@@ -3,8 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Globe, Search, AlertTriangle, Shield, Radio, ChevronDown } from 'lucide-react';
 import { ALL_AFRICA_COUNTRIES, REGION_ORDER, AFRICA_REGIONS, type AfricaCountry } from '@/data/africaRegions';
-import { OPS_FEEDS, OPS_AGENDA, FIELD_AGENTS, WEBHOOK_ENDPOINTS, API_KEYS } from '@/data/opsRoomData';
 import { useVerifiedFeeds } from '@/hooks/useVerifiedFeeds';
+import { useAgendaEvents } from '@/hooks/useAgendaEvents';
+import { getFeedSeverity } from '@/hooks/useAlertLevels';
+import { isVerifiedData } from '@/utils/dataIntegrity';
 import CountrySelector from './components/CountrySelector';
 import AlertTicker from './components/AlertTicker';
 import FeedAggregator from './components/FeedAggregator';
@@ -26,6 +28,7 @@ export default function OpsRoom() {
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [showSosModal, setShowSosModal] = useState(false);
   const { feeds: supabaseFeeds } = useVerifiedFeeds({ includeUnverified: true, includeDeadSources: true });
+  const { events: agendaEvents } = useAgendaEvents();
 
   const filteredCountries = useMemo(() => {
     if (selectedRegion === 'all') return ALL_AFRICA_COUNTRIES;
@@ -33,19 +36,19 @@ export default function OpsRoom() {
   }, [selectedRegion]);
 
   const statsCards = useMemo(() => {
-    const criticalFeeds = OPS_FEEDS.filter((f) => f.alertLevel === 'critical');
-    const verifiedCount = OPS_FEEDS.filter((f) => f.verified).length;
+    const criticalFeeds = supabaseFeeds.filter((f) => getFeedSeverity(f) === 'critical');
+    const verifiedCount = supabaseFeeds.filter((f) => isVerifiedData({ verification_status: f.verification_status })).length;
     return {
-      totalFeeds: OPS_FEEDS.length + supabaseFeeds.length,
+      totalFeeds: supabaseFeeds.length,
       criticalToday: criticalFeeds.length,
       verifiedCount,
-      countriesCovered: new Set([...OPS_FEEDS.map((f) => f.country), ...supabaseFeeds.map((f) => f.country)]).size,
-      sourcesActive: new Set(OPS_FEEDS.map((f) => f.sourceName)).size,
+      countriesCovered: new Set(supabaseFeeds.map((f) => f.country)).size,
+      sourcesActive: new Set(supabaseFeeds.map((f) => f.source)).size,
     };
   }, [supabaseFeeds]);
 
   const filteredFeeds = useMemo(() => {
-    let feeds = [...OPS_FEEDS];
+    let feeds = [...supabaseFeeds];
     if (selectedCountry) feeds = feeds.filter((f) => f.country === selectedCountry.name);
     if (categoryFilter !== 'all') feeds = feeds.filter((f) => f.category === categoryFilter);
     if (searchQuery.trim()) {
@@ -53,14 +56,14 @@ export default function OpsRoom() {
       feeds = feeds.filter(
         (f) =>
           f.title.toLowerCase().includes(q) ||
-          f.locality.toLowerCase().includes(q) ||
+          (f.locality || '').toLowerCase().includes(q) ||
           f.country.toLowerCase().includes(q) ||
-          f.sourceName.toLowerCase().includes(q),
+          f.source.toLowerCase().includes(q),
       );
     }
     feeds.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     return feeds;
-  }, [selectedCountry, categoryFilter, searchQuery]);
+  }, [supabaseFeeds, selectedCountry, categoryFilter, searchQuery]);
 
   const tabs: { id: OpsTab; label: string; icon: React.ReactNode }[] = [
     { id: 'flux', label: 'Flux & Veille', icon: <Radio className="w-3.5 h-3.5" /> },
@@ -71,12 +74,12 @@ export default function OpsRoom() {
     { id: 'country-detail', label: 'Fiche Pays', icon: <Globe className="w-3.5 h-3.5" /> },
   ];
 
-  const categoryOptions = ['all', ...new Set(OPS_FEEDS.map((f) => f.category))];
+  const categoryOptions = ['all', ...new Set(supabaseFeeds.map((f) => f.category))];
 
   return (
     <div className="space-y-4">
       {/* ===== ALERT TICKER ===== */}
-      <AlertTicker feeds={OPS_FEEDS.filter((f) => f.alertLevel === 'critical' || f.alertLevel === 'high')} />
+      <AlertTicker feeds={supabaseFeeds} />
 
       {/* ===== HEADER OPÉRATIONNEL ===== */}
       <div className="bg-[#0f1a2e] rounded-xl border border-[#1a2d4a] p-4 shadow-lg">
@@ -181,19 +184,19 @@ export default function OpsRoom() {
       {/* ===== TAB CONTENT ===== */}
       <div className="min-h-[500px]">
         {activeTab === 'flux' && (
-          <FeedAggregator feeds={filteredFeeds} supabaseFeeds={supabaseFeeds} />
+          <FeedAggregator supabaseFeeds={filteredFeeds} />
         )}
         {activeTab === 'agenda' && (
-          <AgendaWidget agendaItems={OPS_AGENDA} />
+          <AgendaWidget agendaItems={agendaEvents} />
         )}
         {activeTab === 'duty-of-care' && (
-          <DutyOfCare agents={FIELD_AGENTS} />
+          <DutyOfCare />
         )}
         {activeTab === 'pdf-export' && (
           <PdfExportPanel selectedCountry={selectedCountry} />
         )}
         {activeTab === 'api-webhooks' && (
-          <ApiWebhooks webhooks={WEBHOOK_ENDPOINTS} apiKeys={API_KEYS} />
+          <ApiWebhooks />
         )}
         {activeTab === 'country-detail' && (
           <CountryDetail country={selectedCountry} feeds={filteredFeeds} />
@@ -216,12 +219,11 @@ export default function OpsRoom() {
             <div className="space-y-3">
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1">AGENT / ÉQUIPE CONCERNÉ(E)</label>
-                <select className="w-full bg-[#1a2232] border border-[#273449] rounded-lg px-3 py-2 text-sm text-gray-200 focus:outline-none focus:border-red-500">
-                  <option value="">Sélectionner un agent...</option>
-                  {FIELD_AGENTS.map((a) => (
-                    <option key={a.id} value={a.id}>{a.name} — {a.country}, {a.locality}</option>
-                  ))}
-                </select>
+                <input
+                  type="text"
+                  placeholder="Nom de l'agent ou de l'équipe..."
+                  className="w-full bg-[#1a2232] border border-[#273449] rounded-lg px-3 py-2 text-sm text-gray-200 placeholder:text-gray-500 focus:outline-none focus:border-red-500"
+                />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1">NATURE DE L'URGENCE</label>

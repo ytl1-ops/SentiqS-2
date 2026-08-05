@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
 import type { LogisticsStatus, LogisticsEntityType, OperationalStatus } from '@/types/strategic';
+import { validateSourceUrl } from '@/utils/dataIntegrity';
 
 export default function LogisticsMap() {
   const { t } = useTranslation();
@@ -278,14 +279,16 @@ export default function LogisticsMap() {
                             <i className="ri-mail-line" />{entity.contact_email}
                           </a>
                         )}
-                        {entity.source_url && (
+                        {entity.source_url && validateSourceUrl(entity.source_url) && (
                           <a
                             href={entity.source_url}
                             target="_blank"
                             rel="nofollow noopener noreferrer"
                             className="flex items-center gap-1 text-sentiqs-blue hover:underline"
+                            title={t('dataflows.logistics.sourceUrlUnverifiedHint', 'Lien non vérifié automatiquement — vivacité non garantie')}
                           >
                             <i className="ri-links-line" />{t('dataflows.logistics.sourceUrl')}
+                            <span className="text-[9px] text-sentiqs-gray-text">({t('dataflows.logistics.unverified', 'non vérifié')})</span>
                           </a>
                         )}
                       </div>

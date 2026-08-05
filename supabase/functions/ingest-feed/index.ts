@@ -605,7 +605,10 @@ async function handleRssRegister(body: RssRegisterPayload, supabase: ReturnType<
       id: feedId,
       rss_validated: true, // parsing RSS/Atom réel = validation réussie
       source_url: articleUrl,
-      source_status: 'active' as const,
+      // Le flux RSS a répondu, mais CET article n'a pas encore été
+      // HEAD-checké individuellement — 'unchecked' le fait remonter dans
+      // batch-verify-feeds au lieu de rester marqué faussement 'active'.
+      source_status: 'unchecked' as const,
       hallucination_score: hallucinationScore,
     };
 
@@ -645,9 +648,9 @@ async function handleRssRegister(body: RssRegisterPayload, supabase: ReturnType<
         timestamp: article.pubDate || now,
         verification_status: sourceKnown ? 'verified' : 'unverified',
         hallucination_score: hallucinationScore,
-        source_status: 'active',
+        source_status: 'unchecked',
         rss_validated: true,
-        last_link_check: now,
+        last_link_check: null,
       }).select('id').single();
 
       if (!feedErr && feedInserted) {

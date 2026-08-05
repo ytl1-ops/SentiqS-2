@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
-import { MapPin, Shield, AlertTriangle, Globe, Building, Calendar, ExternalLink, Search } from 'lucide-react';
+import { MapPin, Shield, Globe, Building, Calendar, ExternalLink, Search } from 'lucide-react';
 import { ALL_AFRICA_COUNTRIES, type AfricaCountry } from '@/data/africaRegions';
-import { getSourceTypeById, SOURCE_COLORS } from '@/data/sourceTypes';
-import type { OpsFeed } from '@/data/opsRoomData';
+import type { VerifiedFeed } from '@/hooks/useVerifiedFeeds';
+import { getFeedSeverity } from '@/hooks/useAlertLevels';
+import { isVerifiedData } from '@/utils/dataIntegrity';
 
 interface CountryDetailProps {
   country: AfricaCountry | null;
-  feeds: OpsFeed[];
+  feeds: VerifiedFeed[];
 }
 
 export default function CountryDetail({ country, feeds }: CountryDetailProps) {
@@ -21,18 +22,18 @@ export default function CountryDetail({ country, feeds }: CountryDetailProps) {
     }
     if (searchLocality.trim()) {
       const q = searchLocality.toLowerCase();
-      filtered = filtered.filter((f) => f.locality.toLowerCase().includes(q) || f.title.toLowerCase().includes(q));
+      filtered = filtered.filter((f) => (f.locality || '').toLowerCase().includes(q) || f.title.toLowerCase().includes(q));
     }
     return filtered;
   }, [country, feeds, subRegionFilter, searchLocality]);
 
   const stats = useMemo(() => {
     const total = countryFeeds.length;
-    const critical = countryFeeds.filter((f) => f.alertLevel === 'critical').length;
-    const high = countryFeeds.filter((f) => f.alertLevel === 'high').length;
-    const verified = countryFeeds.filter((f) => f.verified).length;
-    const localities = new Set(countryFeeds.map((f) => f.locality));
-    const sources = new Set(countryFeeds.map((f) => f.sourceName));
+    const critical = countryFeeds.filter((f) => getFeedSeverity(f) === 'critical').length;
+    const high = countryFeeds.filter((f) => getFeedSeverity(f) === 'high').length;
+    const verified = countryFeeds.filter((f) => isVerifiedData({ verification_status: f.verification_status })).length;
+    const localities = new Set(countryFeeds.map((f) => f.locality).filter(Boolean));
+    const sources = new Set(countryFeeds.map((f) => f.source));
     return { total, critical, high, verified, localities: localities.size, sources: sources.size };
   }, [countryFeeds]);
 
@@ -163,30 +164,31 @@ export default function CountryDetail({ country, feeds }: CountryDetailProps) {
       ) : (
         <div className="space-y-2">
           {countryFeeds.map((feed) => {
-            const sourceType = getSourceTypeById(feed.sourceTypeId);
+            const alertLevel = getFeedSeverity(feed);
+            const verified = isVerifiedData({ verification_status: feed.verification_status });
             return (
               <div
                 key={feed.id}
                 className={`bg-[#0f1a2e] rounded-lg border p-4 ${
-                  feed.alertLevel === 'critical' ? 'border-red-900/40' :
-                  feed.alertLevel === 'high' ? 'border-orange-900/20' : 'border-[#1a2d4a]'
+                  alertLevel === 'critical' ? 'border-red-900/40' :
+                  alertLevel === 'high' ? 'border-orange-900/20' : 'border-[#1a2d4a]'
                 }`}
               >
                 <div className="flex items-start gap-3">
                   <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${
-                    feed.alertLevel === 'critical' ? 'bg-red-500' :
-                    feed.alertLevel === 'high' ? 'bg-orange-500' :
-                    feed.alertLevel === 'medium' ? 'bg-yellow-500' : 'bg-emerald-500'
+                    alertLevel === 'critical' ? 'bg-red-500' :
+                    alertLevel === 'high' ? 'bg-orange-500' :
+                    alertLevel === 'medium' ? 'bg-yellow-500' : 'bg-emerald-500'
                   }`} />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-1.5">
                       <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${
-                        feed.alertLevel === 'critical' ? 'bg-red-900/30 text-red-400' :
-                        feed.alertLevel === 'high' ? 'bg-orange-900/30 text-orange-400' : 'bg-gray-800 text-gray-400'
+                        alertLevel === 'critical' ? 'bg-red-900/30 text-red-400' :
+                        alertLevel === 'high' ? 'bg-orange-900/30 text-orange-400' : 'bg-gray-800 text-gray-400'
                       }`}>
                         {feed.category}
                       </span>
-                      {feed.verified && (
+                      {verified && (
                         <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-semibold bg-emerald-900/20 text-emerald-400 border border-emerald-800/30">
                           <Shield className="w-2 h-2" />
                           Vérifié
@@ -198,7 +200,7 @@ export default function CountryDetail({ country, feeds }: CountryDetailProps) {
                     </div>
 
                     <a
-                      href={feed.sourceUrl}
+                      href={feed.source_url}
                       target="_blank"
                       rel="noopener noreferrer nofollow"
                       className="text-sm font-semibold text-gray-100 hover:text-emerald-400 transition-colors cursor-pointer leading-snug"
@@ -207,18 +209,20 @@ export default function CountryDetail({ country, feeds }: CountryDetailProps) {
                       <ExternalLink className="w-3 h-3 inline ml-1 text-gray-600" />
                     </a>
 
-                    <p className="text-xs text-gray-400 mt-1.5 leading-relaxed line-clamp-2">{feed.summary}</p>
+                    {feed.summary && (
+                      <p className="text-xs text-gray-400 mt-1.5 leading-relaxed line-clamp-2">{feed.summary}</p>
+                    )}
 
                     <div className="flex items-center gap-2 mt-2 flex-wrap">
-                      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 bg-emerald-900/20 px-2 py-0.5 rounded">
-                        <MapPin className="w-3 h-3" />
-                        {feed.locality}
-                      </span>
-                      {sourceType && (
-                        <span className={`px-2 py-0.5 rounded text-[9px] font-semibold border ${SOURCE_COLORS[sourceType.color]?.split(' ').slice(0, 3).join(' ') || 'bg-gray-800 text-gray-400 border-gray-700'}`}>
-                          Source: {feed.sourceName}
+                      {feed.locality && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 bg-emerald-900/20 px-2 py-0.5 rounded">
+                          <MapPin className="w-3 h-3" />
+                          {feed.locality}
                         </span>
                       )}
+                      <span className="px-2 py-0.5 rounded text-[9px] font-semibold border bg-gray-800 text-gray-400 border-gray-700">
+                        Source: {feed.source}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -232,20 +236,14 @@ export default function CountryDetail({ country, feeds }: CountryDetailProps) {
       <div className="bg-[#0f1a2e] rounded-xl border border-[#1a2d4a] p-4">
         <h4 className="text-xs font-bold text-gray-300 uppercase tracking-wider mb-3">Sources actives sur {country.name}</h4>
         <div className="flex items-center gap-1.5 flex-wrap">
-          {[...new Set(countryFeeds.map((f) => f.sourceName))].map((source) => {
-            const feed = countryFeeds.find((f) => f.sourceName === source);
-            const st = feed ? getSourceTypeById(feed.sourceTypeId) : undefined;
-            return (
-              <span
-                key={source}
-                className={`px-2.5 py-1 rounded-full text-[9px] font-semibold border ${
-                  st ? SOURCE_COLORS[st.color]?.split(' ').slice(0, 3).join(' ') : 'bg-gray-800 text-gray-400 border-gray-700'
-                }`}
-              >
-                {source}
-              </span>
-            );
-          })}
+          {[...new Set(countryFeeds.map((f) => f.source))].map((source) => (
+            <span
+              key={source}
+              className="px-2.5 py-1 rounded-full text-[9px] font-semibold border bg-gray-800 text-gray-400 border-gray-700"
+            >
+              {source}
+            </span>
+          ))}
           {countryFeeds.length === 0 && (
             <span className="text-[10px] text-gray-600">Aucune source active — veille en cours</span>
           )}

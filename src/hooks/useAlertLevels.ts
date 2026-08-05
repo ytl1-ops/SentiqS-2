@@ -232,7 +232,7 @@ const SEVERITY_WEIGHTS: Record<string, number> = {
   low: 0.5,
 };
 
-function getFeedSeverity(feed: SupabaseFeed): 'critical' | 'high' | 'medium' | 'low' {
+export function getFeedSeverity(feed: SupabaseFeed): 'critical' | 'high' | 'medium' | 'low' {
   const fullText = `${feed.title} ${feed.summary || ''}`.toLowerCase();
 
   // --- NÉGATIFS DE CONTEXTE : réduire la sévérité si c'est une nouvelle positive ---

@@ -1,39 +1,41 @@
-import { Calendar, MapPin, Clock, Users, Flag, GraduationCap, Construction, AlertTriangle as AlertTriangleIcon, Heart } from 'lucide-react';
-import { getSourceTypeById, SOURCE_COLORS } from '@/data/sourceTypes';
-import type { AgendaItem } from '@/data/opsRoomData';
+import { Calendar, MapPin, Users, GraduationCap, Radar, ShieldAlert, Megaphone, FileSearch, PresentationIcon, Timer } from 'lucide-react';
+import type { AgendaEvent } from '@/hooks/useAgendaEvents';
 
 interface AgendaWidgetProps {
-  agendaItems: AgendaItem[];
+  agendaItems: AgendaEvent[];
 }
 
 const typeIcons: Record<string, React.ReactNode> = {
-  fete_nationale: <Flag className="w-3.5 h-3.5" />,
-  colloque: <GraduationCap className="w-3.5 h-3.5" />,
-  travaux: <Construction className="w-3.5 h-3.5" />,
-  election: <Users className="w-3.5 h-3.5" />,
-  sommet: <Flag className="w-3.5 h-3.5" />,
-  formation: <GraduationCap className="w-3.5 h-3.5" />,
-  alerte_sanitaire: <Heart className="w-3.5 h-3.5" />,
+  meeting: <Users className="w-3.5 h-3.5" />,
+  exercise: <ShieldAlert className="w-3.5 h-3.5" />,
+  conference: <Megaphone className="w-3.5 h-3.5" />,
+  audit: <FileSearch className="w-3.5 h-3.5" />,
+  briefing: <PresentationIcon className="w-3.5 h-3.5" />,
+  training: <GraduationCap className="w-3.5 h-3.5" />,
+  deadline: <Timer className="w-3.5 h-3.5" />,
+  mission: <Radar className="w-3.5 h-3.5" />,
 };
 
 const typeLabels: Record<string, string> = {
-  fete_nationale: 'Fête Nationale',
-  colloque: 'Colloque / Séminaire',
-  travaux: 'Travaux',
-  election: 'Élection',
-  sommet: 'Sommet',
-  formation: 'Formation / Exercice',
-  alerte_sanitaire: 'Alerte Sanitaire',
+  meeting: 'Réunion',
+  exercise: 'Exercice',
+  conference: 'Conférence',
+  audit: 'Audit',
+  briefing: 'Briefing',
+  training: 'Formation',
+  deadline: 'Échéance',
+  mission: 'Mission',
 };
 
 const typeColors: Record<string, string> = {
-  fete_nationale: 'bg-blue-900/20 text-blue-400 border-blue-800/40',
-  colloque: 'bg-violet-900/20 text-violet-400 border-violet-800/40',
-  travaux: 'bg-orange-900/20 text-orange-400 border-orange-800/40',
-  election: 'bg-amber-900/20 text-amber-400 border-amber-800/40',
-  sommet: 'bg-red-900/20 text-red-400 border-red-800/40',
-  formation: 'bg-emerald-900/20 text-emerald-400 border-emerald-800/40',
-  alerte_sanitaire: 'bg-rose-900/20 text-rose-400 border-rose-800/40',
+  meeting: 'bg-blue-900/20 text-blue-400 border-blue-800/40',
+  exercise: 'bg-red-900/20 text-red-400 border-red-800/40',
+  conference: 'bg-violet-900/20 text-violet-400 border-violet-800/40',
+  audit: 'bg-amber-900/20 text-amber-400 border-amber-800/40',
+  briefing: 'bg-indigo-900/20 text-indigo-400 border-indigo-800/40',
+  training: 'bg-emerald-900/20 text-emerald-400 border-emerald-800/40',
+  deadline: 'bg-orange-900/20 text-orange-400 border-orange-800/40',
+  mission: 'bg-rose-900/20 text-rose-400 border-rose-800/40',
 };
 
 export default function AgendaWidget({ agendaItems }: AgendaWidgetProps) {
@@ -51,7 +53,7 @@ export default function AgendaWidget({ agendaItems }: AgendaWidgetProps) {
         <div>
           <h3 className="text-sm font-bold text-gray-100 flex items-center gap-2">
             <Calendar className="w-4 h-4 text-emerald-400" />
-            Agenda & Fêtes
+            Agenda
           </h3>
           <p className="text-[10px] text-gray-500 mt-0.5">
             {sorted.length} événements programmés — {upcomingItems.length} à venir
@@ -73,12 +75,9 @@ export default function AgendaWidget({ agendaItems }: AgendaWidgetProps) {
             </div>
           ) : (
             <div className="space-y-3">
-              {todayItems.map((item) => {
-                const sourceType = getSourceTypeById(item.sourceTypeId);
-                return (
-                  <AgendaCard key={item.id} item={item} sourceType={sourceType} />
-                );
-              })}
+              {todayItems.map((item) => (
+                <AgendaCard key={item.id} item={item} />
+              ))}
             </div>
           )}
         </div>
@@ -95,12 +94,9 @@ export default function AgendaWidget({ agendaItems }: AgendaWidgetProps) {
             </div>
           ) : (
             <div className="space-y-3">
-              {upcomingItems.map((item) => {
-                const sourceType = getSourceTypeById(item.sourceTypeId);
-                return (
-                  <AgendaCard key={item.id} item={item} sourceType={sourceType} compact />
-                );
-              })}
+              {upcomingItems.map((item) => (
+                <AgendaCard key={item.id} item={item} compact />
+              ))}
             </div>
           )}
         </div>
@@ -114,7 +110,6 @@ export default function AgendaWidget({ agendaItems }: AgendaWidgetProps) {
           </div>
           <div className="divide-y divide-[#1a2d4a]">
             {sorted.map((item) => {
-              const sourceType = getSourceTypeById(item.sourceTypeId);
               const date = new Date(item.date);
               return (
                 <div key={item.id} className="flex items-start gap-3 px-4 py-3 hover:bg-[#1a2232] transition-colors">
@@ -133,13 +128,15 @@ export default function AgendaWidget({ agendaItems }: AgendaWidgetProps) {
                     </div>
                     <p className="text-xs text-gray-200 font-medium">{item.title}</p>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
-                      <span className="inline-flex items-center gap-1 text-[9px] text-gray-500">
-                        <MapPin className="w-2.5 h-2.5" />
-                        {item.locality}
-                      </span>
-                      {sourceType && (
-                        <span className={`px-1.5 py-0.5 rounded text-[8px] font-semibold border ${SOURCE_COLORS[sourceType.color]?.split(' ').slice(0, 3).join(' ') || 'bg-gray-800 text-gray-400 border-gray-700'}`}>
-                          {item.sourceName}
+                      {item.location && (
+                        <span className="inline-flex items-center gap-1 text-[9px] text-gray-500">
+                          <MapPin className="w-2.5 h-2.5" />
+                          {item.location}
+                        </span>
+                      )}
+                      {item.organizer && (
+                        <span className="px-1.5 py-0.5 rounded text-[8px] font-semibold border bg-gray-800 text-gray-400 border-gray-700">
+                          {item.organizer}
                         </span>
                       )}
                     </div>
@@ -154,7 +151,7 @@ export default function AgendaWidget({ agendaItems }: AgendaWidgetProps) {
   );
 }
 
-function AgendaCard({ item, sourceType, compact }: { item: AgendaItem; sourceType?: ReturnType<typeof getSourceTypeById>; compact?: boolean }) {
+function AgendaCard({ item, compact }: { item: AgendaEvent; compact?: boolean }) {
   return (
     <div className="bg-[#1a2232] rounded-lg border border-[#273449] p-3">
       <div className="flex items-center gap-2 flex-wrap mb-2">
@@ -169,13 +166,15 @@ function AgendaCard({ item, sourceType, compact }: { item: AgendaItem; sourceTyp
         <p className="text-[10px] text-gray-400 mt-1.5 leading-relaxed">{item.description}</p>
       )}
       <div className="flex items-center gap-2 mt-2 flex-wrap">
-        <span className="inline-flex items-center gap-1 text-[9px] text-gray-500">
-          <MapPin className="w-2.5 h-2.5" />
-          {item.locality}
-        </span>
-        {sourceType && (
-          <span className={`px-1.5 py-0.5 rounded text-[8px] font-semibold border ${SOURCE_COLORS[sourceType.color]?.split(' ').slice(0, 3).join(' ') || 'bg-gray-800 text-gray-400 border-gray-700'}`}>
-            {item.sourceName}
+        {item.location && (
+          <span className="inline-flex items-center gap-1 text-[9px] text-gray-500">
+            <MapPin className="w-2.5 h-2.5" />
+            {item.location}
+          </span>
+        )}
+        {item.organizer && (
+          <span className="px-1.5 py-0.5 rounded text-[8px] font-semibold border bg-gray-800 text-gray-400 border-gray-700">
+            {item.organizer}
           </span>
         )}
       </div>

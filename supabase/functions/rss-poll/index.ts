@@ -342,8 +342,14 @@ serve(async (req: Request) => {
             timestamp: article.pubDate || now,
             verification_status: 'unverified',
             hallucination_score: hallucinationScore,
-            source_status: 'active',
-            last_link_check: now,
+            // Le flux RSS parent a répondu, mais l'URL de CET article n'a
+            // pas encore été vérifiée individuellement — batch-verify-feeds
+            // s'en charge ensuite. Ne jamais marquer 'active'/last_link_check
+            // ici, sinon le cron de vérification ne retrouve plus ces lignes
+            // (il ne cible que unchecked/warning/null) et rien n'est jamais
+            // re-vérifié.
+            source_status: 'unchecked',
+            last_link_check: null,
             rss_validated: true,
           });
 

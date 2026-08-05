@@ -489,8 +489,8 @@ export default function OsinDashboard() {
               </div>
             )}
 
-            {/* Source URL */}
-            {source.source_url && (
+            {/* Source URL — cliquable uniquement si le flux RSS a été validé et la source est active */}
+            {source.source_url && source.rss_validated && source.is_active ? (
               <a
                 href={source.source_url}
                 target="_blank"
@@ -500,6 +500,11 @@ export default function OsinDashboard() {
                 <i className="ri-links-line" />
                 <span className="truncate">{source.source_url}</span>
               </a>
+            ) : source.source_url && (
+              <div className="mt-3 flex items-center gap-1 text-[10px] text-gray-400 truncate" title={t('dataflows.osint.notValidated', 'Lien non vérifié — non cliquable')}>
+                <i className="ri-link-unlink-m" />
+                <span className="truncate">{source.source_url}</span>
+              </div>
             )}
           </div>
         ))}

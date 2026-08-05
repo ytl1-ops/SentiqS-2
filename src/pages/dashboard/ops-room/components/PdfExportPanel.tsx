@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { FileText, Download, MapPin, Shield, AlertTriangle, FileCheck } from 'lucide-react';
 import { ALL_AFRICA_COUNTRIES, type AfricaCountry } from '@/data/africaRegions';
+import { useAlertLevels } from '@/hooks/useAlertLevels';
+import { generatePdfReport } from '../../reports/utils/pdfGenerator';
 
 interface PdfExportPanelProps {
   selectedCountry: AfricaCountry | null;
@@ -9,28 +11,76 @@ interface PdfExportPanelProps {
 const reportTypes = [
   { id: 'securite', label: 'Fiche Sûreté Pré-déplacement', icon: <Shield className="w-4 h-4" />, desc: 'Évaluation sécuritaire complète pour une région ou localité' },
   { id: 'situation', label: 'Rapport de Situation Pays', icon: <FileText className="w-4 h-4" />, desc: 'Synthèse des incidents et niveau de risque par pays' },
-  { id: 'alerte', label: 'Bulletin d\'Alerte Flash', icon: <AlertTriangle className="w-4 h-4" />, desc: 'Alerte urgente sur un incident en cours' },
-  { id: 'mensuel', label: 'Rapport Mensuel Régional', icon: <FileCheck className="w-4 h-4" />, desc: 'Compilation mensuelle par région africaine' },
 ];
 
 export default function PdfExportPanel({ selectedCountry }: PdfExportPanelProps) {
+  const { alertLevels } = useAlertLevels();
   const [reportType, setReportType] = useState('securite');
   const [targetCountry, setTargetCountry] = useState(selectedCountry?.code || '');
   const [targetLocality, setTargetLocality] = useState('');
-  const [generating, setGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
-
-  const handleGenerate = () => {
-    setGenerating(true);
-    setTimeout(() => {
-      setGenerating(false);
-      setGenerated(true);
-      setTimeout(() => setGenerated(false), 4000);
-    }, 2000);
-  };
 
   const selectedReport = reportTypes.find((r) => r.id === reportType);
   const countryObj = ALL_AFRICA_COUNTRIES.find((c) => c.code === targetCountry);
+  const countryLevel = useMemo(
+    () => (countryObj ? alertLevels.find((l) => l.country === countryObj.name) : undefined),
+    [alertLevels, countryObj],
+  );
+
+  const buildReportData = () => {
+    if (!countryObj) return null;
+    const incidents = countryLevel?.triggeringIncidents || [];
+    const genDate = new Date().toISOString();
+    return {
+      id: `OPS-${countryObj.code}-${Date.now()}`,
+      title: `${selectedReport?.label || 'Fiche Sûreté'} — ${countryObj.name}`,
+      type: 'risk',
+      format: 'pdf',
+      region: countryObj.region,
+      countries: [countryObj.name],
+      localities: targetLocality ? [targetLocality] : undefined,
+      alertCount: incidents.length,
+      corrCount: 0,
+      generatedAt: genDate,
+      status: 'ready',
+      author: 'SentiqS',
+      summary: countryLevel
+        ? `Niveau ${countryLevel.levelLabel} — score ${countryLevel.score}/100, ${countryLevel.incidents} incident(s) recensé(s) sur les 30 derniers jours.`
+        : `Aucune donnée de risque disponible pour ${countryObj.name} pour le moment.`,
+      content: {
+        executiveSummary: countryLevel
+          ? `${countryObj.name} est actuellement classé au niveau ${countryLevel.levelLabel} (score ${countryLevel.score}/100). ${countryLevel.incidents} incident(s) ont été recensés sur les 30 derniers jours, dont ${countryLevel.verifiedCount} vérifié(s). ${targetLocality ? `Zone ciblée : ${targetLocality}.` : ''}`
+          : `Aucune donnée de veille n'est encore disponible pour ${countryObj.name}. Ce rapport sera enrichi automatiquement dès que des flux vérifiés seront détectés.`,
+        sections: countryLevel && countryLevel.protectionMeasures.length > 0
+          ? [{ title: 'Recommandations', text: countryLevel.protectionMeasures.join(' • ') }]
+          : [],
+        stats: countryLevel
+          ? [
+              { label: 'Score de risque', value: `${countryLevel.score}/100` },
+              { label: 'Incidents (30j)', value: countryLevel.incidents },
+              { label: 'Vérifiés', value: countryLevel.verifiedCount },
+            ]
+          : [],
+        alertsIncluded: incidents.map((inc) => ({
+          id: inc.id,
+          title: inc.title,
+          severity: inc.severity,
+          locality: inc.locality || countryObj.name,
+          department: inc.category,
+        })),
+        correlationsIncluded: [],
+        charts: [],
+      },
+    };
+  };
+
+  const handleGenerate = () => {
+    const data = buildReportData();
+    if (!data) return;
+    generatePdfReport(data);
+    setGenerated(true);
+    setTimeout(() => setGenerated(false), 4000);
+  };
 
   return (
     <div className="space-y-4">
@@ -40,7 +90,7 @@ export default function PdfExportPanel({ selectedCountry }: PdfExportPanelProps)
           Export Rapport PDF — Fiche de Sûreté
         </h3>
         <p className="text-[10px] text-gray-500 mt-0.5">
-          Génération automatique de rapports de synthèse par pays, région ou localité
+          Génération de rapports à partir des incidents réels et vérifiés recensés par pays
         </p>
       </div>
 
@@ -79,7 +129,7 @@ export default function PdfExportPanel({ selectedCountry }: PdfExportPanelProps)
             <label className="block text-[10px] font-semibold text-gray-500 mb-2">PAYS CIBLE</label>
             <select
               value={targetCountry}
-              onChange={(e) => setTargetCountry(e.target.value)}
+              onChange={(e) => { setTargetCountry(e.target.value); setGenerated(false); }}
               className="w-full bg-[#1a2232] border border-[#273449] rounded-lg px-3 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-emerald-500/50"
             >
               <option value="">Sélectionner un pays...</option>
@@ -112,25 +162,11 @@ export default function PdfExportPanel({ selectedCountry }: PdfExportPanelProps)
           <button
             type="button"
             onClick={handleGenerate}
-            disabled={!targetCountry || generating}
+            disabled={!targetCountry}
             className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-sm font-bold transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {generating ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Génération en cours...
-              </>
-            ) : generated ? (
-              <>
-                <FileCheck className="w-4 h-4" />
-                Rapport généré !
-              </>
-            ) : (
-              <>
-                <Download className="w-4 h-4" />
-                GÉNÉRER LE PDF
-              </>
-            )}
+            <Download className="w-4 h-4" />
+            GÉNÉRER ET TÉLÉCHARGER LE PDF
           </button>
 
           {generated && (
@@ -138,19 +174,12 @@ export default function PdfExportPanel({ selectedCountry }: PdfExportPanelProps)
               <div className="flex items-center gap-2">
                 <FileCheck className="w-4 h-4 text-emerald-400" />
                 <div>
-                  <div className="text-xs font-semibold text-emerald-400">Rapport prêt</div>
+                  <div className="text-xs font-semibold text-emerald-400">PDF téléchargé</div>
                   <div className="text-[10px] text-emerald-600">
                     {countryObj?.name || targetCountry}{targetLocality ? ` — ${targetLocality}` : ''}
                   </div>
                 </div>
               </div>
-              <button
-                type="button"
-                className="mt-2 w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-500 transition-colors cursor-pointer"
-              >
-                <Download className="w-3.5 h-3.5" />
-                Télécharger le PDF
-              </button>
             </div>
           )}
         </div>
@@ -163,11 +192,10 @@ export default function PdfExportPanel({ selectedCountry }: PdfExportPanelProps)
             <div className="text-center py-16">
               <FileText className="w-12 h-12 text-gray-700 mx-auto mb-3" />
               <p className="text-sm text-gray-500">Sélectionnez un pays pour prévisualiser le rapport</p>
-              <p className="text-[10px] text-gray-600 mt-1">Le rapport inclura les incidents récents, l'évaluation des risques et les recommandations</p>
+              <p className="text-[10px] text-gray-600 mt-1">Le rapport inclura les incidents réels et vérifiés, le score de risque calculé et les recommandations associées</p>
             </div>
           ) : (
             <div className="space-y-4">
-              {/* Report header preview */}
               <div className="bg-[#1a2232] rounded-lg border border-[#273449] p-5">
                 <div className="border-b border-[#273449] pb-4 mb-4">
                   <div className="flex items-center justify-between flex-wrap gap-3">
@@ -189,66 +217,58 @@ export default function PdfExportPanel({ selectedCountry }: PdfExportPanelProps)
                   </div>
                 </div>
 
-                {/* Sample content */}
-                <div className="space-y-4">
-                  <div>
-                    <h5 className="text-xs font-bold text-gray-300 mb-2">1. NIVEAU DE RISQUE</h5>
-                    <div className="flex items-center gap-3">
-                      <span className="px-3 py-1.5 rounded-lg bg-orange-900/20 text-orange-400 border border-orange-800/40 text-xs font-bold">
-                        ÉLEVÉ — SCORE 72/100
-                      </span>
-                      <span className="text-[10px] text-gray-500">Basé sur 8 incidents / 30 jours</span>
-                    </div>
+                {!countryLevel ? (
+                  <div className="text-center py-6">
+                    <AlertTriangle className="w-8 h-8 text-gray-700 mx-auto mb-2" />
+                    <p className="text-xs text-gray-500">Aucune donnée de risque disponible pour ce pays pour le moment.</p>
                   </div>
-
-                  <div>
-                    <h5 className="text-xs font-bold text-gray-300 mb-2">2. INCIDENTS RÉCENTS</h5>
-                    <div className="space-y-2">
-                      <div className="flex items-start gap-2 text-[10px]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1 flex-shrink-0" />
-                        <span className="text-gray-400">
-                          Attaque armée signalée — Source: <span className="text-emerald-500">AIP (Agence Ivoirienne de Presse)</span>
+                ) : (
+                  <div className="space-y-4">
+                    <div>
+                      <h5 className="text-xs font-bold text-gray-300 mb-2">1. NIVEAU DE RISQUE</h5>
+                      <div className="flex items-center gap-3">
+                        <span className="px-3 py-1.5 rounded-lg bg-orange-900/20 text-orange-400 border border-orange-800/40 text-xs font-bold">
+                          {countryLevel.levelLabel.toUpperCase()} — SCORE {countryLevel.score}/100
                         </span>
-                      </div>
-                      <div className="flex items-start gap-2 text-[10px]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mt-1 flex-shrink-0" />
-                        <span className="text-gray-400">
-                          Fermeture RN1 travaux — Source: <span className="text-emerald-500">Ministère des Infrastructures</span>
-                        </span>
-                      </div>
-                      <div className="flex items-start gap-2 text-[10px]">
-                        <span className="w-1.5 h-1.5 rounded-full bg-yellow-500 mt-1 flex-shrink-0" />
-                        <span className="text-gray-400">
-                          Tensions communautaires — Source: <span className="text-emerald-500">KOACI.com</span>
-                        </span>
+                        <span className="text-[10px] text-gray-500">Basé sur {countryLevel.incidents} incident(s) / 30 jours</span>
                       </div>
                     </div>
-                  </div>
 
-                  <div>
-                    <h5 className="text-xs font-bold text-gray-300 mb-2">3. RECOMMANDATIONS</h5>
-                    <ul className="space-y-1.5 text-[10px] text-gray-400">
-                      <li className="flex items-start gap-2">
-                        <span className="text-amber-500 mt-0.5">•</span>
-                        Suspension des déplacements non essentiels dans la zone
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-amber-500 mt-0.5">•</span>
-                        Vérification des itinéraires alternatifs (déviation RN1 active)
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <span className="text-amber-500 mt-0.5">•</span>
-                        Contact consulaire recommandé pour les ressortissants
-                      </li>
-                    </ul>
-                  </div>
+                    <div>
+                      <h5 className="text-xs font-bold text-gray-300 mb-2">2. INCIDENTS RÉCENTS ({countryLevel.triggeringIncidents.length})</h5>
+                      {countryLevel.triggeringIncidents.length === 0 ? (
+                        <p className="text-[10px] text-gray-500">Aucun incident vérifié à ce jour.</p>
+                      ) : (
+                        <div className="space-y-2">
+                          {countryLevel.triggeringIncidents.slice(0, 6).map((inc) => (
+                            <div key={inc.id} className="flex items-start gap-2 text-[10px]">
+                              <span className={`w-1.5 h-1.5 rounded-full mt-1 flex-shrink-0 ${
+                                inc.severity === 'critical' ? 'bg-red-500' : inc.severity === 'high' ? 'bg-orange-500' : inc.severity === 'medium' ? 'bg-yellow-500' : 'bg-emerald-500'
+                              }`} />
+                              <span className="text-gray-400">
+                                {inc.title} — Source : <span className="text-emerald-500">{inc.source}</span>
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
 
-                  <div className="text-[9px] text-gray-600 pt-4 border-t border-[#273449]">
-                    Rapport généré le {new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                    {' '}à {new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
-                    {' '}— Sources : ACLED, ReliefWeb, AIP, Ministère Infrastructures, KOACI
+                    {countryLevel.protectionMeasures.length > 0 && (
+                      <div>
+                        <h5 className="text-xs font-bold text-gray-300 mb-2">3. RECOMMANDATIONS</h5>
+                        <ul className="space-y-1.5 text-[10px] text-gray-400">
+                          {countryLevel.protectionMeasures.map((m) => (
+                            <li key={m} className="flex items-start gap-2">
+                              <span className="text-amber-500 mt-0.5">•</span>
+                              {m}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
-                </div>
+                )}
               </div>
             </div>
           )}
