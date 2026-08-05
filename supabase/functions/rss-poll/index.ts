@@ -56,69 +56,55 @@ interface SourceResult {
 }
 
 // ----- RSS/Atom Parsing -----
+// NB: DOMParser n'est PAS disponible dans le runtime Deno des Supabase Edge
+// Functions (contrairement à un navigateur) — l'ancienne implémentation basée
+// dessus échouait silencieusement sur 100% des flux (0 article jamais parsé,
+// quel que soit le flux, même valides). Remplacé par un parseur regex.
+
+function decodeEntities(text: string): string {
+  return text
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/<[^>]+>/g, '')
+    .trim();
+}
+
+function extractTag(block: string, tag: string): string {
+  const regex = new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`, 'i');
+  const match = block.match(regex);
+  return match ? decodeEntities(match[1]) : '';
+}
+
+function extractAtomLink(block: string): string {
+  const regex = /<link[^>]*href=["']([^"']+)["'][^>]*\/?>/i;
+  const match = block.match(regex);
+  return match ? match[1] : '';
+}
 
 function parseRssXml(xml: string): RssArticle[] {
   const articles: RssArticle[] = [];
-  try {
-    const doc = new DOMParser().parseFromString(xml, 'text/xml');
-    const parseError = doc.querySelector('parsererror');
-    if (parseError) {
-      console.error('[rss-poll] XML parse error:', parseError.textContent?.substring(0, 200));
-      return [];
-    }
 
-    // RSS 2.0: <rss><channel><item>...
-    const rssItems = doc.querySelectorAll('rss channel item');
-    if (rssItems.length > 0) {
-      for (const item of rssItems) {
-        const title = item.querySelector('title')?.textContent?.trim() || '';
-        const link = item.querySelector('link')?.textContent?.trim() || '';
-        const description = item.querySelector('description')?.textContent?.trim() || '';
-        const pubDate = item.querySelector('pubDate')?.textContent?.trim() || null;
-        if (title && link) articles.push({ title, link, description, pubDate });
-      }
-      return articles;
-    }
+  const rssItems = xml.match(/<item[\s>][\s\S]*?<\/item>/gi) || [];
+  for (const block of rssItems) {
+    const title = extractTag(block, 'title');
+    const link = extractTag(block, 'link') || extractAtomLink(block);
+    const description = extractTag(block, 'description') || extractTag(block, 'summary');
+    const pubDate = extractTag(block, 'pubDate') || extractTag(block, 'published') || extractTag(block, 'updated');
+    if (title && link) articles.push({ title, link, description, pubDate: pubDate || null });
+  }
+  if (articles.length > 0) return articles;
 
-    // Atom: <feed><entry>...
-    const atomEntries = doc.querySelectorAll('feed entry');
-    if (atomEntries.length > 0) {
-      for (const entry of atomEntries) {
-        const title = entry.querySelector('title')?.textContent?.trim() || '';
-        const linkEl = entry.querySelector('link[href]');
-        const link = linkEl?.getAttribute('href')?.trim() || '';
-        const description = entry.querySelector('summary')?.textContent?.trim()
-          || entry.querySelector('content')?.textContent?.trim() || '';
-        const pubDate = entry.querySelector('published')?.textContent?.trim()
-          || entry.querySelector('updated')?.textContent?.trim() || null;
-        if (title && link) articles.push({ title, link, description, pubDate });
-      }
-      return articles;
-    }
-
-    // Fallback: raw <item> or <entry> anywhere
-    const rawItems = doc.querySelectorAll('item');
-    for (const item of rawItems) {
-      const title = item.querySelector('title')?.textContent?.trim() || '';
-      const link = item.querySelector('link')?.textContent?.trim() || '';
-      const description = item.querySelector('description')?.textContent?.trim() || '';
-      const pubDate = item.querySelector('pubDate')?.textContent?.trim() || null;
-      if (title && link) articles.push({ title, link, description, pubDate });
-    }
-
-    const rawEntries = doc.querySelectorAll('entry');
-    for (const entry of rawEntries) {
-      const title = entry.querySelector('title')?.textContent?.trim() || '';
-      const linkEl = entry.querySelector('link[href]');
-      const link = linkEl?.getAttribute('href')?.trim() || '';
-      const description = entry.querySelector('summary')?.textContent?.trim()
-        || entry.querySelector('content')?.textContent?.trim() || '';
-      const pubDate = entry.querySelector('published')?.textContent?.trim()
-        || entry.querySelector('updated')?.textContent?.trim() || null;
-      if (title && link) articles.push({ title, link, description, pubDate });
-    }
-  } catch (err) {
-    console.error('[rss-poll] RSS parse exception:', (err as Error).message);
+  const atomEntries = xml.match(/<entry[\s>][\s\S]*?<\/entry>/gi) || [];
+  for (const block of atomEntries) {
+    const title = extractTag(block, 'title');
+    const link = extractAtomLink(block);
+    const description = extractTag(block, 'summary') || extractTag(block, 'content');
+    const pubDate = extractTag(block, 'published') || extractTag(block, 'updated');
+    if (title && link) articles.push({ title, link, description, pubDate: pubDate || null });
   }
   return articles;
 }
@@ -173,6 +159,29 @@ function matchKeywords(text: string, keywords: string[]): boolean {
 function stripHtml(html: string): string {
   return html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
 }
+
+// ----- Content Hash (détection d'altération ultérieure de la source) -----
+
+async function computeContentHash(text: string): Promise<string> {
+  const data = new TextEncoder().encode(text);
+  const digest = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ----- Domaine racine -----
+
+function getDomain(url: string): string | null {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return null;
+  }
+}
+
+// NB: pas de capture Wayback Machine ici — synchrone par article, elle
+// rendrait le polling en masse (plusieurs sources × dizaines d'articles)
+// bien trop lent / sujet aux timeouts. Réservée à ingest-feed (volume
+// unitaire, déclenché manuellement).
 
 // ============ MAIN ============
 
@@ -295,6 +304,7 @@ serve(async (req: Request) => {
         const reliability = (source.reliability_score as number) || 0.80;
         // Plafonner hallucination_score à 0.28 max pour passer le garde d'insertion
         const hallucinationScore = Math.min(1.0 - reliability, 0.28);
+        const sourceDomain = getDomain(source.source_url as string);
 
         for (const article of toInsert) {
           // Dedup: check if source_url already exists
@@ -317,12 +327,15 @@ serve(async (req: Request) => {
           // Only insert if it's about an African country or we want global coverage
           const category = guessCategory(`${article.title} ${article.description}`);
           const cleanSummary = stripHtml(article.description).substring(0, 1000);
+          const contentHash = await computeContentHash(`${article.title}|${cleanSummary}`);
 
           const { error: insertErr } = await supabase.from('feeds').insert({
             id: crypto.randomUUID(),
             title: article.title.substring(0, 500),
             source: source.source_name as string,
             source_url: article.link,
+            source_domain: sourceDomain,
+            content_hash: contentHash,
             country: detectedCountry,
             category,
             summary: cleanSummary || null,

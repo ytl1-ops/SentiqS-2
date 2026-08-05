@@ -226,7 +226,7 @@ serve(async (req: Request) => {
   const auditLog: string[] = [];
 
   try {
-    const { purge_dead, dry_run } = await req.json().catch(() => ());
+    const { purge_dead, dry_run } = await req.json().catch(() => ({}));
 
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',

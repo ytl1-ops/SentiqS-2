@@ -95,7 +95,7 @@ serve(async (req: Request) => {
   }
 
   try {
-    const body = await req.json().catch(() => ());
+    const body = await req.json().catch(() => ({}));
     const dryRun = body.dryRun !== false; // par défaut dryRun=true (safe)
     const autoFix = body.autoFix === true; // par défaut autoFix=false
 

@@ -207,7 +207,7 @@ serve(async (req: Request) => {
   const startTime = Date.now();
 
   try {
-    const { country, dryRun } = await req.json().catch(() => ());
+    const { country, dryRun } = await req.json().catch(() => ({}));
 
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
