@@ -250,6 +250,7 @@ export default function PostureTimeline() {
         {timelineEntries.length === 0 ? (
           <div className="p-8">
             <EmptyState
+              icon="ri-history-line"
               title="Aucun changement de posture enregistré pour le moment."
             />
           </div>

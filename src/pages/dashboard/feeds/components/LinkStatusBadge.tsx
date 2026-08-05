@@ -66,8 +66,3 @@ export function LinkStatusBadge({ feed, showVerification = false, showReliabilit
       );
   }
 }
-
-// Legacy function wrapper for backward compatibility
-export function linkStatusBadge(feed: VerifiedFeed) {
-  return <LinkStatusBadge feed={feed} />;
-}

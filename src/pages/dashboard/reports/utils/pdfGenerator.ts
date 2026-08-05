@@ -33,7 +33,7 @@ interface ReportData {
   corrCount: number;
   generatedAt: string;
   status: string;
-  size: string;
+  size?: string;
   author: string;
   summary: string;
   content?: ReportContent;

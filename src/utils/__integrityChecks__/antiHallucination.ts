@@ -4,6 +4,7 @@
 // ============================================================
 
 import { isMockData, isVerifiedData, isReliableSource, computeHallucinationScore, validateSourceUrl } from '@/utils/dataIntegrity';
+import type { HallucinationInput } from '@/utils/dataIntegrity';
 
 // --- Types génériques pour la validation ---
 
@@ -99,7 +100,7 @@ export function validateHallucinationScores(feeds: ValidatableFeed[]): Integrity
 
     const computedScore = computeHallucinationScore({
       source_url: feed.source_url ?? null,
-      source_status: (feed.source_status as ValidatableFeed['source_status']) ?? null,
+      source_status: (feed.source_status as HallucinationInput['source_status']) ?? null,
       verification_status: feed.verification_status || 'unverified',
       verified_at: feed.verified_at ?? null,
       parent_feed_id: feed.parent_feed_id ?? null,

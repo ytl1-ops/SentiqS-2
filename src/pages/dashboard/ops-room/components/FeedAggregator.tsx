@@ -71,7 +71,7 @@ export default function FeedAggregator({ feeds, supabaseFeeds }: FeedAggregatorP
                 <div className="p-4">
                   {/* Header badges */}
                   <div className="flex items-center gap-2 flex-wrap mb-2.5">
-                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold border ${level.bg} ${level.border?.replace('/')}`}>
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-bold border ${level.bg}`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${level.dot}`} />
                       {level.label}
                     </span>

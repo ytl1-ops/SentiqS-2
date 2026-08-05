@@ -635,8 +635,6 @@ export default {
   'dashboard.agenda.nextEvents': 'Upcoming Events',
   'dashboard.agenda.eventsOf': 'Events of {{date}}',
   'dashboard.agenda.noEventsDay': 'No events on this day',
-  'dashboard.agenda.participants': 'Participants',
-  'dashboard.agenda.share': 'Share',
   'dashboard.agenda.allLink': 'Go to Agenda',
   'dashboard.agenda.tabName': 'Agenda',
 
@@ -751,10 +749,8 @@ export default {
 
   // Feeds page
   'dashboard.feeds.readOriginal': 'Read original article on {{source}}',
-  'dashboard.feeds.department': 'Department',
   'dashboard.feeds.actions': 'Actions',
   'dashboard.feeds.exportPdf': 'Export PDF',
-  'dashboard.feeds.pdfGenerated': 'Generated on {{date}}',
   'dashboard.feeds.pdfDepartment': 'Department: {{department}}',
 
   // Correlations page
@@ -770,7 +766,6 @@ export default {
   'dashboard.countries.loading': 'Loading countries...',
   'dashboard.countries.displayed': 'countries displayed',
   'dashboard.countries.underMonitoring': 'under monitoring',
-  'dashboard.countries.allRegions': 'All regions',
   'dashboard.countries.departmentDetail': 'Department detail',
   'dashboard.countries.critical': 'Critical',
   'dashboard.countries.high': 'High',
@@ -843,19 +838,15 @@ export default {
   'dashboard.settings.links.antiHallucinationTitle': 'RSS anti-hallucination validation',
   'dashboard.settings.links.antiHallucinationDesc': 'Each link is not only verified by its HTTP code. The content is analyzed to confirm the presence of <item>, <entry> or <rss>. A HTTP 200 does not guarantee a real RSS feed — this check eliminates false positives.',
   'dashboard.settings.links.scanComplete': 'Scan completed: {{active}} active, {{warning}} warnings, {{dead}} dead',
-  'dashboard.settings.links.searchPlaceholder': 'Search by feed, source or country...',
   'dashboard.settings.links.deadFilter': 'Dead links ({{count}})',
   'dashboard.settings.links.uncheckedFilter': 'Unchecked ({{count}})',
   'dashboard.settings.links.allIssues': 'All issues',
   'dashboard.settings.links.noDead': 'No dead links detected — all sources are accessible',
-  'dashboard.settings.links.noIssues': 'No issue detected',
   'dashboard.settings.links.rssValidatedBadge': 'RSS validated',
   'dashboard.settings.links.articlesBadge': '{{count}} articles',
 
   'dashboard.settings.links.never': 'Never',
-  'dashboard.settings.links.scanComplete': 'Scan completed: {{active}} active, {{warning}} warnings, {{dead}} dead',
   'dashboard.settings.links.searchPlaceholder': 'Search feed, source or country...',
-  'dashboard.settings.links.allIssues': 'All issues',
   'dashboard.settings.links.noDeadLinks': 'No dead links detected — all sources are accessible',
   'dashboard.settings.links.allVerified': 'All links have been verified',
   'dashboard.settings.links.noIssues': 'No issues detected',
@@ -885,7 +876,6 @@ export default {
   'dashboard.settings.subscriptions.tracking': 'Subscription tracking, plans and downloads',
   'dashboard.settings.subscriptions.noPlans': 'No plan configured',
   'dashboard.settings.subscriptions.noPlansDesc': 'Create your pricing plans from the Products module to make them available here.',
-  'dashboard.settings.subscriptions.downloads': 'Downloads',
   'dashboard.settings.subscriptions.noActiveSubs': 'No active subscription',
   'dashboard.settings.subscriptions.noActiveSubsDesc': 'Subscriptions will appear here once subscribers are linked to a pricing plan.',
 
@@ -987,9 +977,7 @@ export default {
   'dashboard.situation.header.highRisk': 'High risk active — reinforced monitoring',
   'dashboard.situation.header.precaution': 'Active precautions — normal vigilance',
   'dashboard.situation.header.normal': 'Normal vigilance — standard monitoring',
-  'dashboard.situation.countryGrid.title': 'Posture by Country',
   'dashboard.situation.countryGrid.none': 'NOT RATED',
-  'dashboard.situation.postureChanges.title': 'Recent Posture Changes',
   'dashboard.situation.postureChanges.loading': 'Loading history...',
   'dashboard.situation.postureChanges.empty': 'No posture changes recorded.',
 
@@ -1061,11 +1049,9 @@ export default {
 
   // Alert levels (rouge/orange/jaune/vert keys used in alerts page)
   'dashboard.level.rouge': 'RED',
-  'dashboard.level.orange': 'ORANGE',
   'dashboard.level.jaune': 'YELLOW',
   'dashboard.level.vert': 'GREEN',
   'dashboard.level.rougeDesc': 'Major conflict',
-  'dashboard.level.orangeDesc': 'High risk',
   'dashboard.level.jauneDesc': 'Precautions',
   'dashboard.level.vertDesc': 'Stable',
 
@@ -1118,7 +1104,6 @@ export default {
   'dashboard.feeds.readSource': 'Read original article',
   'dashboard.feeds.openSource': 'View source',
   'dashboard.feeds.verifyFeed': 'Verify',
-  'dashboard.feeds.verifying': 'Verifying...',
   'dashboard.feeds.reliability': 'Reliability',
   'dashboard.feeds.antiHallucination': 'Active sources',
 

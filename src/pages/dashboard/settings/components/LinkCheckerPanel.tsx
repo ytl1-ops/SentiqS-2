@@ -104,7 +104,7 @@ export default function LinkCheckerPanel() {
         </div>
         <button
           type="button"
-          onClick={runScan}
+          onClick={() => runScan()}
           disabled={scanning}
           className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-sentiqs-navy text-white text-xs font-semibold hover:bg-sentiqs-navy/90 transition-colors cursor-pointer whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
         >

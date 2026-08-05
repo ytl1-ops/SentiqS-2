@@ -8,7 +8,7 @@ interface AlertTickerProps {
 
 export default function AlertTicker({ feeds }: AlertTickerProps) {
   const criticals = feeds.filter((f) => f.alertLevel === 'critical');
-  const highs = feeds.filter((f) => f.alertLevel === 'high' && f.alertLevel !== 'critical');
+  const highs = feeds.filter((f) => f.alertLevel === 'high');
 
   if (feeds.length === 0) return null;
 

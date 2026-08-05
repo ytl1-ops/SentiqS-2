@@ -38,8 +38,8 @@ interface ReportViewerProps {
     alertCount: number;
     corrCount: number;
     generatedAt: string;
-    status: string;
-    size: string;
+    status: 'ready' | 'generating';
+    size?: string;
     author: string;
     summary: string;
     content?: ReportContent;

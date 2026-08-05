@@ -16,6 +16,7 @@ export interface SupabaseAlert {
   category: string;
   status: string;
   aggravating_factors: string[] | null;
+  verification_status?: string;
 }
 
 export interface SupabaseFeed {
@@ -27,6 +28,7 @@ export interface SupabaseFeed {
   timestamp: string;
   source_url: string | null;
   verification_status: string;
+  source_status?: string | null;
   summary?: string;
   parent_feed_id?: string | null;
 }

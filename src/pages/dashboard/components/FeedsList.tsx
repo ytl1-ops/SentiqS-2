@@ -4,7 +4,7 @@ import { categoryBadgeClasses } from '@/utils/categoryColors';
 
 export default function FeedsList() {
   const { t } = useTranslation();
-  const { feeds, loading } = useVerifiedFeeds(8);
+  const { feeds, loading } = useVerifiedFeeds({ limit: 8 });
 
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);

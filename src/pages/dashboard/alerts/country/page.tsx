@@ -100,7 +100,7 @@ export default function CountryAlertDetailPage() {
     };
 
     fetch30d();
-  }, [countryName, countryCode]);
+  }, [countryName, countryCode, t]);
 
   const allIncidents30d: TriggeringIncident[] = useMemo(() => {
     const incidents: TriggeringIncident[] = [];

@@ -65,12 +65,12 @@ export interface ReportItem {
   author: string;
   summary: string;
   content?: {
-    executiveSummary?: string;
-    sections?: Array<{ title: string; text: string }>;
-    stats?: Array<{ label: string; value: string | number }>;
-    alertsIncluded?: Array<{ id: string; title: string; severity: string; locality?: string; department?: string }>;
-    correlationsIncluded?: Array<{ id: string; type: string; strength: string; confidence: number; description: string }>;
-    charts?: Array<{ label: string; values: number[]; max: number }>;
+    executiveSummary: string;
+    sections: Array<{ title: string; text: string }>;
+    stats: Array<{ label: string; value: string | number }>;
+    alertsIncluded: Array<{ id: string; title: string; severity: string; locality: string; department: string }>;
+    correlationsIncluded: Array<{ id: string; type: string; strength: string; confidence: number; description: string }>;
+    charts: Array<{ label: string; values: number[]; max: number }>;
   };
 }
 

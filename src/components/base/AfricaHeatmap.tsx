@@ -463,7 +463,6 @@ function ChoroplethLayer({ risks, onSelect, selectedCountry }: {
 }) {
   // Convert TopoJSON to GeoJSON and filter for Africa
   const africaGeoJSON = useMemo(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const topologyAny = topology as any;
     const geoJson = feature(topologyAny, topologyAny.objects.countries) as any;
     const riskMap = new Map<string, CountryRiskRecord>();
@@ -490,7 +489,7 @@ function ChoroplethLayer({ risks, onSelect, selectedCountry }: {
       };
     });
 
-    return { type: 'FeatureCollection', features };
+    return { type: 'FeatureCollection' as const, features };
   }, [risks]);
 
   const styleFn = useCallback((feature: any) => {
@@ -649,7 +648,6 @@ export default function AfricaHeatmap({ levels }: { levels?: CountryAlertLevel[]
 
   // Fix leaflet default icon path
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (L.Icon.Default.prototype as any)._getIconUrl;
     L.Icon.Default.mergeOptions({
       iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',

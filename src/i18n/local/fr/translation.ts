@@ -660,8 +660,6 @@ export default {
   'dashboard.agenda.nextEvents': 'Prochains événements',
   'dashboard.agenda.eventsOf': 'Événements du {{date}}',
   'dashboard.agenda.noEventsDay': 'Aucun événement ce jour',
-  'dashboard.agenda.participants': 'Participants',
-  'dashboard.agenda.share': 'Partager',
   'dashboard.agenda.allLink': 'Voir l\'agenda',
   'dashboard.agenda.tabName': 'Agenda',
 
@@ -770,17 +768,14 @@ export default {
   'dashboard.newsHero.emptyDesc': 'Les flux seront affichés ici dès que des sources seront indexées.',
   'dashboard.newsHero.indexedCount': '{{count}} articles indexés depuis des sources fiables — actualisés en continu',
   'dashboard.newsHero.exploreAll': 'Explorer tous les flux',
-  'dashboard.newsHero.africanCountries': 'Pays Africains',
   'dashboard.newsHero.last24h': 'Dernières 24h',
   'dashboard.newsHero.securityAlerts': 'Alertes Sécurité',
   'dashboard.newsHero.readArticle': 'Lire l\'article original sur {{source}}',
 
   // Feeds page
   'dashboard.feeds.readOriginal': 'Lire l\'article original sur {{source}}',
-  'dashboard.feeds.department': 'Département',
   'dashboard.feeds.actions': 'Actions',
   'dashboard.feeds.exportPdf': 'Exporter PDF',
-  'dashboard.feeds.pdfGenerated': 'Généré le {{date}}',
   'dashboard.feeds.pdfDepartment': 'Département : {{department}}',
 
   // Correlations page
@@ -796,7 +791,6 @@ export default {
   'dashboard.countries.loading': 'Chargement des pays...',
   'dashboard.countries.displayed': 'pays affichés',
   'dashboard.countries.underMonitoring': 'sous surveillance',
-  'dashboard.countries.allRegions': 'Toutes les régions',
   'dashboard.countries.departmentDetail': 'Détail départemental',
   'dashboard.countries.critical': 'Critique',
   'dashboard.countries.high': 'Élevé',
@@ -880,12 +874,8 @@ export default {
   'dashboard.settings.links.articlesBadge': '{{count}} articles',
 
   'dashboard.settings.links.never': 'Jamais',
-  'dashboard.settings.links.scanComplete': 'Scan terminé : {{active}} actifs, {{warning}} warnings, {{dead}} morts',
-  'dashboard.settings.links.searchPlaceholder': 'Rechercher un flux, source ou pays...',
-  'dashboard.settings.links.allIssues': 'Tous les problèmes',
   'dashboard.settings.links.noDeadLinks': 'Aucun lien mort détecté — toutes les sources sont accessibles',
   'dashboard.settings.links.allVerified': 'Tous les liens ont été vérifiés',
-  'dashboard.settings.links.noIssues': 'Aucun problème détecté',
 
   // Settings - Payments panel
   'dashboard.settings.payments.errorUpdate': 'Erreur de mise à jour.',
@@ -912,7 +902,6 @@ export default {
   'dashboard.settings.subscriptions.tracking': 'Suivi des abonnements, plans et téléchargements',
   'dashboard.settings.subscriptions.noPlans': 'Aucun plan configuré',
   'dashboard.settings.subscriptions.noPlansDesc': 'Créez vos offres tarifaires depuis le module Produits pour les rendre disponibles ici.',
-  'dashboard.settings.subscriptions.downloads': 'Téléchargements',
   'dashboard.settings.subscriptions.noActiveSubs': 'Aucun abonnement actif',
   'dashboard.settings.subscriptions.noActiveSubsDesc': 'Les abonnements apparaîtront ici dès que des abonnés seront rattachés à un plan tarifaire.',
 
@@ -1013,9 +1002,7 @@ export default {
   'dashboard.situation.header.highRisk': 'Haut risque actif — surveillance renforcée',
   'dashboard.situation.header.precaution': 'Précautions actives — vigilance normale',
   'dashboard.situation.header.normal': 'Vigilance normale — veille standard',
-  'dashboard.situation.countryGrid.title': 'Posture par pays',
   'dashboard.situation.countryGrid.none': 'NON CÔTÉ',
-  'dashboard.situation.postureChanges.title': 'Changements de posture récents',
   'dashboard.situation.postureChanges.loading': 'Chargement de l\'historique...',
   'dashboard.situation.postureChanges.empty': 'Aucun changement de posture enregistré.',
 
@@ -1085,7 +1072,6 @@ export default {
   'region.Grands Lacs': 'Grands Lacs',
 
   // Feeds page specific
-  'dashboard.feeds.verifying': 'Vérification...',
   'dashboard.feeds.reliableSource': 'Source fiable à {{percent}}%',
   'dashboard.feeds.localReportShort': 'Rapport',
   'dashboard.feeds.mapShort': 'Carte',
@@ -1099,7 +1085,6 @@ export default {
   'dashboard.settings.modules': 'Modules Dashboard',
 
   // Heatmap
-  'dashboard.heatmap.interactiveMap': 'Carte interactive',
 
   // Reports format titles
   'dashboard.reports.format.pdf': 'PDF',
@@ -1108,11 +1093,9 @@ export default {
 
   // Alert levels (rouge/orange/jaune/vert keys used in alerts page)
   'dashboard.level.rouge': 'ROUGE',
-  'dashboard.level.orange': 'ORANGE',
   'dashboard.level.jaune': 'JAUNE',
   'dashboard.level.vert': 'VERT',
   'dashboard.level.rougeDesc': 'Conflit majeur',
-  'dashboard.level.orangeDesc': 'Risque élevé',
   'dashboard.level.jauneDesc': 'Précautions renforcées',
   'dashboard.level.vertDesc': 'Situation normale',
 
