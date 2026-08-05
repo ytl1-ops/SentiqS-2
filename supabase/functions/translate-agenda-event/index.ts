@@ -2,15 +2,16 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 // Traduction des événements d'agenda (titre + description), même mécanique
-// que translate-feed : deux fournisseurs gratuits en cascade (Google
-// Translate en priorité, MyMemory en repli), langue source jamais
-// présupposée.
+// que translate-feed : trois fournisseurs gratuits en cascade (Google
+// Translate, MyMemory, Lingva), langue source jamais présupposée.
 
+const ARABIC_RANGE = /[؀-ۿ]/;
 const FRENCH_MARKERS = /\b(le|la|les|des|une|un|dans|pour|avec|sur|qui|que|est|été|sont|leur|cette|selon|après|région|pays|gouvernement)\b/gi;
 const FRENCH_ACCENTS = /[éèêàçùôî]/g;
 const ENGLISH_MARKERS = /\b(the|and|for|with|has|been|from|this|that|are|was|were|said|will|their|after|according|country|government)\b/gi;
 
-function guessSourceLang(text: string): 'fr' | 'en' {
+function guessSourceLang(text: string): 'fr' | 'en' | 'ar' {
+  if (ARABIC_RANGE.test(text)) return 'ar';
   const frenchScore = (text.match(FRENCH_MARKERS)?.length || 0) + (text.match(FRENCH_ACCENTS)?.length || 0) * 0.5;
   const englishScore = text.match(ENGLISH_MARKERS)?.length || 0;
   return frenchScore >= englishScore ? 'fr' : 'en';
@@ -46,14 +47,42 @@ async function translateViaMyMemory(text: string, targetLang: string): Promise<{
   return { ok: true, text: translated };
 }
 
+async function translateViaLingva(text: string, targetLang: string): Promise<{ ok: true; text: string } | { ok: false; error: string }> {
+  const url = `https://lingva.garudalinux.org/api/v1/auto/${targetLang}/${encodeURIComponent(text)}`;
+  const resp = await fetch(url);
+  if (!resp.ok) {
+    return { ok: false, error: `Lingva ${resp.status}: ${(await resp.text()).substring(0, 200)}` };
+  }
+  const data = await resp.json();
+  const translated = data?.translation?.trim();
+  if (!translated) return { ok: false, error: 'Lingva: empty response' };
+  return { ok: true, text: translated };
+}
+
+// Un fournisseur peut répondre 200 avec le texte quasi inchangé quand il
+// n'a pas su traduire — ça ne doit pas être accepté comme une traduction
+// réussie, sous peine d'afficher un contenu non traduit tout en prétendant
+// l'avoir traduit.
+function looksUntranslated(original: string, result: string): boolean {
+  const normalize = (s: string) => s.trim().toLowerCase().replace(/\s+/g, ' ');
+  return normalize(original) === normalize(result);
+}
+
 async function translateText(text: string, targetLang: string): Promise<{ ok: true; text: string } | { ok: false; error: string }> {
   const google = await translateViaGoogle(text, targetLang);
-  if (google.ok) return google;
+  if (google.ok && !looksUntranslated(text, google.text)) return google;
 
-  const fallback = await translateViaMyMemory(text, targetLang);
-  if (fallback.ok) return fallback;
+  const myMemory = await translateViaMyMemory(text, targetLang);
+  if (myMemory.ok && !looksUntranslated(text, myMemory.text)) return myMemory;
 
-  return { ok: false, error: `${google.error} | fallback: ${fallback.error}` };
+  const lingva = await translateViaLingva(text, targetLang);
+  if (lingva.ok && !looksUntranslated(text, lingva.text)) return lingva;
+
+  // Si les trois fournisseurs ont échoué ou n'ont renvoyé que le texte
+  // inchangé, c'est un véritable échec — pas de faux succès avec un
+  // contenu non traduit marqué comme traduit en base.
+  const untranslatedNote = (r: { ok: boolean; error?: string }) => (r.ok ? 'returned unchanged text' : r.error);
+  return { ok: false, error: `Google: ${untranslatedNote(google)} | MyMemory: ${untranslatedNote(myMemory)} | Lingva: ${untranslatedNote(lingva)}` };
 }
 
 serve(async (req: Request) => {
