@@ -1,32 +1,63 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY') ?? '';
+// Traduction gratuite, sans clé, sans facturation — deux fournisseurs en
+// cascade puisque les endpoints publics gratuits sont sujets à des
+// limitations de débit imprévisibles depuis les IP partagées des Edge
+// Functions. Google Translate (sl=auto) sait détecter la langue source
+// nativement ; en repli, MyMemory nécessite une langue source explicite,
+// estimée par une heuristique légère (jamais présupposée à 'fr' — bug
+// précédent corrigé : les flux proviennent de dizaines de sources dans des
+// langues différentes).
 
-// Claude translation prompt — strict security intelligence context
-// NB: on ne présuppose JAMAIS la langue source — les flux proviennent de
-// dizaines de sources (français, anglais, arabe, portugais...). Le modèle
-// détecte la langue source lui-même ; lui affirmer une langue source
-// erronée (bug précédent : sourceLang toujours 'fr') le faisait échouer
-// silencieusement sur tout contenu non-français.
-function buildTranslationPrompt(text: string, targetLang: string): string {
-  const langName = targetLang === 'fr' ? 'français' : 'English';
+const FRENCH_MARKERS = /\b(le|la|les|des|une|un|dans|pour|avec|sur|qui|que|est|été|sont|leur|cette|selon|après|région|pays|gouvernement)\b/gi;
+const FRENCH_ACCENTS = /[éèêàçùôî]/g;
+const ENGLISH_MARKERS = /\b(the|and|for|with|has|been|from|this|that|are|was|were|said|will|their|after|according|country|government)\b/gi;
 
-  return `You are an elite security intelligence translator for SentiqS, a strategic monitoring platform covering 54 African countries. Your translations must be precise, operational-grade, and maintain full fidelity to the source.
+function guessSourceLang(text: string): 'fr' | 'en' {
+  const frenchScore = (text.match(FRENCH_MARKERS)?.length || 0) + (text.match(FRENCH_ACCENTS)?.length || 0) * 0.5;
+  const englishScore = text.match(ENGLISH_MARKERS)?.length || 0;
+  return frenchScore >= englishScore ? 'fr' : 'en';
+}
 
-Detect the source language automatically and translate the following security intelligence text into ${langName}.
+async function translateViaGoogle(text: string, targetLang: string): Promise<{ ok: true; text: string } | { ok: false; error: string }> {
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+  const resp = await fetch(url);
+  if (!resp.ok) {
+    return { ok: false, error: `Google Translate ${resp.status}: ${(await resp.text()).substring(0, 200)}` };
+  }
+  const data = await resp.json();
+  const chunks = Array.isArray(data?.[0]) ? data[0] : [];
+  const translated = chunks.map((chunk: unknown[]) => chunk?.[0] ?? '').join('').trim();
+  if (!translated) return { ok: false, error: 'Google Translate: empty response' };
+  return { ok: true, text: translated };
+}
 
-CRITICAL RULES:
-1. Preserve ALL factual details exactly: names, places, dates, numbers, casualty counts, organization names
-2. Do NOT add, omit, or alter any intelligence — this is operational data, not creative writing
-3. Maintain the same tone: professional, concise, intelligence-briefing style
-4. Keep proper nouns in their original form (e.g. "Boko Haram" stays "Boko Haram", "Gao" stays "Gao")
-5. If the text contains acronyms (e.g. FDS, EIGS, MINUSMA), keep them unchanged
-6. Output ONLY the translated text — no explanations, no notes, no markdown, no quotes around the result
-7. If the text is already in ${langName}, return it unchanged exactly as given
+async function translateViaMyMemory(text: string, targetLang: string): Promise<{ ok: true; text: string } | { ok: false; error: string }> {
+  const sourceLang = targetLang === 'fr' ? 'en' : 'fr';
+  const detected = guessSourceLang(text);
+  const source = detected === targetLang ? sourceLang : detected;
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source}|${targetLang}`;
+  const resp = await fetch(url);
+  if (!resp.ok) {
+    return { ok: false, error: `MyMemory ${resp.status}: ${(await resp.text()).substring(0, 200)}` };
+  }
+  const data = await resp.json();
+  const translated = data?.responseData?.translatedText?.trim();
+  if (!translated || data?.responseStatus >= 400) {
+    return { ok: false, error: `MyMemory: ${data?.responseDetails || 'empty response'}` };
+  }
+  return { ok: true, text: translated };
+}
 
-Text to translate:
-${text}`;
+async function translateText(text: string, targetLang: string): Promise<{ ok: true; text: string } | { ok: false; error: string }> {
+  const google = await translateViaGoogle(text, targetLang);
+  if (google.ok) return google;
+
+  const fallback = await translateViaMyMemory(text, targetLang);
+  if (fallback.ok) return fallback;
+
+  return { ok: false, error: `${google.error} | fallback: ${fallback.error}` };
 }
 
 serve(async (req: Request) => {
@@ -45,13 +76,6 @@ serve(async (req: Request) => {
 
     if (!feedId) {
       return new Response(JSON.stringify({ error: 'feedId required' }), { status: 400, headers });
-    }
-
-    if (!ANTHROPIC_API_KEY) {
-      return new Response(JSON.stringify({
-        error: 'MISSING_API_KEY',
-        detail: 'ANTHROPIC_API_KEY secret not configured on this Supabase project (Project Settings → Edge Functions → Secrets).',
-      }), { status: 503, headers });
     }
 
     const lang = targetLang || 'fr';
@@ -90,63 +114,21 @@ serve(async (req: Request) => {
     const results: Record<string, string> = {};
     let apiError: string | null = null;
 
-    // Translate title
     if (feed.title) {
-      const titlePrompt = buildTranslationPrompt(feed.title, lang);
-
-      const titleResp = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': ANTHROPIC_API_KEY,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 300,
-          temperature: 0.1,
-          system: 'You are a military-grade security intelligence translator. Output only the translation, no commentary.',
-          messages: [{ role: 'user', content: titlePrompt }],
-        }),
-      });
-
-      if (titleResp.ok) {
-        const titleData = await titleResp.json();
-        const titleContent = titleData?.content?.[0]?.text?.trim() || '';
-        results.translated_title = titleContent || feed.title;
+      const r = await translateText(feed.title, lang);
+      if (r.ok) {
+        results.translated_title = r.text;
       } else {
-        apiError = `Anthropic API ${titleResp.status}: ${(await titleResp.text()).substring(0, 300)}`;
-        results.translated_title = feed.title;
+        apiError = r.error;
       }
     }
 
-    // Translate summary if it exists
     if (feed.summary) {
-      const summaryPrompt = buildTranslationPrompt(feed.summary, lang);
-
-      const summaryResp = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': ANTHROPIC_API_KEY,
-          'anthropic-version': '2023-06-01',
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          temperature: 0.1,
-          system: 'You are a military-grade security intelligence translator. Output only the translation, no commentary.',
-          messages: [{ role: 'user', content: summaryPrompt }],
-        }),
-      });
-
-      if (summaryResp.ok) {
-        const summaryData = await summaryResp.json();
-        const summaryContent = summaryData?.content?.[0]?.text?.trim() || '';
-        results.translated_summary = summaryContent || feed.summary;
+      const r = await translateText(feed.summary, lang);
+      if (r.ok) {
+        results.translated_summary = r.text;
       } else {
-        apiError = apiError || `Anthropic API ${summaryResp.status}: ${(await summaryResp.text()).substring(0, 300)}`;
-        results.translated_summary = feed.summary;
+        apiError = apiError || r.error;
       }
     }
 
