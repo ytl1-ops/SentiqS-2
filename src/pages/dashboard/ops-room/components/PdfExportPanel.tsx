@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { FileText, Download, MapPin, Shield, AlertTriangle, FileCheck } from 'lucide-react';
 import { ALL_AFRICA_COUNTRIES, type AfricaCountry } from '@/data/africaRegions';
 import { useAlertLevels } from '@/hooks/useAlertLevels';
+import { useLocalizedAlertLevels } from '@/hooks/useLocalizedAlertLevels';
 import { generatePdfReport } from '../../reports/utils/pdfGenerator';
 
 interface PdfExportPanelProps {
@@ -14,7 +15,8 @@ const reportTypes = [
 ];
 
 export default function PdfExportPanel({ selectedCountry }: PdfExportPanelProps) {
-  const { alertLevels } = useAlertLevels();
+  const { alertLevels: rawAlertLevels } = useAlertLevels();
+  const { levels: alertLevels } = useLocalizedAlertLevels(rawAlertLevels);
   const [reportType, setReportType] = useState('securite');
   const [targetCountry, setTargetCountry] = useState(selectedCountry?.code || '');
   const [targetLocality, setTargetLocality] = useState('');
@@ -63,7 +65,7 @@ export default function PdfExportPanel({ selectedCountry }: PdfExportPanelProps)
           : [],
         alertsIncluded: incidents.map((inc) => ({
           id: inc.id,
-          title: inc.title,
+          title: inc.displayTitle,
           severity: inc.severity,
           locality: inc.locality || countryObj.name,
           department: inc.category,
@@ -246,7 +248,7 @@ export default function PdfExportPanel({ selectedCountry }: PdfExportPanelProps)
                                 inc.severity === 'critical' ? 'bg-red-500' : inc.severity === 'high' ? 'bg-orange-500' : inc.severity === 'medium' ? 'bg-yellow-500' : 'bg-emerald-500'
                               }`} />
                               <span className="text-gray-400">
-                                {inc.title} — Source : <span className="text-emerald-500">{inc.source}</span>
+                                {inc.displayTitle} — Source : <span className="text-emerald-500">{inc.source}</span>
                               </span>
                             </div>
                           ))}

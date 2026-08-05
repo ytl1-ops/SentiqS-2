@@ -31,6 +31,9 @@ export interface SupabaseFeed {
   source_status?: string | null;
   summary?: string;
   parent_feed_id?: string | null;
+  translated_title?: string;
+  translated_summary?: string;
+  translation_lang?: string;
 }
 
 export interface TriggeringIncident {
@@ -43,6 +46,8 @@ export interface TriggeringIncident {
   source: string;
   verified: boolean;
   category: string;
+  translated_title?: string;
+  translation_lang?: string;
 }
 
 export interface CountryAlertLevel {
@@ -601,6 +606,8 @@ export function useAlertLevels() {
         source: feed.source,
         verified: feed.verification_status === 'verified',
         category: feed.category,
+        translated_title: feed.translated_title,
+        translation_lang: feed.translation_lang,
       });
     });
 

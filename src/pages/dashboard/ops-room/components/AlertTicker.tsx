@@ -1,9 +1,9 @@
 import { MapPin } from 'lucide-react';
-import type { VerifiedFeed } from '@/hooks/useVerifiedFeeds';
+import type { LocalizedFeed } from '@/hooks/useLocalizedFeeds';
 import { getFeedSeverity } from '@/hooks/useAlertLevels';
 
 interface AlertTickerProps {
-  feeds: VerifiedFeed[];
+  feeds: LocalizedFeed[];
 }
 
 export default function AlertTicker({ feeds }: AlertTickerProps) {
@@ -39,7 +39,7 @@ export default function AlertTicker({ feeds }: AlertTickerProps) {
                   }`}>
                     {sev === 'critical' ? 'CRITIQUE' : 'ÉLEVÉ'}
                   </span>
-                  <span className="text-xs text-gray-300 font-medium">{feed.title}</span>
+                  <span className="text-xs text-gray-300 font-medium">{feed.displayTitle}</span>
                   <span className="inline-flex items-center gap-0.5 text-[9px] text-gray-500">
                     <MapPin className="w-2.5 h-2.5" />
                     {feed.locality ? `${feed.locality}, ` : ''}{feed.country}

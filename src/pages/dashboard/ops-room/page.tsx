@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { Globe, Search, AlertTriangle, Shield, Radio, ChevronDown } from 'lucide-react';
 import { ALL_AFRICA_COUNTRIES, REGION_ORDER, AFRICA_REGIONS, type AfricaCountry } from '@/data/africaRegions';
 import { useVerifiedFeeds } from '@/hooks/useVerifiedFeeds';
+import { useLocalizedFeeds } from '@/hooks/useLocalizedFeeds';
 import { useAgendaEvents } from '@/hooks/useAgendaEvents';
+import { useLocalizedAgenda } from '@/hooks/useLocalizedAgenda';
 import { getFeedSeverity } from '@/hooks/useAlertLevels';
 import { isVerifiedData } from '@/utils/dataIntegrity';
 import CountrySelector from './components/CountrySelector';
@@ -27,8 +29,10 @@ export default function OpsRoom() {
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [showSosModal, setShowSosModal] = useState(false);
-  const { feeds: supabaseFeeds } = useVerifiedFeeds({ includeUnverified: true, includeDeadSources: true });
-  const { events: agendaEvents } = useAgendaEvents();
+  const { feeds: rawFeeds } = useVerifiedFeeds({ includeUnverified: true, includeDeadSources: true });
+  const { feeds: supabaseFeeds } = useLocalizedFeeds(rawFeeds);
+  const { events: rawAgendaEvents } = useAgendaEvents();
+  const { events: agendaEvents } = useLocalizedAgenda(rawAgendaEvents);
 
   const filteredCountries = useMemo(() => {
     if (selectedRegion === 'all') return ALL_AFRICA_COUNTRIES;

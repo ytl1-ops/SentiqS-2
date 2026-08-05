@@ -1,8 +1,8 @@
 import { Calendar, MapPin, Users, GraduationCap, Radar, ShieldAlert, Megaphone, FileSearch, PresentationIcon, Timer } from 'lucide-react';
-import type { AgendaEvent } from '@/hooks/useAgendaEvents';
+import type { LocalizedAgendaEvent } from '@/hooks/useLocalizedAgenda';
 
 interface AgendaWidgetProps {
-  agendaItems: AgendaEvent[];
+  agendaItems: LocalizedAgendaEvent[];
 }
 
 const typeIcons: Record<string, React.ReactNode> = {
@@ -126,7 +126,7 @@ export default function AgendaWidget({ agendaItems }: AgendaWidgetProps) {
                       </span>
                       <span className="text-[10px] text-gray-400">{item.country}</span>
                     </div>
-                    <p className="text-xs text-gray-200 font-medium">{item.title}</p>
+                    <p className="text-xs text-gray-200 font-medium">{item.displayTitle}</p>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
                       {item.location && (
                         <span className="inline-flex items-center gap-1 text-[9px] text-gray-500">
@@ -151,7 +151,7 @@ export default function AgendaWidget({ agendaItems }: AgendaWidgetProps) {
   );
 }
 
-function AgendaCard({ item, compact }: { item: AgendaEvent; compact?: boolean }) {
+function AgendaCard({ item, compact }: { item: LocalizedAgendaEvent; compact?: boolean }) {
   return (
     <div className="bg-[#1a2232] rounded-lg border border-[#273449] p-3">
       <div className="flex items-center gap-2 flex-wrap mb-2">
@@ -161,9 +161,9 @@ function AgendaCard({ item, compact }: { item: AgendaEvent; compact?: boolean })
         </span>
         <span className="text-[10px] text-gray-500">{item.country}</span>
       </div>
-      <p className="text-xs text-gray-200 font-semibold leading-snug">{item.title}</p>
-      {!compact && item.description && (
-        <p className="text-[10px] text-gray-400 mt-1.5 leading-relaxed">{item.description}</p>
+      <p className="text-xs text-gray-200 font-semibold leading-snug">{item.displayTitle}</p>
+      {!compact && item.displayDescription && (
+        <p className="text-[10px] text-gray-400 mt-1.5 leading-relaxed">{item.displayDescription}</p>
       )}
       <div className="flex items-center gap-2 mt-2 flex-wrap">
         {item.location && (

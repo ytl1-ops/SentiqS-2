@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router-dom';
 import i18n from '@/i18n';
 import { useAlertLevels } from '@/hooks/useAlertLevels';
+import { useLocalizedAlertLevels } from '@/hooks/useLocalizedAlertLevels';
 import { useSupabaseStats } from '@/hooks/useSupabaseStats';
 import { usePostureHistory } from '@/hooks/usePostureHistory';
 import { LEVEL_BORDER, getPostureLabel, getDirection } from '@/utils/postureUtils';
@@ -123,7 +124,8 @@ function RecentTimeline() {
 export default function SituationPage() {
   const [activeTab, setActiveTab] = useState<Tab>('overview');
   const { t } = useTranslation();
-  const { alertLevels, loading, error, stats, lastCalculatedAt } = useAlertLevels();
+  const { alertLevels: rawAlertLevels, loading, error, stats, lastCalculatedAt } = useAlertLevels();
+  const { levels: alertLevels } = useLocalizedAlertLevels(rawAlertLevels);
   const { stats: dashboardStats } = useSupabaseStats();
   const loc = i18n.language.startsWith('fr') ? 'fr-FR' : 'en-US';
 

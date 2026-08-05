@@ -1,13 +1,13 @@
 import { useState, useMemo } from 'react';
 import { MapPin, Shield, Globe, Building, Calendar, ExternalLink, Search } from 'lucide-react';
 import { ALL_AFRICA_COUNTRIES, type AfricaCountry } from '@/data/africaRegions';
-import type { VerifiedFeed } from '@/hooks/useVerifiedFeeds';
+import type { LocalizedFeed } from '@/hooks/useLocalizedFeeds';
 import { getFeedSeverity } from '@/hooks/useAlertLevels';
 import { isVerifiedData } from '@/utils/dataIntegrity';
 
 interface CountryDetailProps {
   country: AfricaCountry | null;
-  feeds: VerifiedFeed[];
+  feeds: LocalizedFeed[];
 }
 
 export default function CountryDetail({ country, feeds }: CountryDetailProps) {
@@ -205,12 +205,12 @@ export default function CountryDetail({ country, feeds }: CountryDetailProps) {
                       rel="noopener noreferrer nofollow"
                       className="text-sm font-semibold text-gray-100 hover:text-emerald-400 transition-colors cursor-pointer leading-snug"
                     >
-                      {feed.title}
+                      {feed.displayTitle}
                       <ExternalLink className="w-3 h-3 inline ml-1 text-gray-600" />
                     </a>
 
-                    {feed.summary && (
-                      <p className="text-xs text-gray-400 mt-1.5 leading-relaxed line-clamp-2">{feed.summary}</p>
+                    {feed.displaySummary && (
+                      <p className="text-xs text-gray-400 mt-1.5 leading-relaxed line-clamp-2">{feed.displaySummary}</p>
                     )}
 
                     <div className="flex items-center gap-2 mt-2 flex-wrap">

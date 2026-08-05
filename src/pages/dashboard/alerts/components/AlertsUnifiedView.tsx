@@ -1,4 +1,6 @@
-import { CountryAlertLevel, TriggeringIncident, LEVEL_BADGE_BORDERED } from '@/hooks/useAlertLevels';
+import { LEVEL_BADGE_BORDERED } from '@/hooks/useAlertLevels';
+import type { LocalizedCountryAlertLevel } from '@/hooks/useLocalizedAlertLevels';
+import type { LocalizedIncident } from '@/hooks/useLocalizedIncidents';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/i18n';
 import CountryAlertCard from './CountryAlertCard';
@@ -7,7 +9,7 @@ import VerificationBadge from '@/components/base/VerificationBadge';
 import { SEVERITY_STRIPE, SEVERITY_BADGE } from '@/utils/severityColors';
 
 interface Props {
-  levels: CountryAlertLevel[];
+  levels: LocalizedCountryAlertLevel[];
   levelFilter: string;
 }
 
@@ -32,7 +34,7 @@ export default function AlertsUnifiedView({ levels, levelFilter }: Props) {
     : levels.filter((l) => l.level === levelFilter);
 
   // ── Timeline : collecter tous les incidents des pays filtrés ──
-  const allIncidents: (TriggeringIncident & { country: string; level: string; score: number })[] = [];
+  const allIncidents: (LocalizedIncident & { country: string; level: string; score: number })[] = [];
   filtered.forEach((l) => {
     l.triggeringIncidents.forEach((inc) => {
       allIncidents.push({ ...inc, country: l.country, level: l.level, score: l.score });
@@ -157,7 +159,7 @@ export default function AlertsUnifiedView({ levels, levelFilter }: Props) {
                               {isUnverified && (
                                 <i className="ri-error-warning-line text-amber-500 mr-1 text-[10px]" title={t('common.unverifiedBadge')} />
                               )}
-                              {inc.title}
+                              {inc.displayTitle}
                             </p>
                             <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                               <span className="text-[9px] text-gray-400">{inc.source}</span>

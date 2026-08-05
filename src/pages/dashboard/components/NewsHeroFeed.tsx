@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useVerifiedFeeds } from '@/hooks/useVerifiedFeeds';
+import { useLocalizedFeeds } from '@/hooks/useLocalizedFeeds';
 import { normalizeCountryName } from '@/hooks/useAlertLevels';
 import { formatTimeSince } from '@/utils/timeFormat';
 import { categorySeverityStyle } from '@/utils/categoryColors';
@@ -12,11 +13,12 @@ export default function NewsHeroFeed() {
   const { t, i18n } = useTranslation();
   const { feeds, loading } = useVerifiedFeeds();
 
-  const latestFeeds = useMemo(() => {
+  const latestFeedsRaw = useMemo(() => {
     return [...feeds]
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
       .slice(0, 12);
   }, [feeds]);
+  const { feeds: latestFeeds } = useLocalizedFeeds(latestFeedsRaw);
 
   const statsCards = useMemo(() => {
     const now = new Date();
@@ -131,12 +133,12 @@ export default function NewsHeroFeed() {
                 </div>
 
                 <h3 className="text-sm font-bold text-sentiqs-navy leading-snug mb-2 group-hover:text-sentiqs-blue transition-colors">
-                  {feed.title}
+                  {feed.displayTitle}
                 </h3>
 
-                {feed.summary && (
+                {feed.displaySummary && (
                   <p className="text-xs text-sentiqs-gray-text leading-relaxed mb-2.5 line-clamp-3">
-                    {feed.summary}
+                    {feed.displaySummary}
                   </p>
                 )}
 

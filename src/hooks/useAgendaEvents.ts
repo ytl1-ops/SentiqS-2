@@ -16,6 +16,10 @@ export interface AgendaEvent {
   participants: string;
   description: string;
   description_en?: string;
+  translated_title?: string;
+  translated_description?: string;
+  translation_lang?: 'fr' | 'en';
+  translated_at?: string;
   created_at: string;
   updated_at: string;
 }

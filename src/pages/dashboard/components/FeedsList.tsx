@@ -1,10 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { useVerifiedFeeds } from '@/hooks/useVerifiedFeeds';
+import { useLocalizedFeeds } from '@/hooks/useLocalizedFeeds';
 import { categoryBadgeClasses } from '@/utils/categoryColors';
 
 export default function FeedsList() {
   const { t } = useTranslation();
-  const { feeds, loading } = useVerifiedFeeds({ limit: 8 });
+  const { feeds: rawFeeds, loading } = useVerifiedFeeds({ limit: 8 });
+  const { feeds } = useLocalizedFeeds(rawFeeds);
 
   const formatTime = (timestamp: string) => {
     const date = new Date(timestamp);
@@ -76,13 +78,13 @@ export default function FeedsList() {
                 className="text-xs text-sentiqs-navy leading-snug hover:text-sentiqs-blue transition-colors cursor-pointer block"
                 title={`${t('dashboard.feeds.readSource')} : ${feed.source}`}
               >
-                {feed.title}
+                {feed.displayTitle}
                 <i className="ri-external-link-line text-[9px] ml-1 align-middle text-sentiqs-gray-text" />
               </a>
 
-              {feed.summary && (
+              {feed.displaySummary && (
                 <p className="text-[10px] text-sentiqs-gray-text mt-0.5 leading-relaxed break-words">
-                  {feed.summary}
+                  {feed.displaySummary}
                 </p>
               )}
 

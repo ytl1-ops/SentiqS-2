@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { jsPDF } from 'jspdf';
 import { useVerifiedFeeds, verifyFeedWithAgent, type VerifiedFeed } from '@/hooks/useVerifiedFeeds';
 import { useFeedTranslation } from '@/hooks/useFeedTranslation';
+import { useLocalizedFeeds } from '@/hooks/useLocalizedFeeds';
+import { detectLanguage } from '@/utils/languageDetection';
 import ShareModal from '@/components/feature/ShareModal';
 import ErrorState from '@/components/base/ErrorState';
 import EmptyState from '@/components/base/EmptyState';
@@ -23,7 +25,9 @@ export default function FeedsPage() {
   const { t, i18n } = useTranslation();
   const { feeds: allFeeds, loading, error, refetch } = useVerifiedFeeds();
   const { translateFeed, translateFeedsBatch, isTranslating, batchProgress } = useFeedTranslation();
+  useLocalizedFeeds(allFeeds); // déclenche la traduction automatique en arrière-plan pour tous les flux chargés
   const isEnglish = i18n.language?.startsWith('en');
+  const uiLang = isEnglish ? 'en' : 'fr';
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [verificationFilter, setVerificationFilter] = useState<string>('all');
@@ -300,26 +304,25 @@ export default function FeedsPage() {
     doc.save(`SentiqS_Local_${feed.id}.pdf`);
   };
 
-  // Resolve display content based on current language
+  // Resolve display content based on current language (bidirectionnel :
+  // un flux anglophone doit être traduit en FR quand FR est actif, et
+  // inversement — pas seulement FR→EN comme avant).
   const displayTitle = useCallback((feed: VerifiedFeed): string => {
-    if (!isEnglish) return feed.title;
-    if (feed.translated_title && feed.translation_lang === 'en') return feed.translated_title;
-    if (feed.title_en) return feed.title_en;
+    if (feed.translated_title && feed.translation_lang === uiLang) return feed.translated_title;
+    if (isEnglish && feed.title_en) return feed.title_en;
     return feed.title;
-  }, [isEnglish]);
+  }, [uiLang, isEnglish]);
 
   const displaySummary = useCallback((feed: VerifiedFeed): string | undefined => {
-    if (!isEnglish) return feed.summary;
-    if (feed.translated_summary && feed.translation_lang === 'en') return feed.translated_summary;
+    if (feed.translated_summary && feed.translation_lang === uiLang) return feed.translated_summary;
     return feed.summary;
-  }, [isEnglish]);
+  }, [uiLang]);
 
   // Check if feed needs translation for current language
   const needsTranslation = useCallback((feed: VerifiedFeed): boolean => {
-    if (!isEnglish) return false;
-    const lang = feed.translation_lang;
-    return lang !== 'en' || !feed.translated_title;
-  }, [isEnglish]);
+    if (feed.translation_lang === uiLang && feed.translated_title) return false;
+    return detectLanguage(feed.title) !== uiLang;
+  }, [uiLang]);
 
   // Handle translate single feed
   const handleTranslateFeed = useCallback(async (feedId: string) => {
@@ -436,8 +439,8 @@ export default function FeedsPage() {
           </span>
         )}
         <div className="flex items-center gap-2 ml-auto flex-wrap">
-          {/* Translate All button — only visible in English mode with untranslated feeds */}
-          {isEnglish && untranslatedCount > 0 && (
+          {/* Translate All button — visible whenever untranslated feeds exist, in either language */}
+          {untranslatedCount > 0 && (
             <button
               type="button"
               onClick={handleTranslateAll}
@@ -893,7 +896,7 @@ export default function FeedsPage() {
                         {t('dashboard.feeds.notTranslated')}
                       </span>
                     )}
-                    {isEnglish && !needsTranslation(feed) && feed.translated_title && (
+                    {!needsTranslation(feed) && feed.translated_title && feed.translation_lang === uiLang && (
                       <span className="inline-flex items-center gap-0.5 ml-1.5 px-1.5 py-0.5 rounded text-[9px] font-medium bg-emerald-50 text-emerald-600 border border-emerald-200 align-middle whitespace-nowrap">
                         <i className="ri-check-line text-[8px]" />
                         {t('dashboard.feeds.translated')}

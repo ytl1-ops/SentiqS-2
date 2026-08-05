@@ -1,10 +1,10 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import type { CountryAlertLevel } from '@/hooks/useAlertLevels';
+import type { LocalizedCountryAlertLevel } from '@/hooks/useLocalizedAlertLevels';
 import EmptyState from '@/components/base/EmptyState';
 
 interface CriticalSituationsProps {
-  levels: CountryAlertLevel[];
+  levels: LocalizedCountryAlertLevel[];
 }
 
 export default function CriticalSituations({ levels }: CriticalSituationsProps) {
@@ -77,7 +77,7 @@ export default function CriticalSituations({ levels }: CriticalSituationsProps) 
                   {latestIncident && (
                     <div className={`text-[10px] mt-1 truncate ${isRouge ? 'text-red-700' : 'text-orange-700'}`}>
                       <i className="ri-time-line mr-1" />
-                      {new Date(latestIncident.timestamp).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })} — {latestIncident.title}
+                      {new Date(latestIncident.timestamp).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })} — {latestIncident.displayTitle}
                     </div>
                   )}
                   {/* Recommendation with i18n */}

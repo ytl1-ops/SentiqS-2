@@ -1,4 +1,5 @@
-import { CountryAlertLevel, LEVEL_BG, LEVEL_DOT, LEVEL_HEADER, LEVEL_HEADER_TEXT, LEVEL_COLORS } from '@/hooks/useAlertLevels';
+import { LEVEL_BG, LEVEL_DOT, LEVEL_HEADER, LEVEL_HEADER_TEXT, LEVEL_COLORS } from '@/hooks/useAlertLevels';
+import type { LocalizedCountryAlertLevel } from '@/hooks/useLocalizedAlertLevels';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/i18n';
@@ -6,7 +7,7 @@ import { formatTimeSince } from '@/utils/timeFormat';
 import { SEVERITY_DOT } from '@/utils/severityColors';
 
 interface Props {
-  data: CountryAlertLevel;
+  data: LocalizedCountryAlertLevel;
   compact?: boolean;
 }
 
@@ -157,7 +158,7 @@ export default function CountryAlertCard({ data, compact = false }: Props) {
                   <div className="min-w-0">
                     <p className="text-[11px] text-sentiqs-navy leading-snug break-words">
                       <span className="text-gray-400 mr-1">{formatShortDate(inc.timestamp)}</span>
-                      {inc.title}
+                      {inc.displayTitle}
                     </p>
                     <div className="flex items-center gap-2 mt-0.5 flex-wrap">
                       <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-semibold ${

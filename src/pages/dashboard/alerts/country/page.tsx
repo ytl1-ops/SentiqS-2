@@ -5,6 +5,8 @@ import { supabase } from '@/lib/supabase';
 import { africaCountryCenters } from '@/data/africaCoordinates';
 import { useAlertLevels, LEVEL_COLORS, LEVEL_BG, COUNTRY_NAME_BY_CODE } from '@/hooks/useAlertLevels';
 import type { TriggeringIncident } from '@/hooks/useAlertLevels';
+import { useLocalizedAlertLevels } from '@/hooks/useLocalizedAlertLevels';
+import { useLocalizedIncidents } from '@/hooks/useLocalizedIncidents';
 import CountryMap from './components/CountryMap';
 import TrendChart from './components/TrendChart';
 import Timeline30d from './components/Timeline30d';
@@ -35,6 +37,8 @@ interface Feed30d {
   timestamp: string;
   verification_status: string;
   summary?: string;
+  translated_title?: string;
+  translation_lang?: string;
 }
 
 export default function CountryAlertDetailPage() {
@@ -42,7 +46,8 @@ export default function CountryAlertDetailPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const { alertLevels } = useAlertLevels();
+  const { alertLevels: rawAlertLevels } = useAlertLevels();
+  const { levels: alertLevels } = useLocalizedAlertLevels(rawAlertLevels);
 
   const [alerts30d, setAlerts30d] = useState<Alert30d[]>([]);
   const [feeds30d, setFeeds30d] = useState<Feed30d[]>([]);
@@ -130,12 +135,16 @@ export default function CountryAlertDetailPage() {
         source: f.source,
         verified: f.verification_status === 'verified',
         category: f.category,
+        translated_title: f.translated_title,
+        translation_lang: f.translation_lang,
       });
     });
 
     incidents.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     return incidents;
   }, [alerts30d, feeds30d]);
+
+  const { incidents: localizedIncidents30d } = useLocalizedIncidents(allIncidents30d);
 
   const dailyCounts = useMemo(() => {
     const counts: Record<string, { critical: number; high: number; medium: number; low: number; total: number }> = {};
@@ -347,7 +356,7 @@ export default function CountryAlertDetailPage() {
       </div>
 
       {/* Timeline */}
-      <Timeline30d incidents={allIncidents30d} />
+      <Timeline30d incidents={localizedIncidents30d} />
 
       {/* Freshness badge */}
       {countryLevel.freshnessHours !== null && (

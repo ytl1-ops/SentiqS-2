@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAlertLevels, LEVEL_COLORS } from '@/hooks/useAlertLevels';
+import { useLocalizedAlertLevels } from '@/hooks/useLocalizedAlertLevels';
 import AlertsUnifiedView from './components/AlertsUnifiedView';
 import ErrorState from '@/components/base/ErrorState';
 import i18n from '@/i18n';
@@ -49,7 +50,8 @@ export default function AlertsPage() {
   const { t } = useTranslation();
   const [levelFilter, setLevelFilter] = useState<LevelFilter>('all');
   const [regionFilter, setRegionFilter] = useState<string>('all');
-  const { alertLevels, loading, error, stats, recalculate } = useAlertLevels();
+  const { alertLevels: rawAlertLevels, loading, error, stats, recalculate } = useAlertLevels();
+  const { levels: alertLevels } = useLocalizedAlertLevels(rawAlertLevels);
 
   const regions = useMemo(() => {
     const r = new Set<string>();

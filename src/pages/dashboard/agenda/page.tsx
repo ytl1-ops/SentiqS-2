@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAgendaEvents, AgendaEvent } from '@/hooks/useAgendaEvents';
+import { useAgendaEvents } from '@/hooks/useAgendaEvents';
+import { useLocalizedAgenda, type LocalizedAgendaEvent } from '@/hooks/useLocalizedAgenda';
 import ShareModal from '@/components/feature/ShareModal';
 import EmptyState from '@/components/base/EmptyState';
 import { SEVERITY_BADGE_BORDERED } from '@/utils/severityColors';
@@ -27,7 +28,8 @@ const typeConfig: Record<EventType, { label: string; labelEn: string; icon: stri
 export default function AgendaPage() {
   const { t, i18n } = useTranslation();
   const isFr = i18n.language.startsWith('fr');
-  const { events: agendaEvents, loading } = useAgendaEvents();
+  const { events: rawAgendaEvents, loading } = useAgendaEvents();
+  const { events: agendaEvents } = useLocalizedAgenda(rawAgendaEvents);
 
   const today = new Date();
   const [viewMonth, setViewMonth] = useState(today.getMonth());
@@ -51,7 +53,7 @@ export default function AgendaPage() {
   };
 
   const eventsByDate = useMemo(() => {
-    const map: Record<string, AgendaEvent[]> = {};
+    const map: Record<string, LocalizedAgendaEvent[]> = {};
     agendaEvents.forEach((ev) => {
       if (!map[ev.date]) map[ev.date] = [];
       map[ev.date].push(ev);
@@ -225,7 +227,7 @@ export default function AgendaPage() {
                         <span
                           key={ev.id}
                           className={`w-1.5 h-1.5 rounded-full ${typeConfig[ev.type as EventType]?.dot || 'bg-gray-400'}`}
-                          title={ev.title}
+                          title={ev.displayTitle}
                         />
                       ))}
                       {(eventsByDate[cell.dateStr] || []).length > 3 && (
@@ -268,7 +270,7 @@ export default function AgendaPage() {
                   <div className="space-y-2">
                     {selectedDateEvents.map((ev) => {
                       const cfg = typeConfig[ev.type as EventType];
-                      const localizedTitle = isFr ? ev.title : (ev.title_en || ev.title);
+                      const localizedTitle = ev.displayTitle;
                       return (
                         <button
                           key={ev.id}
@@ -314,7 +316,7 @@ export default function AgendaPage() {
                                     <span className="font-semibold text-sentiqs-navy">{ev.participants}</span>
                                   </div>
                                   <p className="text-[10px] text-sentiqs-gray-text leading-relaxed pt-1">
-                                    {isFr ? ev.description : (ev.description_en || ev.description)}
+                                    {ev.displayDescription}
                                   </p>
                                   <div className="flex gap-2 pt-1">
                                     <button type="button" className="text-[10px] font-semibold text-sentiqs-navy hover:underline flex items-center gap-1">
@@ -340,7 +342,7 @@ export default function AgendaPage() {
                     const evDate = new Date(ev.date);
                     const evDay = evDate.getDate();
                     const evMonthName = (isFr ? MONTHS_FR : MONTHS_EN)[evDate.getMonth()];
-                    const localizedTitle = isFr ? ev.title : (ev.title_en || ev.title);
+                    const localizedTitle = ev.displayTitle;
                     return (
                       <button
                         key={ev.id}

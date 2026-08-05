@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { ExternalLink, MapPin, ShieldCheck, Clock, ShieldAlert, Eye } from 'lucide-react';
-import type { VerifiedFeed } from '@/hooks/useVerifiedFeeds';
+import type { LocalizedFeed } from '@/hooks/useLocalizedFeeds';
 import { getFeedSeverity } from '@/hooks/useAlertLevels';
 import { categoryBadgeClasses } from '@/utils/categoryColors';
 import { isVerifiedData } from '@/utils/dataIntegrity';
 
 interface FeedAggregatorProps {
-  supabaseFeeds: VerifiedFeed[];
+  supabaseFeeds: LocalizedFeed[];
 }
 
 const alertLevelConfig = {
@@ -100,17 +100,17 @@ export default function FeedAggregator({ supabaseFeeds }: FeedAggregatorProps) {
                     rel="noopener noreferrer nofollow"
                     className="text-sm font-bold text-gray-100 leading-snug hover:text-emerald-400 transition-colors cursor-pointer block"
                   >
-                    {feed.title}
+                    {feed.displayTitle}
                     <ExternalLink className="w-3 h-3 inline ml-1.5 text-gray-600" />
                   </a>
 
                   {/* Summary — expandable */}
-                  {feed.summary && (
+                  {feed.displaySummary && (
                     <div className="mt-2">
                       <p className={`text-xs text-gray-400 leading-relaxed ${isExpanded ? '' : 'line-clamp-3'}`}>
-                        {feed.summary}
+                        {feed.displaySummary}
                       </p>
-                      {feed.summary.length > 200 && (
+                      {feed.displaySummary.length > 200 && (
                         <button
                           type="button"
                           onClick={() => setExpandedId(isExpanded ? null : feed.id)}

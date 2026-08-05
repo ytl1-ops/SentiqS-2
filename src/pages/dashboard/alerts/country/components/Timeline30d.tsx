@@ -8,6 +8,7 @@ import { SEVERITY_DOT, SEVERITY_LABEL } from '@/utils/severityColors';
 export interface TimelineIncident {
   id: string;
   title: string;
+  displayTitle?: string;
   timestamp: string;
   severity: 'critical' | 'high' | 'medium' | 'low';
   type: 'alert' | 'feed';
@@ -109,7 +110,7 @@ export default function Timeline30d({ incidents }: Props) {
                         <span className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${SEVERITY_DOT[inc.severity]}`} />
                         <div className="min-w-0 flex-1">
                           <p className="text-[11px] text-gray-800 leading-snug break-words">
-                            {inc.title}
+                            {inc.displayTitle ?? inc.title}
                           </p>
                           <div className="flex items-center gap-2 mt-1 flex-wrap">
                             {inc.verified ? (

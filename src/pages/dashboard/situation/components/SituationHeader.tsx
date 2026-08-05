@@ -1,15 +1,15 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/i18n';
-import type { CountryAlertLevel } from '@/hooks/useAlertLevels';
+import type { LocalizedCountryAlertLevel } from '@/hooks/useLocalizedAlertLevels';
 
 interface SituationHeaderProps {
-  levels: CountryAlertLevel[];
+  levels: LocalizedCountryAlertLevel[];
   lastUpdated: string | null;
   totalIncidents: number;
 }
 
-function getBannerColor(levels: CountryAlertLevel[]) {
+function getBannerColor(levels: LocalizedCountryAlertLevel[]) {
   const hasRouge = levels.some((l) => l.level === 'rouge');
   const hasOrange = levels.some((l) => l.level === 'orange');
   const hasJaune = levels.some((l) => l.level === 'jaune');
@@ -117,7 +117,7 @@ export default function SituationHeader({ levels, lastUpdated, totalIncidents }:
           </div>
           <div className="hidden sm:flex items-center gap-1 text-[10px] text-red-700 font-medium">
             <i className="ri-alert-line" />
-            {topCountry.triggeringIncidents[0]?.title || t('dashboard.situation.critical.empty')}
+            {topCountry.triggeringIncidents[0]?.displayTitle || t('dashboard.situation.critical.empty')}
           </div>
         </div>
       )}
