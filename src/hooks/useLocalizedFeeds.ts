@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
 import { detectLanguage } from '@/utils/languageDetection';
+import { processWithConcurrency } from '@/utils/concurrency';
 import type { VerifiedFeed } from './useVerifiedFeeds';
 
 export interface LocalizedFeed extends VerifiedFeed {
@@ -24,6 +25,10 @@ const inFlightIds = new Set<string>();
 const lastAttemptAt = new Map<string, number>();
 const RETRY_COOLDOWN_MS = 20_000;
 const RETRY_TIMER_MS = 25_000;
+// Traitement en parallèle borné plutôt que séquentiel : avec un seul flux
+// traité à la fois, le volume réel dépasse largement ce qui peut être
+// traduit avant que l'utilisateur ne change de page.
+const TRANSLATE_CONCURRENCY = 5;
 
 /**
  * Résout automatiquement le titre/résumé de chaque flux dans la langue
@@ -67,31 +72,35 @@ export function useLocalizedFeeds(feeds: VerifiedFeed[]) {
         return detectLanguage(f.title) !== uiLang;
       });
 
-      for (const feed of candidates) {
-        if (cancelled) return;
-        inFlightIds.add(feed.id);
-        lastAttemptAt.set(feed.id, Date.now());
-        try {
-          const { data, error } = await supabase.functions.invoke('translate-feed', {
-            body: { feedId: feed.id, targetLang: uiLang },
-          });
-          if (!cancelled) {
-            if (!error && data?.translated_title) {
-              setOverrides((prev) => ({
-                ...prev,
-                [feed.id]: { title: data.translated_title, summary: data.translated_summary, lang: uiLang },
-              }));
-            } else if (error) {
-              setTranslationError((error as Error).message || 'translation_failed');
+      await processWithConcurrency(
+        candidates,
+        async (feed) => {
+          inFlightIds.add(feed.id);
+          lastAttemptAt.set(feed.id, Date.now());
+          try {
+            const { data, error } = await supabase.functions.invoke('translate-feed', {
+              body: { feedId: feed.id, targetLang: uiLang },
+            });
+            if (!cancelled) {
+              if (!error && data?.translated_title) {
+                setOverrides((prev) => ({
+                  ...prev,
+                  [feed.id]: { title: data.translated_title, summary: data.translated_summary, lang: uiLang },
+                }));
+              } else if (error) {
+                setTranslationError((error as Error).message || 'translation_failed');
+              }
             }
+          } catch {
+            // best-effort — le texte original reste affiché, une nouvelle
+            // tentative aura lieu après le cooldown
+          } finally {
+            inFlightIds.delete(feed.id);
           }
-        } catch {
-          // best-effort — le texte original reste affiché, une nouvelle
-          // tentative aura lieu après le cooldown
-        } finally {
-          inFlightIds.delete(feed.id);
-        }
-      }
+        },
+        TRANSLATE_CONCURRENCY,
+        () => cancelled,
+      );
     }
 
     if (feeds.length > 0) run();

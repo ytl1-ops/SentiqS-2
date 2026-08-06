@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
 import { detectLanguage } from '@/utils/languageDetection';
+import { processWithConcurrency } from '@/utils/concurrency';
 import type { TriggeringIncident } from './useAlertLevels';
 
 export interface LocalizedIncident extends TriggeringIncident {
@@ -16,6 +17,7 @@ const inFlightIds = new Set<string>();
 const lastAttemptAt = new Map<string, number>();
 const RETRY_COOLDOWN_MS = 20_000;
 const RETRY_TIMER_MS = 25_000;
+const TRANSLATE_CONCURRENCY = 5;
 
 /**
  * Résout le titre affiché de chaque incident déclencheur (alertes + actus)
@@ -55,26 +57,30 @@ export function useLocalizedIncidents(incidents: TriggeringIncident[]) {
         return detectLanguage(inc.title) !== uiLang;
       });
 
-      for (const inc of candidates) {
-        if (cancelled) return;
-        inFlightIds.add(inc.id);
-        lastAttemptAt.set(inc.id, Date.now());
-        try {
-          const { data, error } = await supabase.functions.invoke('translate-feed', {
-            body: { feedId: inc.id, targetLang: uiLang },
-          });
-          if (!cancelled && !error && data?.translated_title) {
-            setOverrides((prev) => ({
-              ...prev,
-              [inc.id]: { title: data.translated_title, lang: uiLang },
-            }));
+      await processWithConcurrency(
+        candidates,
+        async (inc) => {
+          inFlightIds.add(inc.id);
+          lastAttemptAt.set(inc.id, Date.now());
+          try {
+            const { data, error } = await supabase.functions.invoke('translate-feed', {
+              body: { feedId: inc.id, targetLang: uiLang },
+            });
+            if (!cancelled && !error && data?.translated_title) {
+              setOverrides((prev) => ({
+                ...prev,
+                [inc.id]: { title: data.translated_title, lang: uiLang },
+              }));
+            }
+          } catch {
+            // best-effort — une nouvelle tentative aura lieu après le cooldown
+          } finally {
+            inFlightIds.delete(inc.id);
           }
-        } catch {
-          // best-effort — une nouvelle tentative aura lieu après le cooldown
-        } finally {
-          inFlightIds.delete(inc.id);
-        }
-      }
+        },
+        TRANSLATE_CONCURRENCY,
+        () => cancelled,
+      );
     }
 
     if (incidents.length > 0) run();

@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
 import { detectLanguage } from '@/utils/languageDetection';
+import { processWithConcurrency } from '@/utils/concurrency';
 import type { AgendaEvent } from './useAgendaEvents';
 
 export interface LocalizedAgendaEvent extends AgendaEvent {
@@ -17,6 +18,7 @@ const inFlightIds = new Set<string>();
 const lastAttemptAt = new Map<string, number>();
 const RETRY_COOLDOWN_MS = 20_000;
 const RETRY_TIMER_MS = 25_000;
+const TRANSLATE_CONCURRENCY = 5;
 
 /**
  * Équivalent de useLocalizedFeeds pour les événements d'agenda : résout
@@ -54,26 +56,30 @@ export function useLocalizedAgenda(events: AgendaEvent[]) {
         return detectLanguage(e.title) !== uiLang;
       });
 
-      for (const event of candidates) {
-        if (cancelled) return;
-        inFlightIds.add(event.id);
-        lastAttemptAt.set(event.id, Date.now());
-        try {
-          const { data, error } = await supabase.functions.invoke('translate-agenda-event', {
-            body: { eventId: event.id, targetLang: uiLang },
-          });
-          if (!cancelled && !error && data?.translated_title) {
-            setOverrides((prev) => ({
-              ...prev,
-              [event.id]: { title: data.translated_title, description: data.translated_description, lang: uiLang },
-            }));
+      await processWithConcurrency(
+        candidates,
+        async (event) => {
+          inFlightIds.add(event.id);
+          lastAttemptAt.set(event.id, Date.now());
+          try {
+            const { data, error } = await supabase.functions.invoke('translate-agenda-event', {
+              body: { eventId: event.id, targetLang: uiLang },
+            });
+            if (!cancelled && !error && data?.translated_title) {
+              setOverrides((prev) => ({
+                ...prev,
+                [event.id]: { title: data.translated_title, description: data.translated_description, lang: uiLang },
+              }));
+            }
+          } catch {
+            // best-effort — une nouvelle tentative aura lieu après le cooldown
+          } finally {
+            inFlightIds.delete(event.id);
           }
-        } catch {
-          // best-effort — une nouvelle tentative aura lieu après le cooldown
-        } finally {
-          inFlightIds.delete(event.id);
-        }
-      }
+        },
+        TRANSLATE_CONCURRENCY,
+        () => cancelled,
+      );
     }
 
     if (events.length > 0) run();
