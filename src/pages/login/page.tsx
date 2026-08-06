@@ -206,7 +206,7 @@ export default function Login() {
             </h1>
 
             <p className="text-sm text-white/50 mb-10 max-w-xs leading-relaxed">
-              Plateforme d&apos;aide à la décision pour responsables sûreté. Alertes, corrélations, rapports.
+              Plateforme d&apos;aide à la décision pour responsables sûreté, humanitaires, financiers et voyageurs. Alertes, corrélations, rapports.
             </p>
 
             {/* Feature list */}

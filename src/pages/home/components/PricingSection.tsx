@@ -28,9 +28,10 @@ interface DisplayPlan {
 }
 
 const planDescriptions: Record<string, { desc: string; popular: boolean }> = {
-  Essentiel: { desc: 'Pour les petites structures', popular: false },
-  Professionnel: { desc: 'Pour les équipes sûreté', popular: true },
-  Enterprise: { desc: 'Pour les grands groupes', popular: false },
+  Voyageur: { desc: 'Pour un déplacement ou une mission individuelle', popular: false },
+  Essentiel: { desc: 'Pour les indépendants et petites structures', popular: false },
+  Professionnel: { desc: 'Pour les équipes sûreté, finance et opérations', popular: true },
+  Enterprise: { desc: 'Pour les grands groupes et ONG internationales', popular: false },
 };
 
 export default function PricingSection() {
@@ -135,7 +136,7 @@ export default function PricingSection() {
             <p className="text-sm text-sentiqs-gray-text">Aucun plan disponible pour le moment.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 max-w-6xl mx-auto">
             {plans.map((plan) => {
               const displayPrice = annual ? plan.price_yearly : plan.price_monthly;
               const period = annual

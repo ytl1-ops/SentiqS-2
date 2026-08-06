@@ -2,7 +2,7 @@ import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import StatsSection from './components/StatsSection';
 import FeaturesSection from './components/FeaturesSection';
-import TestimonialsSection from './components/TestimonialsSection';
+import PersonasSection from './components/PersonasSection';
 import PricingSection from './components/PricingSection';
 import LeadMagnet from './components/LeadMagnet';
 import Footer from './components/Footer';
@@ -15,7 +15,7 @@ const organizationSchema = {
   '@type': 'Organization',
   name: 'SentiqS',
   url: siteUrl,
-  description: "Plateforme d'aide à la décision pour responsables sûreté. Veille active sur 54 pays d'Afrique.",
+  description: "Plateforme d'aide à la décision pour tous ceux qui opèrent en Afrique : responsables sûreté, acteurs humanitaires, investisseurs et voyageurs. Veille active sur 54 pays.",
   knowsAbout: [
     'Veille sûreté',
     'Analyse de risques',
@@ -33,7 +33,7 @@ const websiteSchema = {
   '@type': 'WebSite',
   name: 'SentiqS',
   url: siteUrl,
-  description: "Plateforme d'Analyse Sûreté Pays et d'aide à la décision pour responsables sûreté couvrant 54 pays d'Afrique.",
+  description: "Plateforme d'Analyse Sûreté Pays et d'aide à la décision couvrant 54 pays d'Afrique, pour les responsables sûreté, humanitaires, financiers et voyageurs.",
   inLanguage: ['fr', 'en'],
 };
 
@@ -47,7 +47,7 @@ export default function Home() {
         <HeroSection />
         <StatsSection />
         <FeaturesSection />
-        <TestimonialsSection />
+        <PersonasSection />
         <PricingSection />
         <LeadMagnet />
         <Footer />

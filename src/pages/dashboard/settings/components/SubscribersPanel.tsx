@@ -17,12 +17,14 @@ interface Subscriber {
 }
 
 const tierLabels: Record<string, string> = {
+  Voyageur: 'Voyageur',
   Essentiel: 'Essentiel',
   Professionnel: 'Professionnel',
   Enterprise: 'Enterprise',
 };
 
 const tierColors: Record<string, string> = {
+  Voyageur: 'bg-teal-100 text-teal-700 border-teal-200',
   Essentiel: 'bg-gray-100 text-gray-700 border-gray-200',
   Professionnel: 'bg-sentiqs-navy/10 text-sentiqs-navy border-sentiqs-navy/20',
   Enterprise: 'bg-amber-100 text-amber-700 border-amber-200',
@@ -169,6 +171,7 @@ export default function SubscribersPanel() {
             <input type="text" placeholder="Téléphone (ex: +225...)" value={form.phone} onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))} className="px-3 py-1.5 rounded-lg text-xs border border-gray-200 focus:outline-none focus:border-sentiqs-navy text-sentiqs-navy placeholder:text-gray-400" />
             <input type="text" placeholder="Pays" value={form.country} onChange={(e) => setForm((p) => ({ ...p, country: e.target.value }))} className="px-3 py-1.5 rounded-lg text-xs border border-gray-200 focus:outline-none focus:border-sentiqs-navy text-sentiqs-navy placeholder:text-gray-400" />
             <select value={form.subscription_tier} onChange={(e) => setForm((p) => ({ ...p, subscription_tier: e.target.value }))} className="px-3 py-1.5 rounded-lg text-xs border border-gray-200 focus:outline-none focus:border-sentiqs-navy text-sentiqs-gray-text">
+              <option value="Voyageur">Voyageur</option>
               <option value="Essentiel">Essentiel</option>
               <option value="Professionnel">Professionnel</option>
               <option value="Enterprise">Enterprise</option>
@@ -194,6 +197,7 @@ export default function SubscribersPanel() {
           </div>
           <select value={tierFilter} onChange={(e) => setTierFilter(e.target.value)} className="px-3 py-1.5 rounded-lg text-[10px] font-semibold border border-gray-200 bg-white text-sentiqs-gray-text focus:outline-none focus:border-sentiqs-navy whitespace-nowrap">
             <option value="all">Tous les plans</option>
+            <option value="Voyageur">Voyageur</option>
             <option value="Essentiel">Essentiel</option>
             <option value="Professionnel">Professionnel</option>
             <option value="Enterprise">Enterprise</option>
