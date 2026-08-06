@@ -1281,4 +1281,11 @@ export default {
   'chat.open': 'Open the assistant',
   'chat.serviceUnavailable': 'The assistant is temporarily unavailable. Try again shortly or check the Alerts module directly.',
   'chat.emptyAnswer': "I couldn't generate an answer. Try a more specific question.",
+  'chat.tabGrounded': 'SentiqS Data',
+  'chat.tabGeneral': 'General',
+  'chat.generalTitle': 'General assistant',
+  'chat.generalSubtitle': 'Open questions, outside SentiqS data',
+  'chat.generalDisclaimer': 'This mode answers freely, without checking against the SentiqS database — do not use it for operational decisions.',
+  'chat.generalIntro': "Ask any general question — writing help, explanations, general knowledge. These answers are not verified against SentiqS data.",
+  'chat.generalPlaceholder': 'Ask a general question…',
 };

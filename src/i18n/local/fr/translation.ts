@@ -1348,4 +1348,11 @@ export default {
   'chat.open': "Ouvrir l'assistant",
   'chat.serviceUnavailable': "L'assistant est momentanément indisponible. Réessayez dans un instant ou consultez directement le module Alertes.",
   'chat.emptyAnswer': "Je n'ai pas pu générer de réponse. Réessayez avec une question plus précise.",
+  'chat.tabGrounded': 'Données SentiqS',
+  'chat.tabGeneral': 'Général',
+  'chat.generalTitle': 'Assistant général',
+  'chat.generalSubtitle': "Questions ouvertes, hors données SentiqS",
+  'chat.generalDisclaimer': "Ce mode répond librement, sans vérification contre la base SentiqS — à ne pas utiliser pour des décisions opérationnelles.",
+  'chat.generalIntro': "Posez n'importe quelle question générale — rédaction, explications, culture générale. Ces réponses ne sont pas vérifiées contre les données SentiqS.",
+  'chat.generalPlaceholder': 'Poser une question générale…',
 };

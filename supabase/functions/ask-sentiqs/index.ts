@@ -89,12 +89,65 @@ serve(async (req: Request) => {
     const body = await req.json();
     const message: string = (body.message || "").toString().slice(0, 2000);
     const history: ChatMessage[] = Array.isArray(body.history) ? body.history : [];
+    const mode: "grounded" | "general" = body.mode === "general" ? "general" : "grounded";
 
     if (!message.trim()) {
       return new Response(JSON.stringify({ error: "message required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    // Mode généraliste : pas d'ancrage dans les données SentiqS, questions
+    // ouvertes hors périmètre veille sécuritaire. Assistant distinct du
+    // mode "grounded" — clairement signalé côté interface pour ne pas
+    // laisser croire à une réponse vérifiée contre la base.
+    if (mode === "general") {
+      const generalSystemPrompt = `Tu es l'assistant généraliste intégré à SentiqS. Contrairement à l'assistant "Données SentiqS", tu n'es PAS limité aux données de la plateforme : tu réponds à des questions générales (culture générale, aide à la rédaction, explications, calculs, etc.).
+
+Règles :
+1. Réponds de manière utile, concise et directe.
+2. Si tu n'es pas certain d'un fait, dis-le plutôt que d'affirmer avec assurance.
+3. Réponds dans la langue de la question (français ou anglais).
+4. Si la question porte sur la situation sécuritaire d'un pays précis ou des données SentiqS en direct, précise que l'assistant "Données SentiqS" (mode ancré) est plus indiqué pour ce type de question.`;
+
+      const generalMessages: Array<{ role: string; content: string }> = [{ role: "system", content: generalSystemPrompt }];
+      for (const h of history.slice(-6)) {
+        if ((h.role === "user" || h.role === "assistant") && typeof h.content === "string") {
+          generalMessages.push({ role: h.role, content: h.content.slice(0, 2000) });
+        }
+      }
+      generalMessages.push({ role: "user", content: message });
+
+      const generalRes = await fetch(GROQ_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${GROQ_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: GROQ_MODEL,
+          max_tokens: 700,
+          temperature: 0.6,
+          messages: generalMessages,
+        }),
+      });
+
+      if (!generalRes.ok) {
+        const errText = await generalRes.text();
+        return new Response(
+          JSON.stringify({ error: "Groq API error", status: generalRes.status, detail: errText.slice(0, 500) }),
+          { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+
+      const generalData = await generalRes.json();
+      const generalAnswer: string = generalData.choices?.[0]?.message?.content || "";
+
+      return new Response(
+        JSON.stringify({ answer: generalAnswer, mode: "general" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
     }
 
     const supabase = createClient(
@@ -209,7 +262,7 @@ ${contextText || "Aucune donnée pertinente trouvée pour cette question."}`;
     const answer: string = groqData.choices?.[0]?.message?.content || "";
 
     return new Response(
-      JSON.stringify({ answer, country_matched: country }),
+      JSON.stringify({ answer, country_matched: country, mode: "grounded" }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   } catch (err) {
