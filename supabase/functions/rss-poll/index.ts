@@ -51,8 +51,15 @@ interface SourceResult {
   total_fetched: number;
   inserted: number;
   skipped_duplicates: number;
+  merged_as_related_source: number;
   error_message?: string;
   sample_titles: string[];
+}
+
+interface RelatedSource {
+  source: string;
+  source_url: string;
+  timestamp: string;
 }
 
 // ----- RSS/Atom Parsing -----
@@ -135,10 +142,15 @@ function guessCategory(text: string): string {
 
 // ----- Country Detection from Text -----
 
+// Trié du plus long au plus court : "Nigeria" doit être testé avant "Niger",
+// sinon "nigeria".includes("niger") fait tomber TOUT article Nigeria sur
+// "Niger" (bug réel constaté : Kwara/Niger State, articles Nigeria mal
+// étiquetés "Niger" en base).
+const AFRICAN_COUNTRIES_BY_LENGTH = [...AFRICAN_COUNTRIES].sort((a, b) => b.length - a.length);
+
 function detectCountry(text: string): string | null {
   const lower = text.toLowerCase();
-  // Try to find an African country name in the text
-  for (const country of AFRICAN_COUNTRIES) {
+  for (const country of AFRICAN_COUNTRIES_BY_LENGTH) {
     if (lower.includes(country.toLowerCase())) {
       return country;
     }
@@ -166,6 +178,103 @@ async function computeContentHash(text: string): Promise<string> {
   const data = new TextEncoder().encode(text);
   const digest = await crypto.subtle.digest('SHA-256', data);
   return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ----- Déduplication inter-sources -----
+// Deux articles de sources DIFFÉRENTES peuvent rapporter le même événement
+// réel. La dédup existante (source_url identique) ne détecte que les
+// republications exactes de la même URL. Ici : similarité de titre par
+// recouvrement de mots significatifs, restreinte au même pays et à une
+// fenêtre temporelle resserrée — volontairement conservateur pour éviter
+// de fusionner deux sujets réellement distincts.
+
+const STOPWORDS = new Set([
+  'the', 'and', 'for', 'with', 'has', 'been', 'from', 'this', 'that', 'are', 'was', 'were',
+  'said', 'will', 'their', 'after', 'according', 'about', 'into', 'over', 'more', 'than',
+  'le', 'la', 'les', 'des', 'une', 'un', 'dans', 'pour', 'avec', 'sur', 'qui', 'que', 'est',
+  'sont', 'leur', 'cette', 'selon', 'après', 'plus', 'par', 'aux', 'ses', 'ces', 'été',
+]);
+
+function normalizeTitleTokens(title: string): Set<string> {
+  const cleaned = title
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}\s]/gu, ' ');
+  const tokens = cleaned.split(/\s+/).filter((w) => w.length >= 4 && !STOPWORDS.has(w));
+  return new Set(tokens);
+}
+
+function titleSimilarity(a: string, b: string): { score: number; shared: number } {
+  const setA = normalizeTitleTokens(a);
+  const setB = normalizeTitleTokens(b);
+  if (setA.size === 0 || setB.size === 0) return { score: 0, shared: 0 };
+  let intersection = 0;
+  for (const tok of setA) if (setB.has(tok)) intersection++;
+  const union = setA.size + setB.size - intersection;
+  return { score: union === 0 ? 0 : intersection / union, shared: intersection };
+}
+
+const DUPLICATE_SIMILARITY_THRESHOLD = 0.45;
+const DUPLICATE_MIN_SHARED_TOKENS = 3;
+const DUPLICATE_WINDOW_HOURS = 72;
+
+interface DuplicateCandidate {
+  id: string;
+  source: string;
+  source_url: string;
+  timestamp: string;
+  related_sources: RelatedSource[];
+}
+
+/**
+ * Cherche, parmi les flux déjà en base pour le même pays et dans une
+ * fenêtre de ±72h, un article dont le titre recoupe suffisamment celui de
+ * l'article candidat pour être considéré comme le même événement rapporté
+ * par une autre source.
+ */
+async function findDuplicateCandidate(
+  supabase: ReturnType<typeof createClient>,
+  country: string,
+  title: string,
+  pubDate: string | null,
+  now: string,
+): Promise<DuplicateCandidate | null> {
+  const articleTime = pubDate ? new Date(pubDate).getTime() : new Date(now).getTime();
+  if (Number.isNaN(articleTime)) return null;
+
+  const windowStart = new Date(articleTime - DUPLICATE_WINDOW_HOURS * 3600 * 1000).toISOString();
+  const windowEnd = new Date(articleTime + DUPLICATE_WINDOW_HOURS * 3600 * 1000).toISOString();
+
+  const { data: candidates } = await supabase
+    .from('feeds')
+    .select('id, title, source, source_url, timestamp, related_sources')
+    .eq('country', country)
+    .gte('timestamp', windowStart)
+    .lte('timestamp', windowEnd)
+    .limit(60);
+
+  if (!candidates || candidates.length === 0) return null;
+
+  let best: (typeof candidates)[number] | null = null;
+  let bestScore = 0;
+
+  for (const cand of candidates) {
+    const { score, shared } = titleSimilarity(title, cand.title as string);
+    if (score >= DUPLICATE_SIMILARITY_THRESHOLD && shared >= DUPLICATE_MIN_SHARED_TOKENS && score > bestScore) {
+      best = cand;
+      bestScore = score;
+    }
+  }
+
+  if (!best) return null;
+
+  return {
+    id: best.id as string,
+    source: best.source as string,
+    source_url: best.source_url as string,
+    timestamp: best.timestamp as string,
+    related_sources: (best.related_sources as RelatedSource[]) || [],
+  };
 }
 
 // ----- Domaine racine -----
@@ -238,6 +347,7 @@ serve(async (req: Request) => {
         total_fetched: 0,
         inserted: 0,
         skipped_duplicates: 0,
+        merged_as_related_source: 0,
         sample_titles: [],
       };
 
@@ -307,7 +417,7 @@ serve(async (req: Request) => {
         const sourceDomain = getDomain(source.source_url as string);
 
         for (const article of toInsert) {
-          // Dedup: check if source_url already exists
+          // 1. Dedup exact : même URL déjà en base
           const { data: existing } = await supabase
             .from('feeds')
             .select('id')
@@ -324,9 +434,44 @@ serve(async (req: Request) => {
             || (source.country as string)
             || 'Monde';
 
-          // Only insert if it's about an African country or we want global coverage
           const category = guessCategory(`${article.title} ${article.description}`);
           const cleanSummary = stripHtml(article.description).substring(0, 1000);
+
+          // 2. Dedup croisé : même événement rapporté par une source différente.
+          // La publication la plus ancienne des deux sert de référence — si
+          // l'article entrant est plus ancien que le doublon déjà en base, il
+          // en devient la référence (titre/résumé remplacés) et l'ancien
+          // contenu bascule en source complémentaire ; sinon c'est l'inverse.
+          const dup = await findDuplicateCandidate(supabase, detectedCountry, article.title, article.pubDate, now);
+
+          if (dup) {
+            const incomingTime = new Date(article.pubDate || now).getTime();
+            const existingTime = new Date(dup.timestamp).getTime();
+            const incomingEntry: RelatedSource = { source: source.source_name as string, source_url: article.link, timestamp: article.pubDate || now };
+
+            if (!Number.isNaN(incomingTime) && incomingTime < existingTime) {
+              const priorReferenceEntry: RelatedSource = { source: dup.source, source_url: dup.source_url, timestamp: dup.timestamp };
+              await supabase.from('feeds').update({
+                title: article.title.substring(0, 500),
+                source: source.source_name as string,
+                source_url: article.link,
+                source_domain: sourceDomain,
+                category,
+                summary: cleanSummary || null,
+                timestamp: article.pubDate || now,
+                related_sources: [priorReferenceEntry, ...dup.related_sources],
+              }).eq('id', dup.id);
+            } else {
+              await supabase.from('feeds').update({
+                related_sources: [...dup.related_sources, incomingEntry],
+              }).eq('id', dup.id);
+            }
+
+            result.merged_as_related_source++;
+            continue;
+          }
+
+          // 3. Aucun doublon détecté → insertion normale
           const contentHash = await computeContentHash(`${article.title}|${cleanSummary}`);
 
           const { error: insertErr } = await supabase.from('feeds').insert({
@@ -380,6 +525,7 @@ serve(async (req: Request) => {
     const totalInserted = results.reduce((sum, r) => sum + r.inserted, 0);
     const totalFetched = results.reduce((sum, r) => sum + r.total_fetched, 0);
     const totalSkipped = results.reduce((sum, r) => sum + r.skipped_duplicates, 0);
+    const totalMerged = results.reduce((sum, r) => sum + r.merged_as_related_source, 0);
     const elapsed = Date.now() - startTime;
 
     return new Response(JSON.stringify({
@@ -390,6 +536,7 @@ serve(async (req: Request) => {
       total_articles_fetched: totalFetched,
       total_inserted: totalInserted,
       total_skipped_duplicates: totalSkipped,
+      total_merged_as_related_source: totalMerged,
       results,
     }), { headers });
 
