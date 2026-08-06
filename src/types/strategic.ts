@@ -121,6 +121,20 @@ export interface RssRegisterResponse {
   errors?: string[];
 }
 
+export interface DiscoverFeedRequest {
+  mode: 'discover';
+  website_url: string;
+}
+
+export interface DiscoverFeedResponse {
+  success: boolean;
+  discovered_url?: string;
+  discovery_method?: 'html_link_tag' | 'common_path';
+  reason?: string;
+  message?: string;
+  errors?: string[];
+}
+
 // ─── Logistics Status ────────────────────────────────────────
 
 export type LogisticsEntityType = 'port' | 'airport' | 'border_crossing' | 'road_axis' | 'checkpoint' | 'base_vie' | 'warehouse';

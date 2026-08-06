@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
-import type { RssRegisterResponse } from '@/types/strategic';
+import type { RssRegisterResponse, DiscoverFeedResponse } from '@/types/strategic';
 
 export interface RssSourceModalProps {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  initialMode?: 'manual' | 'discover';
   editSource?: {
     id: number;
     source_name: string;
@@ -30,7 +31,7 @@ const AFRICAN_COUNTRIES = [
   'Zambie', 'Zimbabwe',
 ];
 
-export default function RssSourceModal({ open, onClose, onSuccess, editSource }: RssSourceModalProps) {
+export default function RssSourceModal({ open, onClose, onSuccess, editSource, initialMode = 'manual' }: RssSourceModalProps) {
   const { t } = useTranslation();
 
   const [sourceName, setSourceName] = useState('');
@@ -42,6 +43,11 @@ export default function RssSourceModal({ open, onClose, onSuccess, editSource }:
   const [result, setResult] = useState<RssRegisterResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [countrySearch, setCountrySearch] = useState('');
+
+  const [entryMode, setEntryMode] = useState<'manual' | 'discover'>('manual');
+  const [websiteUrl, setWebsiteUrl] = useState('');
+  const [discovering, setDiscovering] = useState(false);
+  const [discoverError, setDiscoverError] = useState<string | null>(null);
 
   useEffect(() => {
     if (editSource) {
@@ -60,7 +66,45 @@ export default function RssSourceModal({ open, onClose, onSuccess, editSource }:
     setResult(null);
     setError(null);
     setCountrySearch('');
-  }, [editSource, open]);
+    setEntryMode(editSource ? 'manual' : initialMode);
+    setWebsiteUrl('');
+    setDiscovering(false);
+    setDiscoverError(null);
+  }, [editSource, open, initialMode]);
+
+  const handleDiscover = async () => {
+    setDiscovering(true);
+    setDiscoverError(null);
+    try {
+      const { data, error: invokeErr } = await supabase.functions.invoke<DiscoverFeedResponse>(
+        'ingest-feed',
+        { body: { mode: 'discover', website_url: websiteUrl.trim() } },
+      );
+
+      if (invokeErr) {
+        setDiscoverError(invokeErr.message || t('dataflows.rssModal.genericError'));
+        setDiscovering(false);
+        return;
+      }
+
+      if (data?.success && data.discovered_url) {
+        setSourceUrl(data.discovered_url);
+        if (!sourceName.trim()) {
+          try {
+            const host = new URL(websiteUrl.trim()).hostname.replace(/^www\./, '');
+            setSourceName(host);
+          } catch {
+            // leave source name empty if the URL can't be parsed
+          }
+        }
+      } else {
+        setDiscoverError(data?.message || t('dataflows.rssModal.noFeedFound'));
+      }
+    } catch (err) {
+      setDiscoverError((err as Error).message || t('dataflows.rssModal.genericError'));
+    }
+    setDiscovering(false);
+  };
 
   const filteredCountries = countrySearch
     ? AFRICAN_COUNTRIES.filter(c => c.toLowerCase().includes(countrySearch.toLowerCase()))
@@ -124,10 +168,14 @@ export default function RssSourceModal({ open, onClose, onSuccess, editSource }:
         <div className="sticky top-0 bg-white border-b border-gray-100 px-5 py-4 flex items-center justify-between rounded-t-2xl">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-lg bg-sentiqs-navy/10 flex items-center justify-center">
-              <i className="ri-rss-line text-sentiqs-navy" />
+              <i className={entryMode === 'discover' && !editSource ? 'ri-global-line text-sentiqs-navy' : 'ri-rss-line text-sentiqs-navy'} />
             </div>
             <h3 className="text-sm font-bold text-sentiqs-navy">
-              {editSource ? t('dataflows.rssModal.editTitle') : t('dataflows.rssModal.title')}
+              {editSource
+                ? t('dataflows.rssModal.editTitle')
+                : entryMode === 'discover'
+                  ? t('dataflows.rssModal.websiteTitle')
+                  : t('dataflows.rssModal.title')}
             </h3>
           </div>
           <button
@@ -143,6 +191,78 @@ export default function RssSourceModal({ open, onClose, onSuccess, editSource }:
         <div className="p-5 space-y-4">
           {!result && (
             <>
+              {/* Website discovery step */}
+              {entryMode === 'discover' && (
+                <div className="bg-sentiqs-navy/5 border border-sentiqs-navy/10 rounded-xl p-3.5 space-y-2.5">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-sentiqs-navy mb-1.5">
+                      {t('dataflows.rssModal.websiteUrl')}
+                    </label>
+                    <p className="text-[10px] text-sentiqs-gray-text mb-2">{t('dataflows.rssModal.discoverHint')}</p>
+                    <div className="flex gap-2">
+                      <input
+                        type="url"
+                        value={websiteUrl}
+                        onChange={(e) => { setWebsiteUrl(e.target.value); setDiscoverError(null); }}
+                        placeholder={t('dataflows.rssModal.websiteUrlPlaceholder')}
+                        disabled={!!sourceUrl}
+                        className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-sentiqs-navy focus:ring-1 focus:ring-sentiqs-navy/20 transition-colors disabled:bg-gray-50 disabled:text-sentiqs-gray-text"
+                      />
+                      {!sourceUrl && (
+                        <button
+                          type="button"
+                          onClick={handleDiscover}
+                          disabled={discovering || !websiteUrl.trim()}
+                          className="px-4 py-2 text-xs font-bold text-white bg-sentiqs-navy hover:bg-sentiqs-navy/90 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg cursor-pointer transition-all whitespace-nowrap flex items-center gap-1.5"
+                        >
+                          {discovering ? (
+                            <i className="ri-loader-4-line animate-spin" />
+                          ) : (
+                            <i className="ri-search-line" />
+                          )}
+                          {discovering ? t('dataflows.rssModal.discovering') : t('dataflows.rssModal.discoverButton')}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {discoverError && (
+                    <div className="flex items-start gap-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-2.5">
+                      <i className="ri-error-warning-line mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p>{discoverError}</p>
+                        <button
+                          type="button"
+                          onClick={() => { setEntryMode('manual'); setDiscoverError(null); }}
+                          className="underline font-semibold mt-1 cursor-pointer"
+                        >
+                          {t('dataflows.rssModal.enterManually')}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {sourceUrl && (
+                    <div className="flex items-center justify-between gap-2 text-xs bg-emerald-50 border border-emerald-200 rounded-lg p-2.5">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <i className="ri-check-line text-emerald-600 flex-shrink-0" />
+                        <span className="font-semibold text-emerald-800 flex-shrink-0">{t('dataflows.rssModal.feedDetected')}:</span>
+                        <span className="font-mono text-emerald-700 truncate">{sourceUrl}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => { setSourceUrl(''); setWebsiteUrl(''); }}
+                        className="text-emerald-700 hover:text-emerald-900 flex-shrink-0 cursor-pointer font-semibold"
+                      >
+                        {t('dataflows.rssModal.changeUrl')}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {(entryMode === 'manual' || sourceUrl) && (
+              <>
               {/* Source Name */}
               <div>
                 <label className="block text-[11px] font-semibold text-sentiqs-navy mb-1.5">
@@ -158,6 +278,7 @@ export default function RssSourceModal({ open, onClose, onSuccess, editSource }:
               </div>
 
               {/* RSS URL */}
+              {entryMode === 'manual' && (
               <div>
                 <label className="block text-[11px] font-semibold text-sentiqs-navy mb-1.5">
                   {t('dataflows.rssModal.rssUrl')}
@@ -170,6 +291,7 @@ export default function RssSourceModal({ open, onClose, onSuccess, editSource }:
                   className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-sentiqs-navy focus:ring-1 focus:ring-sentiqs-navy/20 transition-colors font-mono text-xs"
                 />
               </div>
+              )}
 
               {/* Country */}
               <div>
@@ -250,6 +372,8 @@ export default function RssSourceModal({ open, onClose, onSuccess, editSource }:
                   <option value={1440}>24 h</option>
                 </select>
               </div>
+              </>
+              )}
             </>
           )}
 

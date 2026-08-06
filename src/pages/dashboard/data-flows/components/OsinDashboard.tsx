@@ -29,6 +29,7 @@ export default function OsinDashboard() {
   const [typeFilter, setTypeFilter] = useState<OsinSourceType | 'all'>('all');
   const [activeOnly, setActiveOnly] = useState(false);
   const [rssModalOpen, setRssModalOpen] = useState(false);
+  const [rssModalMode, setRssModalMode] = useState<'manual' | 'discover'>('manual');
   const [editSource, setEditSource] = useState<RssSourceModalProps['editSource']>(null);
   const [refreshingIds, setRefreshingIds] = useState<Set<number>>(new Set());
   const [isPollingAll, setIsPollingAll] = useState(false);
@@ -133,6 +134,13 @@ export default function OsinDashboard() {
 
   const handleAddRss = () => {
     setEditSource(null);
+    setRssModalMode('manual');
+    setRssModalOpen(true);
+  };
+
+  const handleAddWebsite = () => {
+    setEditSource(null);
+    setRssModalMode('discover');
     setRssModalOpen(true);
   };
 
@@ -331,6 +339,14 @@ export default function OsinDashboard() {
           </button>
           <button
             type="button"
+            onClick={handleAddWebsite}
+            className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-sentiqs-navy bg-white border-2 border-sentiqs-navy hover:bg-sentiqs-navy/5 rounded-full cursor-pointer transition-all whitespace-nowrap"
+          >
+            <i className="ri-global-line" />
+            {t('dataflows.rssModal.addWebsiteButton')}
+          </button>
+          <button
+            type="button"
             onClick={handleAddRss}
             className="flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-sentiqs-navy hover:bg-sentiqs-navy/90 rounded-full cursor-pointer transition-all whitespace-nowrap"
           >
@@ -523,6 +539,7 @@ export default function OsinDashboard() {
         onClose={() => { setRssModalOpen(false); setEditSource(null); }}
         onSuccess={() => { fetchSources(); }}
         editSource={editSource}
+        initialMode={rssModalMode}
       />
     </div>
   );

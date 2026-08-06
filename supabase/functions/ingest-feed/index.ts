@@ -684,10 +684,130 @@ async function handleRssRegister(body: RssRegisterPayload, supabase: ReturnType<
   }));
 }
 
+// ============ MODE: DISCOVER ============
+// Depuis une simple URL de site web (pas l'URL du flux RSS elle-même) :
+// 1. cherche une balise <link rel="alternate" type="application/rss+xml|atom+xml">
+//    dans le HTML de la page ;
+// 2. à défaut, teste un petit nombre de chemins usuels (/feed, /rss, ...) et
+//    vérifie que la réponse ressemble réellement à du RSS/Atom avant de la
+//    proposer — jamais de simple pari sur une URL non vérifiée.
+// Ne s'auto-enregistre PAS : renvoie l'URL détectée pour confirmation par
+// l'utilisateur, qui déclenche ensuite le même chemin que "Ajouter RSS".
+
+interface DiscoverPayload {
+  mode: 'discover';
+  website_url: string;
+}
+
+function resolveUrl(href: string, base: string): string | null {
+  try {
+    return new URL(href, base).toString();
+  } catch {
+    return null;
+  }
+}
+
+function looksLikeFeed(text: string): boolean {
+  const head = text.slice(0, 800);
+  return /<rss[\s>]|<feed[\s>]|<rdf:rdf[\s>]/i.test(head);
+}
+
+const COMMON_FEED_PATHS = ['/feed', '/feed/', '/rss', '/rss.xml', '/feed.xml', '/atom.xml'];
+
+async function handleDiscover(body: DiscoverPayload): Promise<Response> {
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  };
+
+  const raw = (body.website_url || '').trim();
+  if (!raw) {
+    return new Response(JSON.stringify({ success: false, reason: 'VALIDATION_FAILED', errors: ['MISSING_WEBSITE_URL'] }), { status: 422, headers });
+  }
+
+  let websiteUrl: string;
+  try {
+    const parsed = new URL(raw);
+    if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error('bad protocol');
+    websiteUrl = parsed.toString();
+  } catch {
+    return new Response(JSON.stringify({ success: false, reason: 'VALIDATION_FAILED', errors: ['MALFORMED_URL'] }), { status: 422, headers });
+  }
+
+  // 1. Chercher une balise <link rel="alternate" type="application/(rss|atom)+xml">
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const resp = await fetch(websiteUrl, {
+      method: 'GET',
+      signal: controller.signal,
+      headers: { 'User-Agent': 'SentiqS-Discover/1.0', 'Accept': 'text/html,*/*' },
+      redirect: 'follow',
+    });
+    clearTimeout(timeoutId);
+
+    if (resp.ok) {
+      const html = await resp.text();
+      const linkTags = html.match(/<link[^>]+rel=["']alternate["'][^>]*>/gi) || [];
+      for (const tag of linkTags) {
+        if (!/type=["']application\/(rss|atom)\+xml["']/i.test(tag)) continue;
+        const hrefMatch = tag.match(/href=["']([^"']+)["']/i);
+        if (!hrefMatch) continue;
+        const resolved = resolveUrl(hrefMatch[1], websiteUrl);
+        if (resolved) {
+          return new Response(JSON.stringify({
+            success: true,
+            discovered_url: resolved,
+            discovery_method: 'html_link_tag',
+          }), { headers });
+        }
+      }
+    }
+  } catch {
+    // page d'accueil injoignable ou lente — on tente quand même les chemins usuels
+  }
+
+  // 2. Chemins usuels, avec vérification réelle du contenu (pas un pari sur le code HTTP seul)
+  for (const path of COMMON_FEED_PATHS) {
+    const candidate = resolveUrl(path, websiteUrl);
+    if (!candidate) continue;
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 6000);
+      const resp = await fetch(candidate, {
+        method: 'GET',
+        signal: controller.signal,
+        headers: { 'User-Agent': 'SentiqS-Discover/1.0', 'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*' },
+        redirect: 'follow',
+      });
+      clearTimeout(timeoutId);
+      if (resp.ok) {
+        const text = await resp.text();
+        if (looksLikeFeed(text)) {
+          return new Response(JSON.stringify({
+            success: true,
+            discovered_url: candidate,
+            discovery_method: 'common_path',
+          }), { headers });
+        }
+      }
+    } catch {
+      // chemin suivant
+    }
+  }
+
+  return new Response(JSON.stringify({
+    success: false,
+    reason: 'NO_FEED_FOUND',
+    message: "Aucun flux RSS/Atom détecté sur ce site. Renseignez directement l'URL du flux via \"Ajouter RSS\" si vous la connaissez.",
+  }), { status: 404, headers });
+}
+
 // ============ MAIN ============
 
 interface IngestRequest {
-  mode?: 'single' | 'rss_register';
+  mode?: 'single' | 'rss_register' | 'discover';
   [key: string]: unknown;
 }
 
@@ -707,6 +827,9 @@ serve(async (req: Request) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
     );
     const body: IngestRequest = await req.json();
+    if (body.mode === 'discover') {
+      return await handleDiscover(body as unknown as DiscoverPayload);
+    }
     if (body.mode === 'rss_register') {
       return await handleRssRegister(body as unknown as RssRegisterPayload, supabase);
     }
