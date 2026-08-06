@@ -1,9 +1,76 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useSupabaseCriticalAlerts, SupabaseAlert } from '@/hooks/useSupabaseAlerts';
+import { supabase } from '@/lib/supabase';
 import { playCriticalAlertSound, preheatAudioContext } from '@/utils/alertSound';
 
 const STORAGE_KEY = 'sentiqs_seen_critical_alerts';
 const MUTED_KEY = 'sentiqs_alert_sound_muted';
+
+interface PostureCriticalRow {
+  id: number;
+  country_code: string;
+  country_name: string;
+  old_level: string;
+  new_level: string;
+  old_score: number;
+  new_score: number;
+  created_at: string;
+}
+
+// La table `alerts` (source historique du toast) reste souvent vide en
+// pratique — le niveau de risque réel est calculé côté client par
+// useAlertLevels à partir des flux, puis synchronisé dans posture_history
+// à chaque changement effectif. On combine donc les deux sources pour que
+// le popup reflète l'état réel de l'app plutôt qu'une table non alimentée.
+function postureRowToAlert(row: PostureCriticalRow): SupabaseAlert {
+  return {
+    id: `posture-${row.id}`,
+    severity: 'critical',
+    title: `${row.country_name} passe en niveau CRITIQUE (score ${Number(row.new_score).toFixed(1)}/100)`,
+    country: row.country_name,
+    region: '',
+    department: '',
+    locality: '',
+    timestamp: row.created_at,
+    source: 'Analyse de posture SentiqS',
+    category: 'Sécurité',
+    status: 'active',
+    impact: '',
+    verification_status: 'verified',
+    created_at: row.created_at,
+  };
+}
+
+function usePostureCriticalAlerts() {
+  const [rows, setRows] = useState<PostureCriticalRow[]>([]);
+
+  const fetchRows = useCallback(async () => {
+    const { data } = await supabase
+      .from('posture_history')
+      .select('*')
+      .eq('new_level', 'rouge')
+      .order('created_at', { ascending: false })
+      .limit(20);
+    setRows((data || []) as PostureCriticalRow[]);
+  }, []);
+
+  useEffect(() => {
+    fetchRows();
+
+    const channel = supabase
+      .channel('posture-critical-alerts')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'posture_history' }, () => {
+        fetchRows();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [fetchRows]);
+
+  return rows;
+}
 
 function getSeenAlertIds(): string[] {
   try {
@@ -23,12 +90,20 @@ function isMuted(): boolean {
 }
 
 export function useCriticalAlerts() {
-  const { criticalAlerts: dbAlerts } = useSupabaseCriticalAlerts();
+  const { criticalAlerts: tableAlerts } = useSupabaseCriticalAlerts();
+  const postureRows = usePostureCriticalAlerts();
   const [seenIds, setSeenIds] = useState<string[]>(getSeenAlertIds);
   const [showToast, setShowToast] = useState(false);
   const [toastDismissed, setToastDismissed] = useState(false);
   const [muted, setMuted] = useState(isMuted);
   const [latestAlert, setLatestAlert] = useState<SupabaseAlert | null>(null);
+
+  const dbAlerts = useMemo(() => {
+    const postureAlerts = postureRows.map(postureRowToAlert);
+    return [...tableAlerts, ...postureAlerts].sort(
+      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
+    );
+  }, [tableAlerts, postureRows]);
 
   // Garder trace des IDs précédents pour détecter les nouvelles alertes temps réel
   const prevAlertIdsRef = useRef<string[]>([]);

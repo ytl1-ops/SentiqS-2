@@ -1,6 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
 const LEVEL_ORDER: Record<string, number> = {
   vert: 0,
   jaune: 1,
@@ -16,6 +21,10 @@ interface PostureInput {
 }
 
 serve(async (req: Request) => {
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: corsHeaders });
+  }
+
   try {
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
@@ -28,11 +37,10 @@ serve(async (req: Request) => {
     if (!Array.isArray(inputs) || inputs.length === 0) {
       return new Response(
         JSON.stringify({ success: true, changes: [], message: "No levels provided" }),
-        { headers: { "Content-Type": "application/json" } }
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Fetch current state for all countries at once
     const { data: currentStates, error: stateError } = await supabaseClient
       .from("country_posture_state")
       .select("country_code, country_name, level, score");
@@ -40,7 +48,7 @@ serve(async (req: Request) => {
     if (stateError) {
       return new Response(
         JSON.stringify({ success: false, error: stateError.message }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -60,6 +68,12 @@ serve(async (req: Request) => {
       event_type: string;
     }> = [];
 
+    // Pays passant réellement AU niveau rouge (pas déjà rouge avant) —
+    // ce sont ceux-là, et seulement ceux-là, qui déclenchent une notification
+    // push critique (écran de verrouillage). Une simple variation de score en
+    // restant rouge ne renvoie pas de nouvelle alerte.
+    const newCriticalEscalations: Array<{ country_name: string; score: number }> = [];
+
     const upsertStates: Array<{
       country_code: string;
       country_name: string;
@@ -72,17 +86,13 @@ serve(async (req: Request) => {
       const currentLevel = input.level;
       const currentScore = input.score;
 
-      // Determine if this is a level change
       const levelChanged = !prev || prev.level !== currentLevel;
-
-      // Determine if score changed meaningfully (more than 5 points)
       const scoreChanged = prev && Math.abs(prev.score - currentScore) > 5;
 
       if (levelChanged) {
         const oldLevel = prev ? prev.level : "non_cote";
         const oldScore = prev ? prev.score : 0;
 
-        // Generate reason based on direction
         let reason: string | null = null;
         const oldIdx = LEVEL_ORDER[oldLevel] ?? -1;
         const newIdx = LEVEL_ORDER[currentLevel] ?? -1;
@@ -90,15 +100,17 @@ serve(async (req: Request) => {
         if (oldIdx === -1 && newIdx !== -1) {
           reason = `Première cotation du pays — score calculé ${currentScore}/100`;
         } else if (newIdx > oldIdx) {
-          // Escalation
           const reasonMap: Record<string, string> = {
             rouge: "Détérioration critique — conflit majeur ou évacuation recommandée",
             orange: "Dégradation significative de la situation sécuritaire",
             jaune: "Augmentation des tensions — vigilance renforcée recommandée",
           };
           reason = reasonMap[currentLevel] || `Score passé de ${oldScore} à ${currentScore}`;
+
+          if (currentLevel === "rouge" && prev) {
+            newCriticalEscalations.push({ country_name: input.country_name, score: currentScore });
+          }
         } else if (newIdx < oldIdx) {
-          // De-escalation
           const reasonMap: Record<string, string> = {
             vert: "Retour à la normale — absence d'incidents majeurs signalés",
             jaune: "Amélioration progressive — risque modéré résiduel",
@@ -118,7 +130,6 @@ serve(async (req: Request) => {
           event_type: "auto",
         });
       } else if (scoreChanged && prev) {
-        // Score changed significantly but no level change — still record it
         newHistoryEntries.push({
           country_code: input.country_code,
           country_name: input.country_name,
@@ -131,7 +142,6 @@ serve(async (req: Request) => {
         });
       }
 
-      // Always upsert current state
       upsertStates.push({
         country_code: input.country_code,
         country_name: input.country_name,
@@ -140,7 +150,6 @@ serve(async (req: Request) => {
       });
     }
 
-    // Insert history entries
     if (newHistoryEntries.length > 0) {
       const { error: histError } = await supabaseClient
         .from("posture_history")
@@ -149,12 +158,11 @@ serve(async (req: Request) => {
       if (histError) {
         return new Response(
           JSON.stringify({ success: false, error: histError.message }),
-          { status: 500, headers: { "Content-Type": "application/json" } }
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
     }
 
-    // Upsert current states
     if (upsertStates.length > 0) {
       const { error: upsertError } = await supabaseClient
         .from("country_posture_state")
@@ -163,8 +171,33 @@ serve(async (req: Request) => {
       if (upsertError) {
         return new Response(
           JSON.stringify({ success: false, error: upsertError.message }),
-          { status: 500, headers: { "Content-Type": "application/json" } }
+          { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
+      }
+    }
+
+    // Notification push best-effort — ne doit jamais faire échouer la synchro
+    // de posture si l'envoi échoue (clés VAPID absentes, etc.)
+    if (newCriticalEscalations.length > 0) {
+      try {
+        const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+        const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+        for (const esc of newCriticalEscalations) {
+          await fetch(`${supabaseUrl}/functions/v1/send-push-alert`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${serviceKey}`,
+            },
+            body: JSON.stringify({
+              title: `🚨 ${esc.country_name} — Niveau CRITIQUE`,
+              body: `Score de risque : ${esc.score.toFixed(1)}/100. Vérification immédiate recommandée.`,
+              url: "/dashboard/alerts",
+            }),
+          });
+        }
+      } catch (pushErr) {
+        console.error("[sync-posture-changes] push notification failed:", pushErr);
       }
     }
 
@@ -173,14 +206,15 @@ serve(async (req: Request) => {
         success: true,
         changes: newHistoryEntries.length,
         entries: newHistoryEntries,
+        pushNotified: newCriticalEscalations.length,
         message: `${newHistoryEntries.length} changement(s) de posture enregistré(s)`,
       }),
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {
     return new Response(
       JSON.stringify({ success: false, error: (err as Error).message }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });

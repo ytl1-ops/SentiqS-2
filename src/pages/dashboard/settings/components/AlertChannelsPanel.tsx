@@ -2,9 +2,50 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 import Toast from '@/components/base/Toast';
 import ErrorState from '@/components/base/ErrorState';
 import EmptyState from '@/components/base/EmptyState';
+
+function PushNotificationsCard() {
+  const { supported, permission, isSubscribed, loading, error, subscribe, unsubscribe } = usePushNotifications();
+
+  return (
+    <div className="bg-white rounded-lg border border-gray-200 p-4 flex flex-col sm:flex-row sm:items-center gap-4">
+      <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${isSubscribed ? 'bg-emerald-50' : 'bg-gray-100'}`}>
+        <i className={`ri-notification-badge-line text-lg ${isSubscribed ? 'text-emerald-600' : 'text-gray-400'}`} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <h3 className="text-xs font-bold text-sentiqs-navy">Notifications push (navigateur / écran de verrouillage)</h3>
+        <p className="text-[10px] text-sentiqs-gray-text mt-0.5">
+          {!supported
+            ? "Ce navigateur ne prend pas en charge les notifications push."
+            : permission === 'denied'
+              ? "Notifications bloquées — autorisez-les dans les réglages du navigateur pour ce site."
+              : isSubscribed
+                ? "Activées : vous recevrez une notification dès qu'un pays passe en niveau critique, même écran verrouillé (Android)."
+                : "Recevez une notification immédiate (y compris écran verrouillé sur Android) dès qu'un pays passe en niveau critique."}
+        </p>
+        {error && <p className="text-[10px] text-red-600 mt-1">{error}</p>}
+      </div>
+      <button
+        type="button"
+        onClick={isSubscribed ? unsubscribe : subscribe}
+        disabled={!supported || loading || permission === 'denied'}
+        className={`text-[10px] font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 whitespace-nowrap transition-colors cursor-pointer flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed ${
+          isSubscribed ? 'text-gray-600 bg-gray-100 hover:bg-gray-200' : 'text-white bg-sentiqs-navy hover:bg-sentiqs-navy/90'
+        }`}
+      >
+        {loading ? (
+          <i className="ri-loader-4-line animate-spin text-xs" />
+        ) : (
+          <i className={`${isSubscribed ? 'ri-notification-off-line' : 'ri-notification-3-line'} text-xs`} />
+        )}
+        {isSubscribed ? 'Désactiver' : 'Activer les alertes push'}
+      </button>
+    </div>
+  );
+}
 
 interface AlertChannel {
   id: number;
@@ -130,6 +171,9 @@ export default function AlertChannelsPanel() {
   return (
     <div className="space-y-5">
       <Toast message={toast} onDismiss={() => setToast(null)} />
+
+      {/* Push notifications navigateur — écran de verrouillage */}
+      <PushNotificationsCard />
 
       {/* Connection card to Alerts module */}
       <div className="bg-white rounded-lg border border-gray-200 p-4 flex flex-col sm:flex-row sm:items-center gap-4">

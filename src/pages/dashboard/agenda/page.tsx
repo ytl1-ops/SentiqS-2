@@ -11,7 +11,7 @@ const MONTHS_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July
 const DAYS_FR = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 const DAYS_EN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-type EventType = 'meeting' | 'exercise' | 'conference' | 'audit' | 'briefing' | 'training' | 'deadline' | 'mission';
+type EventType = 'meeting' | 'exercise' | 'conference' | 'audit' | 'briefing' | 'training' | 'deadline' | 'mission' | 'anniversary';
 
 const typeConfig: Record<EventType, { label: string; labelEn: string; icon: string; color: string; bg: string; dot: string }> = {
   meeting: { label: 'Réunion', labelEn: 'Meeting', icon: 'ri-group-line', color: 'text-blue-600', bg: 'bg-blue-50 border-blue-200', dot: 'bg-blue-500' },
@@ -22,6 +22,7 @@ const typeConfig: Record<EventType, { label: string; labelEn: string; icon: stri
   training: { label: 'Formation', labelEn: 'Training', icon: 'ri-graduation-cap-line', color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-200', dot: 'bg-emerald-500' },
   deadline: { label: 'Échéance', labelEn: 'Deadline', icon: 'ri-timer-line', color: 'text-orange-600', bg: 'bg-orange-50 border-orange-200', dot: 'bg-orange-500' },
   mission: { label: 'Mission', labelEn: 'Mission', icon: 'ri-radar-line', color: 'text-rose-600', bg: 'bg-rose-50 border-rose-200', dot: 'bg-rose-500' },
+  anniversary: { label: 'Date sensible', labelEn: 'Sensitive date', icon: 'ri-flag-line', color: 'text-teal-600', bg: 'bg-teal-50 border-teal-200', dot: 'bg-teal-500' },
 };
 
 

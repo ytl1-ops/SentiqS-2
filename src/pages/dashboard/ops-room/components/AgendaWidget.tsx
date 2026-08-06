@@ -1,4 +1,4 @@
-import { Calendar, MapPin, Users, GraduationCap, Radar, ShieldAlert, Megaphone, FileSearch, PresentationIcon, Timer } from 'lucide-react';
+import { Calendar, MapPin, Users, GraduationCap, Radar, ShieldAlert, Megaphone, FileSearch, PresentationIcon, Timer, Flag } from 'lucide-react';
 import type { LocalizedAgendaEvent } from '@/hooks/useLocalizedAgenda';
 
 interface AgendaWidgetProps {
@@ -14,6 +14,7 @@ const typeIcons: Record<string, React.ReactNode> = {
   training: <GraduationCap className="w-3.5 h-3.5" />,
   deadline: <Timer className="w-3.5 h-3.5" />,
   mission: <Radar className="w-3.5 h-3.5" />,
+  anniversary: <Flag className="w-3.5 h-3.5" />,
 };
 
 const typeLabels: Record<string, string> = {
@@ -25,6 +26,7 @@ const typeLabels: Record<string, string> = {
   training: 'Formation',
   deadline: 'Échéance',
   mission: 'Mission',
+  anniversary: 'Date sensible',
 };
 
 const typeColors: Record<string, string> = {
@@ -36,6 +38,7 @@ const typeColors: Record<string, string> = {
   training: 'bg-emerald-900/20 text-emerald-400 border-emerald-800/40',
   deadline: 'bg-orange-900/20 text-orange-400 border-orange-800/40',
   mission: 'bg-rose-900/20 text-rose-400 border-rose-800/40',
+  anniversary: 'bg-teal-900/20 text-teal-400 border-teal-800/40',
 };
 
 export default function AgendaWidget({ agendaItems }: AgendaWidgetProps) {
