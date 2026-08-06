@@ -6,8 +6,11 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY") ?? "";
-const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
+// Groq : inférence gratuite (aucune carte bancaire requise) et très rapide,
+// API compatible OpenAI. Voir https://console.groq.com/keys
+const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY") ?? "";
+const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+const GROQ_MODEL = "llama-3.3-70b-versatile";
 
 // Miroir de AFRICA_54 / COUNTRY_CODES dans src/hooks/useAlertLevels.ts
 const COUNTRY_NAMES: string[] = [
@@ -76,9 +79,9 @@ serve(async (req: Request) => {
   }
 
   try {
-    if (!ANTHROPIC_API_KEY) {
+    if (!GROQ_API_KEY) {
       return new Response(
-        JSON.stringify({ error: "MISSING_ANTHROPIC_KEY", detail: "ANTHROPIC_API_KEY non configurée sur ce projet Supabase." }),
+        JSON.stringify({ error: "MISSING_GROQ_KEY", detail: "GROQ_API_KEY non configurée sur ce projet Supabase. Clé gratuite sur https://console.groq.com/keys" }),
         { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
@@ -172,7 +175,7 @@ RÈGLES IMPÉRATIVES (zéro hallucination) :
 DONNÉES DISPONIBLES (extraites en direct de la base SentiqS à l'instant de la question) :
 ${contextText || "Aucune donnée pertinente trouvée pour cette question."}`;
 
-    const messages: ChatMessage[] = [];
+    const messages: Array<{ role: string; content: string }> = [{ role: "system", content: systemPrompt }];
     for (const h of history.slice(-6)) {
       if ((h.role === "user" || h.role === "assistant") && typeof h.content === "string") {
         messages.push({ role: h.role, content: h.content.slice(0, 2000) });
@@ -180,31 +183,30 @@ ${contextText || "Aucune donnée pertinente trouvée pour cette question."}`;
     }
     messages.push({ role: "user", content: message });
 
-    const anthropicRes = await fetch(ANTHROPIC_URL, {
+    const groqRes = await fetch(GROQ_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-api-key": ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
+        "Authorization": `Bearer ${GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-5",
+        model: GROQ_MODEL,
         max_tokens: 700,
-        system: systemPrompt,
+        temperature: 0.2,
         messages,
       }),
     });
 
-    if (!anthropicRes.ok) {
-      const errText = await anthropicRes.text();
+    if (!groqRes.ok) {
+      const errText = await groqRes.text();
       return new Response(
-        JSON.stringify({ error: "Anthropic API error", status: anthropicRes.status, detail: errText.slice(0, 500) }),
+        JSON.stringify({ error: "Groq API error", status: groqRes.status, detail: errText.slice(0, 500) }),
         { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
-    const claudeData = await anthropicRes.json();
-    const answer: string = claudeData.content?.[0]?.text || "";
+    const groqData = await groqRes.json();
+    const answer: string = groqData.choices?.[0]?.message?.content || "";
 
     return new Response(
       JSON.stringify({ answer, country_matched: country }),
