@@ -5,6 +5,7 @@ import i18n from '@/i18n';
 import TopBar from './components/TopBar';
 import Sidebar from './components/Sidebar';
 import CriticalToast from './components/CriticalToast';
+import ChatAssistant from '@/components/feature/ChatAssistant';
 import PageTransition from '@/components/base/PageTransition';
 import { useCriticalAlerts } from '@/hooks/useCriticalAlerts';
 import { setFaviconBadge, resetFavicon, setTabTitle } from '@/utils/tabNotification';
@@ -120,6 +121,8 @@ export default function DashboardLayout() {
         onToggleMute={toggleMute}
         latestAlert={latestAlert}
       />
+
+      <ChatAssistant />
     </div>
   );
 }

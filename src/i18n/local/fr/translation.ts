@@ -1338,4 +1338,14 @@ export default {
   'opsroom.countryDetail.noIncidentsSub': 'Aucun incident signalé à {{locality}}',
   'opsroom.countryDetail.activeMonitoring': 'La veille est active sur cette zone. Les incidents seront affichés ici dès qu\'ils seront détectés.',
   'opsroom.countryDetail.sources': 'Sources actives sur {{country}}',
+
+  // Assistant conversationnel (données réelles SentiqS)
+  'chat.title': 'Assistant SentiqS',
+  'chat.subtitle': 'Basé sur vos données en direct',
+  'chat.intro': "Posez une question sur un pays, une alerte ou une tendance — je réponds uniquement à partir des données vérifiées de SentiqS, jamais par supposition.",
+  'chat.placeholder': 'Poser une question…',
+  'chat.reset': 'Nouvelle conversation',
+  'chat.open': "Ouvrir l'assistant",
+  'chat.serviceUnavailable': "L'assistant est momentanément indisponible. Réessayez dans un instant ou consultez directement le module Alertes.",
+  'chat.emptyAnswer': "Je n'ai pas pu générer de réponse. Réessayez avec une question plus précise.",
 };

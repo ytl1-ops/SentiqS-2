@@ -1271,4 +1271,14 @@ export default {
   'dataflows.gis.beds': 'beds',
   'dataflows.gis.mapTitle': 'Interactive GIS Map — Africa',
   'dataflows.gis.noLayers': 'No active layers. Enable at least one layer above.',
+
+  // Conversational assistant (real SentiqS data)
+  'chat.title': 'SentiqS Assistant',
+  'chat.subtitle': 'Grounded in your live data',
+  'chat.intro': "Ask about a country, an alert or a trend — I answer only from verified SentiqS data, never by guessing.",
+  'chat.placeholder': 'Ask a question…',
+  'chat.reset': 'New conversation',
+  'chat.open': 'Open the assistant',
+  'chat.serviceUnavailable': 'The assistant is temporarily unavailable. Try again shortly or check the Alerts module directly.',
+  'chat.emptyAnswer': "I couldn't generate an answer. Try a more specific question.",
 };
