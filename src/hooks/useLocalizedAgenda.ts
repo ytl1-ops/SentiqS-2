@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
 import { detectLanguage } from '@/utils/languageDetection';
@@ -11,7 +11,12 @@ export interface LocalizedAgendaEvent extends AgendaEvent {
 }
 
 const inFlightIds = new Set<string>();
-const BATCH_SIZE = 8;
+// Voir useLocalizedFeeds.ts : les services de traduction gratuits limitent
+// le débit par IP partagée, donc un échec est souvent temporaire — on
+// retente après un cooldown plutôt que d'abandonner définitivement.
+const lastAttemptAt = new Map<string, number>();
+const RETRY_COOLDOWN_MS = 20_000;
+const RETRY_TIMER_MS = 25_000;
 
 /**
  * Équivalent de useLocalizedFeeds pour les événements d'agenda : résout
@@ -22,29 +27,37 @@ export function useLocalizedAgenda(events: AgendaEvent[]) {
   const { i18n } = useTranslation();
   const uiLang = i18n.language?.startsWith('en') ? 'en' : 'fr';
   const [overrides, setOverrides] = useState<Record<string, { title: string; description?: string; lang: string }>>({});
-  const triedRef = useRef<Set<string>>(new Set());
+  const [retryTick, setRetryTick] = useState(0);
 
   useEffect(() => {
-    triedRef.current = new Set();
+    setRetryTick(0);
   }, [uiLang]);
+
+  useEffect(() => {
+    const timer = setInterval(() => setRetryTick((t) => t + 1), RETRY_TIMER_MS);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
 
     async function run() {
+      const now = Date.now();
       const candidates = events.filter((e) => {
-        if (triedRef.current.has(e.id) || inFlightIds.has(e.id)) return false;
+        if (inFlightIds.has(e.id)) return false;
         const cachedMatch = e.translation_lang === uiLang && e.translated_title;
         const overrideMatch = overrides[e.id]?.lang === uiLang;
         if (cachedMatch || overrideMatch) return false;
         if (uiLang === 'en' && e.title_en) return false;
+        const last = lastAttemptAt.get(e.id);
+        if (last && now - last < RETRY_COOLDOWN_MS) return false;
         return detectLanguage(e.title) !== uiLang;
-      }).slice(0, BATCH_SIZE);
+      });
 
       for (const event of candidates) {
         if (cancelled) return;
-        triedRef.current.add(event.id);
         inFlightIds.add(event.id);
+        lastAttemptAt.set(event.id, Date.now());
         try {
           const { data, error } = await supabase.functions.invoke('translate-agenda-event', {
             body: { eventId: event.id, targetLang: uiLang },
@@ -56,7 +69,7 @@ export function useLocalizedAgenda(events: AgendaEvent[]) {
             }));
           }
         } catch {
-          // best-effort
+          // best-effort — une nouvelle tentative aura lieu après le cooldown
         } finally {
           inFlightIds.delete(event.id);
         }
@@ -65,7 +78,7 @@ export function useLocalizedAgenda(events: AgendaEvent[]) {
 
     if (events.length > 0) run();
     return () => { cancelled = true; };
-  }, [events, uiLang, overrides]);
+  }, [events, uiLang, overrides, retryTick]);
 
   const localizedEvents = useMemo<LocalizedAgendaEvent[]>(() => {
     return events.map((e) => {

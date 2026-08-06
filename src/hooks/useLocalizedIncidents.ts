@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
 import { detectLanguage } from '@/utils/languageDetection';
@@ -9,10 +9,13 @@ export interface LocalizedIncident extends TriggeringIncident {
   isTranslating: boolean;
 }
 
-// Partagé avec useLocalizedFeeds pour éviter les appels concurrents redondants
-// sur le même feed lorsqu'il apparaît à la fois comme actu et comme incident.
 const inFlightIds = new Set<string>();
-const BATCH_SIZE = 8;
+// Voir useLocalizedFeeds.ts : les services de traduction gratuits limitent
+// le débit par IP partagée, donc un échec est souvent temporaire — on
+// retente après un cooldown plutôt que d'abandonner définitivement.
+const lastAttemptAt = new Map<string, number>();
+const RETRY_COOLDOWN_MS = 20_000;
+const RETRY_TIMER_MS = 25_000;
 
 /**
  * Résout le titre affiché de chaque incident déclencheur (alertes + actus)
@@ -25,29 +28,37 @@ export function useLocalizedIncidents(incidents: TriggeringIncident[]) {
   const { i18n } = useTranslation();
   const uiLang = i18n.language?.startsWith('en') ? 'en' : 'fr';
   const [overrides, setOverrides] = useState<Record<string, { title: string; lang: string }>>({});
-  const triedRef = useRef<Set<string>>(new Set());
+  const [retryTick, setRetryTick] = useState(0);
 
   useEffect(() => {
-    triedRef.current = new Set();
+    setRetryTick(0);
   }, [uiLang]);
+
+  useEffect(() => {
+    const timer = setInterval(() => setRetryTick((t) => t + 1), RETRY_TIMER_MS);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
 
     async function run() {
+      const now = Date.now();
       const candidates = incidents.filter((inc) => {
         if (inc.type !== 'feed') return false;
-        if (triedRef.current.has(inc.id) || inFlightIds.has(inc.id)) return false;
+        if (inFlightIds.has(inc.id)) return false;
         const cachedMatch = inc.translation_lang === uiLang && inc.translated_title;
         const overrideMatch = overrides[inc.id]?.lang === uiLang;
         if (cachedMatch || overrideMatch) return false;
+        const last = lastAttemptAt.get(inc.id);
+        if (last && now - last < RETRY_COOLDOWN_MS) return false;
         return detectLanguage(inc.title) !== uiLang;
-      }).slice(0, BATCH_SIZE);
+      });
 
       for (const inc of candidates) {
         if (cancelled) return;
-        triedRef.current.add(inc.id);
         inFlightIds.add(inc.id);
+        lastAttemptAt.set(inc.id, Date.now());
         try {
           const { data, error } = await supabase.functions.invoke('translate-feed', {
             body: { feedId: inc.id, targetLang: uiLang },
@@ -59,7 +70,7 @@ export function useLocalizedIncidents(incidents: TriggeringIncident[]) {
             }));
           }
         } catch {
-          // best-effort — le titre original reste affiché
+          // best-effort — une nouvelle tentative aura lieu après le cooldown
         } finally {
           inFlightIds.delete(inc.id);
         }
@@ -68,7 +79,7 @@ export function useLocalizedIncidents(incidents: TriggeringIncident[]) {
 
     if (incidents.length > 0) run();
     return () => { cancelled = true; };
-  }, [incidents, uiLang, overrides]);
+  }, [incidents, uiLang, overrides, retryTick]);
 
   const localizedIncidents = useMemo<LocalizedIncident[]>(() => {
     return incidents.map((inc) => {

@@ -14,7 +14,16 @@ export interface LocalizedFeed extends VerifiedFeed {
 // traduction concurrents redondants sur le même flux si plusieurs
 // composants (ex: FeedsList + NewsHeroFeed) l'affichent simultanément.
 const inFlightIds = new Set<string>();
-const BATCH_SIZE = 8;
+// Horodatage de la dernière tentative par flux, partagé lui aussi — les
+// services de traduction gratuits (Google/MyMemory/Lingva) limitent le
+// débit par IP partagée entre tous les utilisateurs de l'app ; un échec
+// n'est donc souvent que temporaire. On retente après ce délai plutôt que
+// d'abandonner définitivement (bug précédent : un flux resté non traduit
+// après un seul échec ne l'était plus jamais, même si le service redevenait
+// disponible quelques secondes plus tard).
+const lastAttemptAt = new Map<string, number>();
+const RETRY_COOLDOWN_MS = 20_000;
+const RETRY_TIMER_MS = 25_000;
 
 /**
  * Résout automatiquement le titre/résumé de chaque flux dans la langue
@@ -29,29 +38,39 @@ export function useLocalizedFeeds(feeds: VerifiedFeed[]) {
   const { i18n } = useTranslation();
   const uiLang = i18n.language?.startsWith('en') ? 'en' : 'fr';
   const [overrides, setOverrides] = useState<Record<string, { title: string; summary?: string; lang: string }>>({});
-  const triedRef = useRef<Set<string>>(new Set());
+  const [retryTick, setRetryTick] = useState(0);
   const [translationError, setTranslationError] = useState<string | null>(null);
 
   useEffect(() => {
-    triedRef.current = new Set();
+    setRetryTick(0);
   }, [uiLang]);
+
+  // Relance périodique pour retenter les flux en échec, sans bombarder les
+  // fournisseurs en continu (le cooldown par flux limite déjà la fréquence).
+  useEffect(() => {
+    const timer = setInterval(() => setRetryTick((t) => t + 1), RETRY_TIMER_MS);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
 
     async function run() {
+      const now = Date.now();
       const candidates = feeds.filter((f) => {
-        if (triedRef.current.has(f.id) || inFlightIds.has(f.id)) return false;
+        if (inFlightIds.has(f.id)) return false;
         const cachedMatch = f.translation_lang === uiLang && f.translated_title;
         const overrideMatch = overrides[f.id]?.lang === uiLang;
         if (cachedMatch || overrideMatch) return false;
+        const last = lastAttemptAt.get(f.id);
+        if (last && now - last < RETRY_COOLDOWN_MS) return false;
         return detectLanguage(f.title) !== uiLang;
-      }).slice(0, BATCH_SIZE);
+      });
 
       for (const feed of candidates) {
         if (cancelled) return;
-        triedRef.current.add(feed.id);
         inFlightIds.add(feed.id);
+        lastAttemptAt.set(feed.id, Date.now());
         try {
           const { data, error } = await supabase.functions.invoke('translate-feed', {
             body: { feedId: feed.id, targetLang: uiLang },
@@ -67,7 +86,8 @@ export function useLocalizedFeeds(feeds: VerifiedFeed[]) {
             }
           }
         } catch {
-          // best-effort — le texte original reste affiché
+          // best-effort — le texte original reste affiché, une nouvelle
+          // tentative aura lieu après le cooldown
         } finally {
           inFlightIds.delete(feed.id);
         }
@@ -76,7 +96,7 @@ export function useLocalizedFeeds(feeds: VerifiedFeed[]) {
 
     if (feeds.length > 0) run();
     return () => { cancelled = true; };
-  }, [feeds, uiLang, overrides]);
+  }, [feeds, uiLang, overrides, retryTick]);
 
   const localizedFeeds = useMemo<LocalizedFeed[]>(() => {
     return feeds.map((f) => {
