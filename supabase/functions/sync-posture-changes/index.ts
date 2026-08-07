@@ -13,6 +13,15 @@ interface PostureInput {
   country_name: string;
   level: string;
   score: number;
+  coverage?: string;
+  sources_consulted_count?: number;
+  last_collection_at?: string | null;
+  rule_version?: string;
+  confidence?: number;
+  factors?: Record<string, number>;
+  feed_ids?: string[];
+  alert_ids?: string[];
+  explanation?: string;
 }
 
 serve(async (req: Request) => {
@@ -65,6 +74,23 @@ serve(async (req: Request) => {
       country_name: string;
       level: string;
       score: number;
+      coverage_status?: string;
+      sources_consulted_count?: number;
+      last_collection_at?: string | null;
+    }> = [];
+
+    const scoreCalculations: Array<{
+      country_code: string;
+      country_name: string;
+      rule_version: string;
+      score: number;
+      level: string;
+      feed_ids: string[];
+      alert_ids: string[];
+      factors: Record<string, number>;
+      confidence: number | null;
+      explanation: string | null;
+      status: string;
     }> = [];
 
     for (const input of inputs) {
@@ -137,7 +163,31 @@ serve(async (req: Request) => {
         country_name: input.country_name,
         level: currentLevel,
         score: currentScore,
+        ...(input.coverage ? { coverage_status: input.coverage } : {}),
+        ...(input.sources_consulted_count != null ? { sources_consulted_count: input.sources_consulted_count } : {}),
+        ...(input.last_collection_at !== undefined ? { last_collection_at: input.last_collection_at } : {}),
       });
+
+      // Traçabilité du calcul : persiste systématiquement les preuves et facteurs
+      // ayant produit ce score, même quand le niveau/score n'a pas changé.
+      // Un niveau "rouge" fraîchement calculé démarre "provisoire" — il doit
+      // être confirmé par un analyste (cf. score_calculations.status et le
+      // module de validation manuelle) avant d'être considéré acquis.
+      if (input.rule_version) {
+        scoreCalculations.push({
+          country_code: input.country_code,
+          country_name: input.country_name,
+          rule_version: input.rule_version,
+          score: currentScore,
+          level: currentLevel,
+          feed_ids: input.feed_ids || [],
+          alert_ids: input.alert_ids || [],
+          factors: input.factors || {},
+          confidence: input.confidence ?? null,
+          explanation: input.explanation ?? null,
+          status: currentLevel === "rouge" ? "provisoire" : "valide",
+        });
+      }
     }
 
     // Insert history entries
@@ -168,11 +218,27 @@ serve(async (req: Request) => {
       }
     }
 
+    // Persiste la justification de chaque calcul (score_calculations) — best-effort :
+    // une erreur ici ne doit pas faire échouer la synchronisation de posture_history
+    // /country_posture_state, qui reste la source d'affichage principale.
+    let scoreCalculationsInserted = 0;
+    if (scoreCalculations.length > 0) {
+      const { error: scError, count } = await supabaseClient
+        .from("score_calculations")
+        .insert(scoreCalculations, { count: "exact" });
+      if (scError) {
+        console.error("[sync-posture-changes] score_calculations insert failed:", scError.message);
+      } else {
+        scoreCalculationsInserted = count ?? scoreCalculations.length;
+      }
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
         changes: newHistoryEntries.length,
         entries: newHistoryEntries,
+        score_calculations_inserted: scoreCalculationsInserted,
         message: `${newHistoryEntries.length} changement(s) de posture enregistré(s)`,
       }),
       { headers: { "Content-Type": "application/json" } }

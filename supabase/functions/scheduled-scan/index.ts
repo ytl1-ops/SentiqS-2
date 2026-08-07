@@ -80,25 +80,58 @@ Deno.serve(async (req) => {
       );
     }
 
-    // ---- Run the scan ----
-    const { data: feeds, error: feedsError } = await supabase
-      .from('feeds')
-      .select('id, source_url, title')
-      .not('source_url', 'is', null)
-      .order('id');
+    // ---- Verrou anti-concurrence ----
+    // cron (sentiqs-scheduled-scan), le bouton manuel "check-links" et l'auto-check
+    // client (useLinkStatus) peuvent se déclencher à quelques secondes d'écart et
+    // scanner les mêmes URLs en double. On revendique le verrou par un UPDATE
+    // conditionné sur running=false : Postgres sérialise les écritures concurrentes
+    // sur la même ligne, donc un seul appelant peut effectivement le poser.
+    // Un verrou plus vieux que STALE_LOCK_MINUTES est considéré abandonné (crash
+    // précédent) et peut être repris.
+    const STALE_LOCK_MINUTES = 30;
+    const staleBefore = new Date(now.getTime() - STALE_LOCK_MINUTES * 60 * 1000).toISOString();
 
-    if (feedsError) throw feedsError;
+    const { data: lockRows, error: lockError } = await supabase
+      .from('scan_schedule')
+      .update({ running: true, running_started_at: now.toISOString() })
+      .eq('id', 1)
+      .or(`running.eq.false,running_started_at.lt.${staleBefore}`)
+      .select('id');
 
-    const results = {
-      total: feeds?.length ?? 0,
-      active: 0,
-      warning: 0,
-      dead: 0,
-      rss_validated: 0,
-      total_articles_detected: 0,
-    };
+    if (lockError) throw lockError;
 
-    const domainLastCall = new Map<string, number>();
+    if (!lockRows || lockRows.length === 0) {
+      return new Response(
+        JSON.stringify({
+          success: true,
+          schedule: scheduleInfo,
+          scan_performed: false,
+          skipped_reason: 'Scan déjà en cours (verrou actif) — probablement le cron ou un autre déclenchement.',
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    try {
+      // ---- Run the scan ----
+      const { data: feeds, error: feedsError } = await supabase
+        .from('feeds')
+        .select('id, source_url, title')
+        .not('source_url', 'is', null)
+        .order('id');
+
+      if (feedsError) throw feedsError;
+
+      const results = {
+        total: feeds?.length ?? 0,
+        active: 0,
+        warning: 0,
+        dead: 0,
+        rss_validated: 0,
+        total_articles_detected: 0,
+      };
+
+      const domainLastCall = new Map<string, number>();
 
     async function throttleByDomain(url: string) {
       const domain = getDomain(url);
@@ -237,6 +270,10 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
+    } finally {
+      // Toujours relâcher le verrou, y compris en cas d'erreur pendant le scan.
+      await supabase.from('scan_schedule').update({ running: false }).eq('id', 1);
+    }
 
   } catch (error: unknown) {
     const err = error as Error;

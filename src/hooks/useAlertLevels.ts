@@ -14,6 +14,7 @@ export interface SupabaseAlert {
   source: string;
   category: string;
   status: string;
+  verification_status?: string;
   aggravating_factors: string[] | null;
 }
 
@@ -28,6 +29,7 @@ export interface SupabaseFeed {
   verification_status: string;
   summary?: string;
   parent_feed_id?: string | null;
+  osint_source_id?: number | null;
 }
 
 export interface TriggeringIncident {
@@ -63,6 +65,14 @@ export interface CountryAlertLevel {
   trend: 'up' | 'down' | 'stable';
   trendDelta: number;
   freshnessHours: number | null;
+  /** Qualité de couverture des données — indépendante du niveau de risque :
+   *  l'absence de donnée ne doit jamais être lue comme une preuve de sécurité. */
+  coverage: 'bonne_couverture' | 'couverture_partielle' | 'donnees_anciennes' | 'aucune_donnee_recente';
+  distinctSourceCount: number;
+  /** true si le niveau a été plafonné à 'orange' faute de corroboration multi-sources suffisante. */
+  corroborationLimited: boolean;
+  /** Facteurs ayant produit le score — même contenu que celui persisté dans score_calculations. */
+  factors: Record<string, number>;
 }
 
 export interface FeedCluster {
@@ -189,6 +199,11 @@ function normalizeCountryName(name: string): string | null {
    // STICKY : un pays ≥ orange reste au moins jaune (10 pts) pendant 7 jours
    ============================================================ */
 
+// Version de la règle de scoring — à incrémenter à chaque changement de
+// formule, pour que les score_calculations persistés restent interprétables
+// historiquement même après une évolution de la logique.
+export const SCORING_RULE_VERSION = 'client-heuristic-v2-corroboration-coverage';
+
 const ALERT_WEIGHTS: Record<string, number> = {
   critical: 12,
   high: 8,
@@ -202,6 +217,19 @@ const FEED_WEIGHTS: Record<string, number> = {
   medium: 2,
   low: 0.5,
 };
+
+/**
+ * Pondère la contribution d'un feed par la fiabilité de sa source
+ * (osint_sources.reliability_score, 0-1, défaut 0.70). Plancher à 0.3 pour
+ * qu'une source non notée ne soit pas totalement écartée, mais une source
+ * connue peu fiable pèse nettement moins qu'une source de référence.
+ */
+function getReliabilityMultiplier(feed: SupabaseFeed, reliabilityMap: Map<number, number>): number {
+  if (feed.osint_source_id == null) return 0.7; // source non enregistrée dans osint_sources — neutre
+  const score = reliabilityMap.get(feed.osint_source_id);
+  if (score == null) return 0.7;
+  return Math.max(0.3, Math.min(1, score));
+}
 
 function getTemporalWeight(timestamp: string, nowMs: number): number {
   const ageHours = (nowMs - new Date(timestamp).getTime()) / 3600000;
@@ -232,6 +260,15 @@ function getFeedSeverity(feed: SupabaseFeed): 'critical' | 'high' | 'medium' | '
   // --- NÉGATIFS DE CONTEXTE : réduire la sévérité si c'est une nouvelle positive ---
   const positiveContext = /\b(réouverture|rouverture|reprise|retour\s+à\s+la\s+normale|calme\s+revenu|tensions\s+apaisées|cessez-le-feu\s+respecté|accord\s+de\s+paix\s+signé|libération\s+des\s+otages)\b/i;
   if (positiveContext.test(fullText)) return 'low';
+
+  // --- ÉVÉNEMENTS BANALS / PLANIFIÉS : administratif, culturel, sportif, commercial, cérémoniel ---
+  // Ces événements récurrents ou planifiés ne doivent pas être classés comme des incidents
+  // sécuritaires même s'ils partagent du vocabulaire avec des patterns de sévérité (ex. "attaque"
+  // dans un contexte sportif). Un mot-clé de sécurité non ambigu dans le même texte reprend
+  // toutefois la main (ex. "attentat lors du match" reste critique).
+  const unambiguousSecurityOverride = /\b(attentat|attaque\s+terroriste|explosion|fusillade|enlèvement|kidnapping|assassinat|coup\s+d'état|massacre)\b/i;
+  const banalContext = /\b(festival|concert|match(?:s)?\s+(?:de|amical)|coupe\s+d'afrique|championnat|tournoi|inauguration|cérémonie|salon\s+(?:international|professionnel)|foire\s+commerciale|exposition|conférence\s+de\s+presse|remise\s+de\s+(?:prix|diplômes)|anniversaire\s+de\s+l'indépendance|défilé|fête\s+nationale|vernissage|lancement\s+de\s+produit|soldes|black\s+friday)\b/i;
+  if (banalContext.test(fullText) && !unambiguousSecurityOverride.test(fullText)) return 'low';
 
   const criticalPatterns: RegExp[] = [
     /\b(massacre|génocide|nettoyage\s+ethnique|crimes?\s+contre\s+l'humanité|cour\s+pénale\s+internationale)\b/i,
@@ -535,8 +572,9 @@ export function useAlertLevels() {
   const isFirstComputation = useRef(true);
   const syncTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const previousLevelsRef = useRef<Map<string, { score: number; level: string }>>(new Map());
+  const reliabilityMapRef = useRef<Map<number, number>>(new Map());
 
-  const computeLevels = useCallback((alerts: SupabaseAlert[], feeds: SupabaseFeed[]) => {
+  const computeLevels = useCallback((alerts: SupabaseAlert[], feeds: SupabaseFeed[], reliabilityMap: Map<number, number>) => {
     const now = new Date();
     const nowMs = now.getTime();
     const alertCutoff = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);   // 7 jours
@@ -637,13 +675,14 @@ export function useAlertLevels() {
         alertBySev.medium * ALERT_WEIGHTS.medium +
         alertBySev.low * ALERT_WEIGHTS.low;
 
-      // 2. Feeds RSS avec déclin temporel — comptées séparément
+      // 2. Feeds RSS avec déclin temporel et pondération par fiabilité de la source
       let feedScore = 0;
       data.feeds.forEach((feed) => {
         const sev = getFeedSeverity(feed);
         const weight = FEED_WEIGHTS[sev] || 0.5;
         const temporal = getTemporalWeight(feed.timestamp, nowMs);
-        feedScore += weight * temporal;
+        const reliability = getReliabilityMultiplier(feed, reliabilityMap);
+        feedScore += weight * temporal * reliability;
       });
 
       // 3. Bonus concentration sécuritaire : si >60% des feeds sont sécuritaires
@@ -682,7 +721,46 @@ export function useAlertLevels() {
       }
 
       const displayScore = Math.max(stickyFloor, Math.min(95, Math.round(rawScore)));
-      const { level, label } = calculateAlertLevel(displayScore);
+      let { level, label } = calculateAlertLevel(displayScore);
+
+      // ---- CORROBORATION : une source unique et non vérifiée ne peut pas,
+      // à elle seule, déclencher un niveau critique. On exige soit une
+      // alerte structurée (saisie analyste) critique/haute, soit au moins
+      // deux sources distinctes (par osint_source_id, à défaut par nom de
+      // source normalisé) parmi les feeds canoniques (dédupliqués) du pays. ----
+      const distinctSources = new Set(
+        data.feeds.map((f) =>
+          f.osint_source_id != null ? `id:${f.osint_source_id}` : `name:${(f.source || '').toLowerCase().trim()}`,
+        ),
+      );
+      const hasStructuredHighConfidenceAlert = data.alerts.some(
+        (a) => a.severity === 'critical' || a.severity === 'high',
+      );
+      const sufficientCorroboration = hasStructuredHighConfidenceAlert || distinctSources.size >= 2;
+
+      let corroborationLimited = false;
+      if (level === 'rouge' && !sufficientCorroboration) {
+        level = 'orange';
+        label = 'Risque élevé (corroboration insuffisante pour critique)';
+        corroborationLimited = true;
+      }
+
+      // ---- COUVERTURE : indépendante du niveau de risque ----
+      const latestFeedMsForCoverage = data.feeds.length > 0
+        ? Math.max(...data.feeds.map((f) => new Date(f.timestamp).getTime()))
+        : null;
+      const coverageAgeHours = latestFeedMsForCoverage != null ? (nowMs - latestFeedMsForCoverage) / 3600000 : Infinity;
+      let coverage: CountryAlertLevel['coverage'];
+      if (totalFeeds === 0) {
+        coverage = 'aucune_donnee_recente';
+      } else if (coverageAgeHours > 720) {
+        coverage = 'donnees_anciennes';
+      } else if (totalFeeds >= 3 && distinctSources.size >= 2) {
+        coverage = 'bonne_couverture';
+      } else {
+        coverage = 'couverture_partielle';
+      }
+
       const totalIncidents = data.allIncidents.length;
       const verifiedCount = data.allIncidents.filter((i) => i.verified).length;
       const factorsCount = Object.values(factorBreakdown).reduce((a, b) => a + b, 0);
@@ -734,10 +812,24 @@ export function useAlertLevels() {
         trend,
         trendDelta,
         freshnessHours,
+        coverage,
+        distinctSourceCount: distinctSources.size,
+        corroborationLimited,
+        factors: {
+          alert_score: Math.round(alertScore * 100) / 100,
+          feed_score: Math.round(feedScore * 100) / 100,
+          aggravants_total: aggravantsTotal,
+          volume_bonus: volumeBonus,
+          security_bonus: securityBonus,
+          sticky_floor: stickyFloor,
+          distinct_sources: distinctSources.size,
+        },
       });
     });
 
-    // Ajouter les 54 pays manquants avec un score de base (risque résiduel)
+    // Ajouter les 54 pays manquants — score résiduel bas par défaut, MAIS la
+    // couverture est explicitement marquée "aucune_donnee_recente" : l'absence
+    // de flux ne doit jamais être présentée comme une preuve de sécurité.
     AFRICA_54.forEach((country) => {
       if (!levels.find((l) => l.country === country)) {
         prevMap.set(country, { score: 3, level: 'vert' });
@@ -745,7 +837,7 @@ export function useAlertLevels() {
           country,
           countryCode: COUNTRY_CODES[country] || '--',
           level: 'vert',
-          levelLabel: 'Situation normale',
+          levelLabel: 'Aucun incident signalé — donnée non confirmée',
           score: 3.0,
           rawScore: 3,
           incidents: 0,
@@ -762,6 +854,10 @@ export function useAlertLevels() {
           trend: 'stable',
           trendDelta: 0,
           freshnessHours: null,
+          coverage: 'aucune_donnee_recente',
+          distinctSourceCount: 0,
+          corroborationLimited: false,
+          factors: {},
         });
       }
     });
@@ -778,20 +874,28 @@ export function useAlertLevels() {
       const alertCutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
       const feedCutoff = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-      const [alertsRes, feedsRes] = await Promise.all([
+      const [alertsRes, feedsRes, sourcesRes] = await Promise.all([
         supabase.from('alerts').select('*').gte('timestamp', alertCutoff).order('timestamp', { ascending: false }),
         supabase.from('feeds').select('*').gte('timestamp', feedCutoff).order('timestamp', { ascending: false }),
+        supabase.from('osint_sources').select('id, reliability_score'),
       ]);
 
       if (alertsRes.error) throw alertsRes.error;
       if (feedsRes.error) throw feedsRes.error;
+      // osint_sources est utilisé pour pondérer la fiabilité — une erreur ici ne doit pas
+      // bloquer l'affichage des niveaux, on retombe simplement sur le multiplicateur neutre.
+      if (sourcesRes.error) console.warn('[useAlertLevels] osint_sources indisponible:', sourcesRes.error.message);
 
       const alerts = (alertsRes.data || []) as SupabaseAlert[];
       const feeds = (feedsRes.data || []) as SupabaseFeed[];
+      const reliabilityMap = new Map<number, number>(
+        (sourcesRes.data || []).map((s: { id: number; reliability_score: number }) => [s.id, s.reliability_score]),
+      );
+      reliabilityMapRef.current = reliabilityMap;
 
       setRawAlerts(alerts);
       setRawFeeds(feeds);
-      setAlertLevels(computeLevels(alerts, feeds));
+      setAlertLevels(computeLevels(alerts, feeds, reliabilityMap));
       setLastCalculatedAt(new Date().toISOString());
     } catch (err) {
       setError((err as Error).message);
@@ -824,7 +928,7 @@ export function useAlertLevels() {
   }, [fetchData]);
 
   const recalculate = useCallback(() => {
-    setAlertLevels(computeLevels(rawAlerts, rawFeeds));
+    setAlertLevels(computeLevels(rawAlerts, rawFeeds, reliabilityMapRef.current));
     setLastCalculatedAt(new Date().toISOString());
   }, [computeLevels, rawAlerts, rawFeeds]);
 
@@ -861,6 +965,17 @@ export function useAlertLevels() {
         country_name: l.country,
         level: l.level,
         score: l.score,
+        coverage: l.coverage,
+        sources_consulted_count: l.distinctSourceCount,
+        last_collection_at: l.latestIncidentAt,
+        rule_version: SCORING_RULE_VERSION,
+        confidence: l.corroborationLimited ? 0.5 : Math.min(1, 0.5 + l.distinctSourceCount * 0.15),
+        factors: l.factors,
+        feed_ids: l.triggeringIncidents.filter((i) => i.type === 'feed').map((i) => i.id),
+        alert_ids: l.triggeringIncidents.filter((i) => i.type === 'alert').map((i) => i.id),
+        explanation: l.corroborationLimited
+          ? `Niveau plafonné à orange : score brut ${l.rawScore.toFixed(1)} justifierait rouge, mais corroboration insuffisante (${l.distinctSourceCount} source(s) distincte(s), aucune alerte structurée critique/haute).`
+          : `Score ${l.score}/100 (${l.level}) — ${l.incidents} incident(s), ${l.distinctSourceCount} source(s) distincte(s), couverture: ${l.coverage}.`,
       }));
 
       syncPostureChanges(postureInputs).then((result) => {

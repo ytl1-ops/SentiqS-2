@@ -55,6 +55,33 @@ Deno.serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
+    // ---- Verrou anti-concurrence : partagé avec scheduled-scan (même workload,
+    // même ligne scan_schedule) pour éviter deux scans simultanés des mêmes URLs. ----
+    const now = new Date();
+    const STALE_LOCK_MINUTES = 30;
+    const staleBefore = new Date(now.getTime() - STALE_LOCK_MINUTES * 60 * 1000).toISOString();
+
+    const { data: lockRows, error: lockError } = await supabase
+      .from('scan_schedule')
+      .update({ running: true, running_started_at: now.toISOString() })
+      .eq('id', 1)
+      .or(`running.eq.false,running_started_at.lt.${staleBefore}`)
+      .select('id');
+
+    if (lockError) throw lockError;
+
+    if (!lockRows || lockRows.length === 0) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: 'Scan déjà en cours (verrou actif) — réessayez dans quelques minutes.',
+        }),
+        { status: 409, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    try {
+
     // Fetch all feeds with source_url
     const { data: feeds, error } = await supabase
       .from('feeds')
@@ -199,6 +226,10 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
+    } finally {
+      // Toujours relâcher le verrou, y compris en cas d'erreur pendant le scan.
+      await supabase.from('scan_schedule').update({ running: false }).eq('id', 1);
+    }
 
   } catch (error: unknown) {
     const err = error as Error;

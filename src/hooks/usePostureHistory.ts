@@ -104,8 +104,24 @@ export function usePostureState() {
   return { states, loading, error, refetch: fetchStates };
 }
 
+export interface PostureSyncInput {
+  country_code: string;
+  country_name: string;
+  level: string;
+  score: number;
+  coverage?: string;
+  sources_consulted_count?: number;
+  last_collection_at?: string | null;
+  rule_version?: string;
+  confidence?: number;
+  factors?: Record<string, number>;
+  feed_ids?: string[];
+  alert_ids?: string[];
+  explanation?: string;
+}
+
 export async function syncPostureChanges(
-  levels: Array<{ country_code: string; country_name: string; level: string; score: number }>
+  levels: PostureSyncInput[]
 ): Promise<{ success: boolean; changes: number; message: string }> {
   try {
     const response = await supabase.functions.invoke('sync-posture-changes', {
