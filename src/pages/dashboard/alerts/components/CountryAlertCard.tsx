@@ -41,7 +41,12 @@ export default function CountryAlertCard({ data, compact = false }: Props) {
             </div>
             <span className="text-xs font-bold truncate max-w-[100px]">{data.country}</span>
           </div>
-          <span className="text-[9px] font-bold uppercase tracking-wider">{data.level}</span>
+          <span className="text-[9px] font-bold uppercase tracking-wider flex items-center gap-1">
+            {data.coverage === 'aucune_donnee_recente' && (
+              <i className="ri-radar-line" title="Aucune donnée récente — niveau non confirmé" />
+            )}
+            {data.level}
+          </span>
         </div>
         <div className="px-3 py-2 flex-1 space-y-1">
           <div className="flex items-center justify-between">
@@ -118,6 +123,12 @@ export default function CountryAlertCard({ data, compact = false }: Props) {
               {data.level.toUpperCase()}
             </span>
             <p className="text-[10px] text-white/80 mt-1 font-medium">{data.levelLabel}</p>
+            {data.coverage === 'aucune_donnee_recente' && (
+              <p className="text-[9px] text-white/70 mt-0.5 flex items-center justify-end gap-1">
+                <i className="ri-radar-line" />
+                {isFr ? 'Aucune donnée récente' : 'No recent data'}
+              </p>
+            )}
           </div>
         </div>
         <div className="mt-2 flex items-center justify-between">

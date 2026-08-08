@@ -9,6 +9,7 @@ import CountryMap from './components/CountryMap';
 import TrendChart from './components/TrendChart';
 import Timeline30d from './components/Timeline30d';
 import CountryOperationalPanel from './components/CountryOperationalPanel';
+import ScoreJustificationPanel from './components/ScoreJustificationPanel';
 import ErrorState from '@/components/base/ErrorState';
 import i18n from '@/i18n';
 
@@ -269,6 +270,12 @@ export default function CountryAlertDetailPage() {
                     {stats30d.trend === 'up' ? `+${stats30d.trendDelta}%` : stats30d.trend === 'down' ? `${stats30d.trendDelta}%` : t('common.today')}
                     <span className="font-normal ml-0.5">14{t('common.daysAgo')}</span>
                   </span>
+                  {countryLevel.coverage === 'aucune_donnee_recente' && (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-600 border border-gray-300">
+                      <i className="ri-radar-line text-xs" />
+                      Aucune donnée récente — niveau non confirmé
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -327,6 +334,13 @@ export default function CountryAlertDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Justification du niveau — pourquoi ce score, avec preuves à l'appui */}
+      <ScoreJustificationPanel
+        countryCode={countryLevel.countryCode}
+        coverage={countryLevel.coverage}
+        corroborationLimited={countryLevel.corroborationLimited}
+      />
 
       {/* Map + Trend side by side */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
