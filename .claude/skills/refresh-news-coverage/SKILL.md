@@ -39,21 +39,22 @@ immédiatement un `request_id`, et la réponse doit être relue séparément dan
    existants du projet, `sentiqs-rss-poll` etc.).
 
 2. Lancer l'appel via `mcp__Supabase__execute_sql` (voir `scripts/trigger_refresh.sql`
-   pour le gabarit exact — remplacer `<ANON_KEY>` par la clé récupérée à l'étape 1) :
+   pour le gabarit exact — remplacer `<ANON_KEY>` par la clé récupérée à l'étape 1). Utiliser
+   un `timeout_milliseconds` d'au moins 150000 (150s) — voir pourquoi ci-dessous :
 
    ```sql
    select net.http_post(
      url := 'https://yttctytqjtmaiheegqky.supabase.co/functions/v1/refresh-coverage-gaps',
      headers := '{"Content-Type": "application/json", "Authorization": "Bearer <ANON_KEY>"}'::jsonb,
      body := '{}'::jsonb,
-     timeout_milliseconds := 90000
+     timeout_milliseconds := 150000
    ) as request_id;
    ```
 
    Noter le `request_id` retourné (ex. `399`).
 
-3. Attendre ~45-60 secondes (la fonction a un budget d'exécution interne de 45s pour
-   toujours rendre la main proprement), puis relire le résultat avec
+3. **Attendre ~2 minutes 30 avant de relire le résultat** — voir la note de timing
+   ci-dessous, c'est plus long qu'on ne s'y attendrait. Puis relire avec
    `scripts/check_result.sql` (remplacer `<REQUEST_ID>`) :
 
    ```sql
@@ -63,9 +64,28 @@ immédiatement un `request_id`, et la réponse doit être relue séparément dan
    ```
 
    Si `content` est vide et `error_msg` est `null`, la requête est encore en cours —
-   attendre encore un peu et réinterroger. N'utilise pas de boucle `sleep` serrée : un
-   seul délai de 45-60s avant la première vérification suffit dans la grande majorité des
-   cas.
+   attendre encore ~30s et réinterroger. N'utilise pas de boucle `sleep` serrée.
+
+   ### Note de timing (important, testé en réel le 2026-08-09)
+
+   `refresh-coverage-gaps` interroge Google News via `pg_net` (voir "Architecture interne"
+   plus bas) et non via `fetch()` direct. Le worker `pg_net` de ce projet vide sa file par
+   cycle plutôt que requête par requête, avec une latence observée entre ~35s et ~140s selon
+   la charge du moment — donc la fonction peut légitimement prendre jusqu'à ~2 minutes
+   avant de répondre. Elle attend elle-même jusqu'à 135s en interne (trois passes de
+   récolte) avant de rendre la main, pour rester sous la limite stricte de réponse des
+   Edge Functions Supabase (150s, au-delà : 504 côté appelant).
+
+   **Il est normal et attendu qu'un run se termine avec `requests_answered: 0` et
+   `total_articles_inserted: 0`** si la latence pg_net dépasse exceptionnellement ce budget
+   ce jour-là (queue chargée, etc.) — ce n'est pas une panne : le verrou est relâché
+   proprement, chaque pays reçoit un log `"result": "erreur", "detail": "Pas de réponse
+   dans le délai imparti"`, et le prochain déclenchement (à la demande ou via le cron
+   d'automatisation) retentera normalement. Si une majorité des runs échouent ainsi de
+   façon répétée, c'est le signe que la file `pg_net` de ce projet est durablement
+   surchargée — dans ce cas, resignale-le à l'utilisateur plutôt que de relancer en boucle
+   (ne jamais redéclencher plusieurs fois d'affilée pour "forcer" un succès : chaque tir
+   ajoute des requêtes à la même file et aggrave la situation).
 
 ## Interpréter et présenter le résultat
 
@@ -74,9 +94,10 @@ Le corps JSON de la réponse (`content`, à parser) a cette forme :
 ```json
 {
   "success": true,
-  "budget_exceeded": false,
+  "requests_fired": 8,
+  "requests_answered": 6,
   "countries_targeted": [{ "name": "Botswana", "code": "BW", "reason": "sans_source" }, ...],
-  "countries_processed": 8,
+  "countries_processed": 5,
   "total_countries_in_gap": 23,
   "total_articles_found": 14,
   "total_articles_inserted": 6,
@@ -91,6 +112,11 @@ Le corps JSON de la réponse (`content`, à parser) a cette forme :
   ]
 }
 ```
+
+`requests_fired` vs `requests_answered` indique directement si la latence `pg_net` a posé
+problème sur ce run (voir note de timing) — si `requests_answered` est nettement inférieur
+à `requests_fired`, c'est le signe que le budget de récolte a été dépassé pour certaines
+requêtes ce run-ci.
 
 - `reason` par pays ciblé : `sans_source` (aucune source enregistrée pour ce pays — le
   cas le plus prioritaire), `jamais_collecte` (source existe mais aucun article encore
@@ -120,7 +146,7 @@ vraiment périodique ("en temps réel", "toutes les heures", "automatiquement") 
 - **Option pg_cron** (cohérente avec les cron jobs existants du projet, ex.
   `sentiqs-rss-poll`) : demander confirmation puis appliquer une migration qui ajoute un
   job `net.http_post` planifié, sur le même modèle que `sentiqs-scheduled-scan`. Comme
-  chaque exécution ne traite que 8 pays maximum, un intervalle de 30-60 min laisse le
+  chaque exécution ne traite que 5 pays maximum, un intervalle de 30-60 min laisse le
   temps de couvrir tous les pays en creux en quelques passages sans jamais surcharger
   Google News.
 - **Option Routine Claude Code** : `mcp__Claude_Code_Remote__create_trigger` avec un
@@ -129,13 +155,24 @@ vraiment périodique ("en temps réel", "toutes les heures", "automatiquement") 
 Ne mets en place l'un ou l'autre qu'après confirmation explicite de l'utilisateur — c'est
 un changement d'infrastructure récurrent, pas une simple lecture.
 
+## Architecture interne (utile pour diagnostiquer un run qui échoue)
+
+Les appels sortants `fetch()` du runtime Deno des Edge Functions vers `news.google.com`
+échouent systématiquement (HTTP 503, confirmé en test réel — cohérent avec l'échec
+silencieux jamais résolu de la fonction `fetch-mentions`/resobuzz préexistante, qui utilise
+le même pattern et n'a jamais réussi une seule insertion). `refresh-coverage-gaps` relaie
+donc ses requêtes via `pg_net` (exécuté côté Postgres, qui aboutit de façon fiable) avec un
+modèle "tir groupé puis récolte différée" : toutes les requêtes d'un run sont lancées d'un
+coup (RPC `net_fetch_start`), puis récoltées en bloc après une ou plusieurs attentes (RPC
+`net_fetch_collect`) — voir la note de timing ci-dessus pour pourquoi ces attentes sont
+longues (jusqu'à 135s cumulés).
+
 ## Limites à connaître et à rappeler si pertinent
 
-- **8 pays maximum par exécution**, 2 langues maximum par pays — volontairement limité
-  pour ne jamais bombarder Google News de requêtes (confirmé en test : Google News
-  renvoie HTTP 503 à un client qui se présente avec un User-Agent non-navigateur ou qui
-  enchaîne trop de requêtes trop vite ; la fonction utilise un User-Agent de navigateur
-  standard et un délai de 900ms entre requêtes pour rester fiable).
+- **5 pays maximum par exécution**, 2 langues maximum par pays — volontairement limité
+  pour ne jamais bombarder Google News de requêtes et pour limiter la pression sur la file
+  `pg_net` (voir note de timing) ; la fonction utilise un User-Agent de navigateur standard
+  et un délai de 300ms entre tirs.
 - **Catégorisation limitée au français** : un article dont la langue de recherche est
   `en`/`ar`/`pt` entre en base avec `category = null` plutôt qu'une catégorie devinée à
   l'aveugle — cohérent avec le principe "zéro hallucination" de l'application.
