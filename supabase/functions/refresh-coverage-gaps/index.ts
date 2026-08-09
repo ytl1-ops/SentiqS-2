@@ -97,23 +97,28 @@ const COUNTRY_LANGS: Record<string, { code: string; langs: string[] }> = {
 };
 
 // Limites pour ne jamais surcharger Google News ni faire déraper la durée
-// d'exécution d'un run.
-const MAX_COUNTRIES_PER_RUN = 8;
+// d'exécution d'un run. MAX_COUNTRIES_PER_RUN réduit de 8 à 5 le 2026-08-09
+// pour alléger la charge sur la file pg_net (voir note ci-dessous) — moins
+// de requêtes en vol par run, donc une récolte plus rapide.
+const MAX_COUNTRIES_PER_RUN = 5;
 const MAX_LANGS_PER_COUNTRY = 2;
 const FETCH_TIMEOUT_MS = 15000;
 const DELAY_BETWEEN_FIRES_MS = 300;
-// Testé en réel le 2026-08-09 (deux runs successifs) : les requêtes d'un run
-// répondent TOUJOURS groupées au même instant (le worker pg_net vide sa file
-// par cycle, pas requête par requête) — observé à ~34s puis ~72s après le
-// tir selon la charge du worker au moment du run. Un premier essai à
-// 15s+12s=27s puis un second à 20s+20s+25s=65s ont tous deux manqué le lot
-// (requests_answered:0 alors que net._http_response montrait bien
-// status_code=200 quelques secondes plus tard à chaque fois). Élargi à un
-// budget cumulé de 100s (50s/25s/25s) pour absorber cette variabilité sans
-// reproduire l'attente bloquante par requête de l'ancien net_fetch_sync.
-const FIRST_COLLECT_WAIT_MS = 50000;
-const SECOND_COLLECT_WAIT_MS = 25000;
-const THIRD_COLLECT_WAIT_MS = 25000;
+// Testé en réel le 2026-08-09 (plusieurs runs successifs, avec logs de
+// diagnostic confirmant qu'il ne s'agit PAS d'une erreur RPC mais bien d'une
+// absence de réponse dans net._http_response au moment de la requête) : le
+// worker pg_net vide sa file par cycle (toutes les réponses d'un run
+// arrivent groupées au même instant), avec une latence observée croissant
+// de ~34s à >100s au fil de tests rapprochés — cohérent avec un effet de
+// file d'attente qui s'alourdit sous charge de test répétée, plutôt qu'une
+// latence intrinsèque au endpoint. Les Edge Functions Supabase ont un délai
+// de réponse maximal strict de 150s (au-delà : 504 côté appelant), donc le
+// budget ci-dessous vise ~140s au pire (tir + 3 passes de récolte), en
+// restant sous ce plafond avec une marge de sécurité pour l'écriture finale
+// en base.
+const FIRST_COLLECT_WAIT_MS = 60000;
+const SECOND_COLLECT_WAIT_MS = 40000;
+const THIRD_COLLECT_WAIT_MS = 35000;
 const STALE_LOCK_MINUTES = 20;
 const STALE_DATA_THRESHOLD_HOURS = 48;
 // Google News répond 503 à un client dont le User-Agent ne ressemble pas à
@@ -312,11 +317,20 @@ Deno.serve(async (req) => {
 
       // ---- 3. Phase de récolte : une attente, puis récupération en bloc ----
       const results = new Map<number, FetchResult>();
+      const debugLog: string[] = [];
 
       async function collectOnce(ids: number[]) {
         if (ids.length === 0) return;
         const { data, error } = await supabase.rpc('net_fetch_collect', { p_request_ids: ids });
-        if (error || !data) return;
+        if (error) {
+          debugLog.push(`collect error: ${JSON.stringify(error)}`);
+          return;
+        }
+        if (!data) {
+          debugLog.push('collect: no data');
+          return;
+        }
+        debugLog.push(`collect: got ${(data as unknown[]).length} rows for ${ids.length} ids`);
         for (const row of data as Array<{ id: number; status_code: number | null; content: string | null; error_msg: string | null }>) {
           if (row.status_code != null || row.error_msg != null) {
             results.set(row.id, { status_code: row.status_code, content: row.content, error_msg: row.error_msg });
@@ -469,6 +483,7 @@ Deno.serve(async (req) => {
         total_articles_found: totalFound,
         total_articles_inserted: totalInserted,
         log: runLog,
+        debug: debugLog,
       }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     } finally {
       await supabase.from('coverage_refresh_lock').update({ running: false }).eq('id', 1);
