@@ -49,4 +49,6 @@ jobs:
       - name: Lancer la collecte planifiee
         env:
           SENTINEL_URL: https://sentiqs.netlify.app/dashboard/feeds
+          COLLECT_LOGIN_EMAIL: ${{ secrets.COLLECT_LOGIN_EMAIL }}
+          COLLECT_LOGIN_PASSWORD: ${{ secrets.COLLECT_LOGIN_PASSWORD }}
         run: node scripts/collecte-planifiee.js
