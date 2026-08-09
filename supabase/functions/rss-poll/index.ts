@@ -1,12 +1,19 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { fetchWithRetry } from './_shared/fetch-with-retry.ts';
 
 // ============================================================
-// SentiqS — rss-poll v1.1
+// SentiqS — rss-poll v1.2
 // Scheduled function that polls all active RSS sources,
 // parses articles, deduplicates, and inserts into feeds.
 // v1.1 : génère un id crypto.randomUUID() pour chaque insert,
 //        plafonne hallucination_score à 0.28 max.
+// v1.2 (audit 2026-08-09, "instabilité de la collecte") : retry avec
+//      backoff exponentiel sur les 429/503/timeout transitoires (avant :
+//      un seul fetch() par source par cycle, aucune seconde chance avant
+//      le cycle de cron suivant) + suivi des échecs consécutifs par
+//      source (consecutive_failures/last_success_at/last_failure_reason)
+//      pour permettre l'alerting (alert-dead-sources).
 // ============================================================
 
 const AFRICAN_COUNTRIES = new Set([
@@ -352,26 +359,33 @@ serve(async (req: Request) => {
       };
 
       try {
-        // 1. Fetch RSS feed
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 20000);
-
+        // 1. Fetch RSS feed (le timeout par tentative est géré en interne par fetchWithRetry)
         let rssResp: Response;
         try {
-          rssResp = await fetch(source.source_url as string, {
+          rssResp = await fetchWithRetry(source.source_url as string, {
             method: 'GET',
-            signal: controller.signal,
             headers: {
-              'User-Agent': 'SentiqS-RSS-Poll/1.1',
+              'User-Agent': 'SentiqS-RSS-Poll/1.2',
               'Accept': 'application/rss+xml, application/atom+xml, application/xml, text/xml, */*',
             },
             redirect: 'follow',
-          });
-        } finally {
-          clearTimeout(timeoutId);
+          }, { maxAttempts: 3, timeoutMs: 20000 });
+        } catch (retryErr) {
+          result.status = 'error';
+          result.error_message = (retryErr as Error).message.substring(0, 200);
+          results.push(result);
+
+          await supabase.from('osint_sources').update({
+            last_fetched_at: now,
+            rss_validated: false,
+            consecutive_failures: (Number(source.consecutive_failures) || 0) + 1,
+            last_failure_reason: result.error_message,
+          }).eq('id', source.id);
+          continue;
         }
 
         if (!rssResp.ok) {
+          const isTransient = rssResp.status === 429 || rssResp.status >= 500;
           result.status = 'error';
           result.error_message = `HTTP ${rssResp.status}`;
           results.push(result);
@@ -380,6 +394,8 @@ serve(async (req: Request) => {
           await supabase.from('osint_sources').update({
             last_fetched_at: now,
             rss_validated: false,
+            consecutive_failures: (Number(source.consecutive_failures) || 0) + 1,
+            last_failure_reason: `HTTP ${rssResp.status}${isTransient ? ' (transitoire, malgré retry)' : ''}`,
           }).eq('id', source.id);
           continue;
         }
@@ -399,6 +415,8 @@ serve(async (req: Request) => {
             last_fetched_at: now,
             nb_articles_last_check: 0,
             rss_validated: true,
+            consecutive_failures: 0,
+            last_success_at: now,
           }).eq('id', source.id);
           continue;
         }
@@ -514,11 +532,18 @@ serve(async (req: Request) => {
           nb_articles_last_check: articles.length,
           rss_validated: true,
           updated_at: now,
+          consecutive_failures: 0,
+          last_success_at: now,
         }).eq('id', source.id);
 
       } catch (fetchErr) {
         result.status = 'error';
         result.error_message = (fetchErr as Error).message.substring(0, 200);
+        await supabase.from('osint_sources').update({
+          last_fetched_at: now,
+          consecutive_failures: (Number(source.consecutive_failures) || 0) + 1,
+          last_failure_reason: result.error_message,
+        }).eq('id', source.id);
       }
 
       results.push(result);
