@@ -102,15 +102,17 @@ const MAX_COUNTRIES_PER_RUN = 8;
 const MAX_LANGS_PER_COUNTRY = 2;
 const FETCH_TIMEOUT_MS = 15000;
 const DELAY_BETWEEN_FIRES_MS = 300;
-// Testé en réel le 2026-08-09 : les 11 requêtes d'un run à 8 pays ont toutes
-// répondu groupées à ~34s après le tir (le worker pg_net traite sa file par
-// lots, pas requête par requête) — un premier essai à 15s+12s=27s les a
-// entièrement manquées (requests_answered:0 alors que net._http_response
-// montrait bien status_code=200 quelques secondes plus tard). Élargi à trois
-// passes pour absorber cette variabilité sans reproduire l'attente bloquante
-// par requête de l'ancien net_fetch_sync.
-const FIRST_COLLECT_WAIT_MS = 20000;
-const SECOND_COLLECT_WAIT_MS = 20000;
+// Testé en réel le 2026-08-09 (deux runs successifs) : les requêtes d'un run
+// répondent TOUJOURS groupées au même instant (le worker pg_net vide sa file
+// par cycle, pas requête par requête) — observé à ~34s puis ~72s après le
+// tir selon la charge du worker au moment du run. Un premier essai à
+// 15s+12s=27s puis un second à 20s+20s+25s=65s ont tous deux manqué le lot
+// (requests_answered:0 alors que net._http_response montrait bien
+// status_code=200 quelques secondes plus tard à chaque fois). Élargi à un
+// budget cumulé de 100s (50s/25s/25s) pour absorber cette variabilité sans
+// reproduire l'attente bloquante par requête de l'ancien net_fetch_sync.
+const FIRST_COLLECT_WAIT_MS = 50000;
+const SECOND_COLLECT_WAIT_MS = 25000;
 const THIRD_COLLECT_WAIT_MS = 25000;
 const STALE_LOCK_MINUTES = 20;
 const STALE_DATA_THRESHOLD_HOURS = 48;
