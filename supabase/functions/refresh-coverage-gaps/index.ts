@@ -102,8 +102,16 @@ const MAX_COUNTRIES_PER_RUN = 8;
 const MAX_LANGS_PER_COUNTRY = 2;
 const FETCH_TIMEOUT_MS = 15000;
 const DELAY_BETWEEN_FIRES_MS = 300;
-const FIRST_COLLECT_WAIT_MS = 15000;
-const SECOND_COLLECT_WAIT_MS = 12000;
+// Testé en réel le 2026-08-09 : les 11 requêtes d'un run à 8 pays ont toutes
+// répondu groupées à ~34s après le tir (le worker pg_net traite sa file par
+// lots, pas requête par requête) — un premier essai à 15s+12s=27s les a
+// entièrement manquées (requests_answered:0 alors que net._http_response
+// montrait bien status_code=200 quelques secondes plus tard). Élargi à trois
+// passes pour absorber cette variabilité sans reproduire l'attente bloquante
+// par requête de l'ancien net_fetch_sync.
+const FIRST_COLLECT_WAIT_MS = 20000;
+const SECOND_COLLECT_WAIT_MS = 20000;
+const THIRD_COLLECT_WAIT_MS = 25000;
 const STALE_LOCK_MINUTES = 20;
 const STALE_DATA_THRESHOLD_HOURS = 48;
 // Google News répond 503 à un client dont le User-Agent ne ressemble pas à
@@ -317,9 +325,15 @@ Deno.serve(async (req) => {
       await sleep(FIRST_COLLECT_WAIT_MS);
       await collectOnce(pending.map((p) => p.requestId));
 
-      const stragglers = pending.filter((p) => !results.has(p.requestId));
+      let stragglers = pending.filter((p) => !results.has(p.requestId));
       if (stragglers.length > 0) {
         await sleep(SECOND_COLLECT_WAIT_MS);
+        await collectOnce(stragglers.map((p) => p.requestId));
+      }
+
+      stragglers = pending.filter((p) => !results.has(p.requestId));
+      if (stragglers.length > 0) {
+        await sleep(THIRD_COLLECT_WAIT_MS);
         await collectOnce(stragglers.map((p) => p.requestId));
       }
 
