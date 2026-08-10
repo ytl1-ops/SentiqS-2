@@ -29,6 +29,36 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 //      requêtes d'un coup (retour immédiat de pg_net, sans attendre la
 //      réponse), puis on récolte en bloc après une attente unique — un
 //      retardataire ne bloque plus les autres.
+//
+// v2.1 (2026-08-10) — corrige un vrai trou de couverture constaté en
+// production : le décès du colonel Fofié (FACI) n'est jamais apparu pour
+// la Côte d'Ivoire malgré la table de langues qui la couvre. Cause racine
+// à deux niveaux :
+//   1. Cette fonction n'était JAMAIS planifiée (pg_cron) — uniquement
+//      déclenchable à la demande via le skill Claude Code
+//      refresh-news-coverage. Sans session humaine pour la relancer
+//      chaque jour, aucun pays "en creux" n'était plus jamais rattrapé.
+//      Corrigé par la migration schedule_refresh_coverage_gaps (cron
+//      dédié, indépendant de toute intervention manuelle).
+//   2. La requête Google News utilisait uniquement le nom du pays
+//      ("Côte d'Ivoire"), un terme trop générique : Google le classe
+//      comme sujet "actualité pays" et remonte en priorité du contenu
+//      panafricain grand public (culture, sport) plutôt que les
+//      événements sécuritaires/institutionnels qui sont la raison d'être
+//      de SentiqS. Corrigé en combinant le nom du pays à un vocabulaire
+//      sécuritaire générique (SECURITY_TERMS) — stable dans le temps,
+//      jamais besoin d'y ajouter un nom propre ou un événement précis.
+//   3. Le calcul de "pays en creux" se basait sur feeds.timestamp (la
+//      date du DERNIER article toutes sources confondues), qui pouvait
+//      être rafraîchie par une mention incidente d'un flux panafricain
+//      générique (ex. un article culture RFI mentionnant la Côte
+//      d'Ivoire) — masquant ainsi le fait qu'aucune recherche CIBLÉE
+//      sécuritaire n'avait abouti depuis longtemps. Remplacé par une
+//      rotation équitable basée sur country_posture_state.last_collection_at
+//      (la date de la dernière tentative de CETTE fonction, succès ou
+//      échec), qui garantit que chacun des 54 pays repasse en tête de
+//      file après un nombre de runs borné, indépendamment du bruit
+//      généré par les flux génériques de rss-poll.
 // ============================================================
 
 const corsHeaders = {
@@ -126,6 +156,20 @@ const STALE_DATA_THRESHOLD_HOURS = 48;
 // par prudence si Google applique la même heuristique côté IP Postgres un jour.
 const NEWS_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
+// Vocabulaire sécuritaire/institutionnel générique, combiné au nom du pays
+// dans la requête Google News. Volontairement composé de catégories larges
+// (armée, sécurité, politique, violence, décès de figures publiques) et non
+// de noms propres ou d'événements spécifiques — un nom d'officier, de
+// rébellion ou de parti ajouté ici deviendrait obsolète et demanderait
+// exactement la maintenance manuelle qu'on cherche à éliminer. Cette liste
+// n'a pas besoin d'être mise à jour pour rester pertinente à long terme.
+const SECURITY_TERMS: Record<string, string> = {
+  fr: '(armée OR militaire OR sécurité OR attaque OR attentat OR putsch OR "coup d\'État" OR rébellion OR insurrection OR émeute OR manifestation OR décès OR mort OR "forces armées" OR gouvernement OR élection OR terrorisme OR violence OR crise)',
+  en: '(army OR military OR security OR attack OR coup OR unrest OR rebellion OR insurgency OR protest OR killed OR death OR government OR election OR terrorism OR violence OR crisis)',
+  ar: '(الجيش OR أمن OR هجوم OR انقلاب OR تمرد OR احتجاج OR عنف OR وفاة OR حكومة OR انتخابات OR إرهاب OR أزمة)',
+  pt: '(exército OR militar OR segurança OR ataque OR golpe OR rebelião OR protesto OR morte OR governo OR eleição OR terrorismo OR violência OR crise)',
+};
+
 interface RssArticle {
   title: string;
   link: string;
@@ -200,7 +244,8 @@ function sleep(ms: number): Promise<void> {
 }
 
 function buildGoogleNewsUrl(countryName: string, gl: string, hl: string): string {
-  const query = encodeURIComponent(countryName);
+  const securityClause = SECURITY_TERMS[hl] || SECURITY_TERMS.en;
+  const query = encodeURIComponent(`${countryName} ${securityClause}`);
   return `https://news.google.com/rss/search?q=${query}&hl=${hl}&gl=${gl}&ceid=${gl}:${hl}`;
 }
 
@@ -208,8 +253,9 @@ interface CountryGap {
   name: string;
   code: string;
   langs: string[];
-  reason: 'sans_source' | 'donnees_anciennes' | 'jamais_collecte';
+  reason: 'sans_source' | 'donnees_anciennes' | 'jamais_collecte' | 'couverture_recente';
   lastFeedAt: string | null;
+  lastCollectionAt: string | null;
 }
 
 interface PendingFetch {
@@ -261,9 +307,10 @@ Deno.serve(async (req) => {
       // ---- 1. Identifier les pays en creux ----
       const staleCutoff = new Date(now.getTime() - STALE_DATA_THRESHOLD_HOURS * 3600 * 1000).toISOString();
 
-      const [{ data: sourceCountries }, { data: latestFeeds }] = await Promise.all([
+      const [{ data: sourceCountries }, { data: latestFeeds }, { data: postureRows }] = await Promise.all([
         supabase.from('osint_sources').select('country').eq('is_active', true),
         supabase.from('feeds').select('country, timestamp').order('timestamp', { ascending: false }).limit(4000),
+        supabase.from('country_posture_state').select('country_code, last_collection_at'),
       ]);
 
       const countriesWithSource = new Set((sourceCountries || []).map((s) => s.country).filter(Boolean));
@@ -272,30 +319,42 @@ Deno.serve(async (req) => {
         if (!f.country) continue;
         if (!latestFeedByCountry.has(f.country)) latestFeedByCountry.set(f.country, f.timestamp);
       }
+      const lastCollectionByCode = new Map<string, string>();
+      for (const p of postureRows || []) {
+        if (p.country_code && p.last_collection_at) lastCollectionByCode.set(p.country_code, p.last_collection_at);
+      }
 
+      // Tous les 54 pays sont candidats en permanence (plus de seuil
+      // d'entrée) : `reason` reste calculé à partir de feeds.timestamp pour
+      // le journal (lisibilité humaine), mais ne sert plus à trier — voir
+      // le tri par lastCollectionAt ci-dessous pour la vraie priorité.
       const gaps: CountryGap[] = [];
       for (const [name, meta] of Object.entries(COUNTRY_LANGS)) {
         const lastFeedAt = latestFeedByCountry.get(name) || null;
         const hasSource = countriesWithSource.has(name);
+        const lastCollectionAt = lastCollectionByCode.get(meta.code) || null;
 
-        if (!hasSource) {
-          gaps.push({ name, code: meta.code, langs: meta.langs, reason: 'sans_source', lastFeedAt });
-        } else if (!lastFeedAt) {
-          gaps.push({ name, code: meta.code, langs: meta.langs, reason: 'jamais_collecte', lastFeedAt });
-        } else if (lastFeedAt < staleCutoff) {
-          gaps.push({ name, code: meta.code, langs: meta.langs, reason: 'donnees_anciennes', lastFeedAt });
-        }
+        let reason: CountryGap['reason'];
+        if (!hasSource) reason = 'sans_source';
+        else if (!lastFeedAt) reason = 'jamais_collecte';
+        else if (lastFeedAt < staleCutoff) reason = 'donnees_anciennes';
+        else reason = 'couverture_recente';
+
+        gaps.push({ name, code: meta.code, langs: meta.langs, reason, lastFeedAt, lastCollectionAt });
       }
 
-      // Priorité : jamais collecté / sans source d'abord, puis données les plus anciennes.
-      gaps.sort((a, b) => {
-        const rank = (g: CountryGap) => (g.reason === 'sans_source' ? 0 : g.reason === 'jamais_collecte' ? 1 : 2);
-        const rankDiff = rank(a) - rank(b);
-        if (rankDiff !== 0) return rankDiff;
-        return (a.lastFeedAt || '').localeCompare(b.lastFeedAt || '');
-      });
+      // Rotation équitable : le pays dont la dernière recherche CIBLÉE
+      // (cette fonction, succès ou échec) remonte le plus loin dans le
+      // temps passe en premier — jamais rattrapé (lastCollectionAt=null)
+      // prioritaire sur tout le reste. Une mention incidente captée par un
+      // flux panafricain générique (rss-poll) ne fait plus perdre son tour
+      // à un pays : c'est ce qui masquait la Côte d'Ivoire avant ce
+      // correctif. Avec 54 pays / 5 par run, chaque pays repasse en tête
+      // au pire après ~11 exécutions du cron.
+      gaps.sort((a, b) => (a.lastCollectionAt || '').localeCompare(b.lastCollectionAt || ''));
 
       const targets = gaps.slice(0, MAX_COUNTRIES_PER_RUN);
+      const staleCount = gaps.filter((g) => !g.lastCollectionAt || g.lastCollectionAt < staleCutoff).length;
 
       // ---- 2. Phase de tir : lance toutes les requêtes pg_net d'un coup ----
       const pending: PendingFetch[] = [];
@@ -479,7 +538,7 @@ Deno.serve(async (req) => {
         requests_answered: results.size,
         countries_targeted: targets.map((t) => ({ name: t.name, code: t.code, reason: t.reason })),
         countries_processed: runLog.length,
-        total_countries_in_gap: gaps.length,
+        total_countries_in_gap: staleCount,
         total_articles_found: totalFound,
         total_articles_inserted: totalInserted,
         log: runLog,

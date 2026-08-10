@@ -1,6 +1,6 @@
 ---
 name: refresh-news-coverage
-description: Déclenche un rattrapage de couverture des actualités pour les 54 pays africains suivis par SentiqS, en ciblant en priorité les pays sans source enregistrée, jamais collectés, ou dont la donnée la plus récente date de plus de 48h — avec recherche multi-langue (français/anglais/arabe/portugais selon le pays) via Google News. Utilise ce skill dès que l'utilisateur demande d'actualiser les actus, de rafraîchir/vérifier la couverture, de "lancer un rattrapage", de savoir quels pays manquent de données récentes, ou mentionne "temps réel" à propos de SentiqS — même sans nommer explicitement refresh-coverage-gaps.
+description: Déclenche à la demande (diagnostic/rattrapage immédiat) le rattrapage de couverture des actualités pour les 54 pays africains suivis par SentiqS — recherche multi-langue (français/anglais/arabe/portugais) combinée à un vocabulaire sécuritaire générique via Google News, sur une rotation équitable pilotée par country_posture_state.last_collection_at. Depuis le 2026-08-10 ce rattrapage tourne aussi automatiquement toutes les 30 min via pg_cron (sentiqs-refresh-coverage-gaps) — ce skill sert surtout à forcer un passage immédiat ou à diagnostiquer un pays précis. Utilise ce skill dès que l'utilisateur demande d'actualiser les actus, de rafraîchir/vérifier la couverture, de "lancer un rattrapage", de savoir quels pays manquent de données récentes, ou mentionne "temps réel" à propos de SentiqS — même sans nommer explicitement refresh-coverage-gaps.
 ---
 
 # Rattrapage de couverture SentiqS (54 pays)
@@ -9,15 +9,40 @@ description: Déclenche un rattrapage de couverture des actualités pour les 54 
 
 SentiqS ingère déjà les actualités en continu via un cron (`sentiqs-rss-poll`, toutes les
 30 min) qui interroge les ~33 sources RSS enregistrées dans `osint_sources`. Mais ce cron
-ne priorise pas géographiquement : un pays sans source enregistrée, ou dont la dernière
-actualité remonte à plusieurs jours, ne remonte jamais en tête tant que personne ne s'en
-aperçoit. C'est exactement le trou identifié dans l'audit du 2026-08-07 (section 4 :
-"ne jamais déclarer une zone sûre uniquement parce qu'aucune actualité n'a été trouvée").
+ne priorise pas géographiquement : un pays sans source enregistrée ne remonte jamais en
+tête tant que personne ne s'en aperçoit. C'est exactement le trou identifié dans l'audit du
+2026-08-07 (section 4 : "ne jamais déclarer une zone sûre uniquement parce qu'aucune
+actualité n'a été trouvée") — et concrètement constaté le 2026-08-10 : le décès du colonel
+Fofié, annoncé par les FACI, n'est jamais remonté pour la Côte d'Ivoire, qui n'a aucune
+source dédiée dans `osint_sources`.
 
-L'Edge Function `refresh-coverage-gaps` comble ce trou : elle identifie les pays en creux,
-les priorise, et lance pour eux une recherche élargie multi-langue via Google News RSS —
-sans jamais toucher au niveau de risque déjà calculé (`country_posture_state.level`), qui
+L'Edge Function `refresh-coverage-gaps` comble ce trou : elle identifie les pays à
+rafraîchir (rotation équitable sur les 54, voir plus bas), et lance pour eux une recherche
+élargie multi-langue **combinée à un vocabulaire sécuritaire générique** (armée, sécurité,
+attaque, coup d'État, décès, etc. — voir `SECURITY_TERMS` dans le code) via Google News RSS
+— sans jamais toucher au niveau de risque déjà calculé (`country_posture_state.level`), qui
 reste la responsabilité exclusive de `useAlertLevels.ts` côté client.
+
+**Correctif 2026-08-10 (v2.1)** — trois causes racines corrigées après le cas Fofié :
+1. **Cette fonction n'était jamais planifiée** — uniquement déclenchable à la demande via
+   ce skill. Sans session humaine pour la relancer chaque jour, aucun pays n'était plus
+   jamais rattrapé. Corrigé : cron `sentiqs-refresh-coverage-gaps` (`5,35 * * * *`, migration
+   `schedule_refresh_coverage_gaps`) — le rattrapage tourne désormais seul, en continu.
+2. **La requête ne portait que sur le nom du pays**, un terme trop générique qui remonte du
+   contenu panafricain grand public (culture, sport) plutôt que les événements
+   sécuritaires/institutionnels qui sont la raison d'être de SentiqS. Corrigé en combinant
+   systématiquement le nom du pays à un vocabulaire sécuritaire générique et stable dans le
+   temps (jamais de nom propre ni d'événement précis à y ajouter).
+3. **La priorisation se basait sur `feeds.timestamp`** (date du dernier article toutes
+   sources confondues), que des mentions incidentes de flux panafricains génériques
+   pouvaient rafraîchir sans qu'aucune recherche ciblée n'ait réellement eu lieu — masquant
+   ainsi un pays réellement délaissé. Remplacé par une rotation équitable sur
+   `country_posture_state.last_collection_at` (date de la dernière tentative de CETTE
+   fonction, succès ou échec) : chaque pays repasse en tête après un nombre de runs borné,
+   indépendamment du bruit généré par rss-poll.
+4. **Alerting étendu** : `alert-dead-sources` (cron horaire) surveille désormais aussi les
+   pays sans recherche ciblée depuis 24h+, en plus des sources RSS mortes — pour ne plus
+   jamais dépendre d'une vérification manuelle périodique pour s'en apercevoir.
 
 ## Contrainte d'environnement importante
 
@@ -118,42 +143,47 @@ problème sur ce run (voir note de timing) — si `requests_answered` est nettem
 à `requests_fired`, c'est le signe que le budget de récolte a été dépassé pour certaines
 requêtes ce run-ci.
 
-- `reason` par pays ciblé : `sans_source` (aucune source enregistrée pour ce pays — le
-  cas le plus prioritaire), `jamais_collecte` (source existe mais aucun article encore
-  vu), `donnees_anciennes` (dernier article de plus de 48h).
+- `reason` par pays ciblé (informatif — ne sert plus à prioriser depuis v2.1, voir plus
+  bas) : `sans_source` (aucune source enregistrée pour ce pays), `jamais_collecte` (source
+  existe mais aucun article encore vu), `donnees_anciennes` (dernier article de plus de
+  48h), `couverture_recente` (le pays a été choisi uniquement parce que sa dernière
+  recherche ciblée est la plus ancienne, pas parce que ses données sont en creux).
 - `result` par pays traité : `couverture_amelioree` (au moins un article inséré),
   `aucun_resultat` (recherche effectuée, rien trouvé), `erreur` (la requête vers Google
   News a échoué — voir `detail`).
 - Si `skipped: true` dans la réponse, un rattrapage est déjà en cours (verrou actif) —
   ne pas relancer, réessayer plus tard.
+- `total_countries_in_gap` : depuis v2.1, ce n'est plus "combien de pays sur 54 sont
+  candidats" (tous le sont en permanence désormais) mais "combien de pays n'ont pas eu de
+  recherche ciblée depuis plus de 48h" — un indicateur de retard de la rotation, pas de
+  la population totale.
 
-**Présente toujours à l'utilisateur, en français, un résumé courent avant le détail** :
-combien de pays étaient en creux au total, combien ont été traités cette fois-ci, combien
-d'articles ont été trouvés/insérés, et la liste des pays encore en attente
-(`total_countries_in_gap - countries_processed`) — c'est cette dernière donnée qui indique
-si plusieurs exécutions successives seront nécessaires pour rattraper tout le retard.
+**Présente toujours à l'utilisateur, en français, un résumé court avant le détail** :
+combien de pays étaient en retard (`total_countries_in_gap`), combien ont été traités
+cette fois-ci, combien d'articles ont été trouvés/insérés. Comme la rotation tourne en
+continu via le cron, il n'est plus nécessaire de "rattraper tout le retard en plusieurs
+appels manuels" — mais un appel manuel reste utile pour accélérer un pays précis.
 
 Rappelle que les articles insérés portent `verification_status: 'unverified'` et un score
 d'hallucination prudent (0.3) — ils seront re-vérifiés automatiquement par le prochain
 passage de `batch-verify-feeds` (cron `sentiqs-batch-verify`, toutes les 30 min), pas
 immédiatement.
 
-## Automatisation périodique (au-delà du déclenchement à la demande)
+## Automatisation périodique — déjà en place depuis le 2026-08-10
 
-Ce skill déclenche le rattrapage *à la demande*. Si l'utilisateur veut une exécution
-vraiment périodique ("en temps réel", "toutes les heures", "automatiquement") :
+Le rattrapage tourne désormais **automatiquement** via `pg_cron`
+(`sentiqs-refresh-coverage-gaps`, `5,35 * * * *` — décalé de 5 min par rapport à
+`sentiqs-rss-poll` pour ne pas cumuler deux pics `pg_net`), planifié par la migration
+`schedule_refresh_coverage_gaps`. Ce skill reste utile pour :
+- **forcer un passage immédiat** (ex. l'utilisateur signale un pays précis qui manque
+  d'actualité et ne veut pas attendre la prochaine rotation) ;
+- **diagnostiquer** un run qui échoue de façon répétée (voir `coverage_refresh_log` et la
+  note de timing plus bas).
 
-- **Option pg_cron** (cohérente avec les cron jobs existants du projet, ex.
-  `sentiqs-rss-poll`) : demander confirmation puis appliquer une migration qui ajoute un
-  job `net.http_post` planifié, sur le même modèle que `sentiqs-scheduled-scan`. Comme
-  chaque exécution ne traite que 5 pays maximum, un intervalle de 30-60 min laisse le
-  temps de couvrir tous les pays en creux en quelques passages sans jamais surcharger
-  Google News.
-- **Option Routine Claude Code** : `mcp__Claude_Code_Remote__create_trigger` avec un
-  `cron_expression`, qui répète ce skill dans cette session ou une session dédiée.
-
-Ne mets en place l'un ou l'autre qu'après confirmation explicite de l'utilisateur — c'est
-un changement d'infrastructure récurrent, pas une simple lecture.
+Si l'utilisateur veut modifier la cadence ou désactiver l'automatisation, c'est un
+changement d'infrastructure récurrent : demander confirmation avant de modifier ou
+supprimer le cron (`select cron.alter_job(...)` / migration dédiée), ne jamais le faire
+silencieusement.
 
 ## Architecture interne (utile pour diagnostiquer un run qui échoue)
 
