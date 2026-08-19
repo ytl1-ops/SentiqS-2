@@ -198,6 +198,16 @@ function normalizeCountryName(name: string): string | null {
    //   ROUGE  ≥ 70   |   ORANGE ≥ 35   |   JAUNE ≥ 10   |   VERT < 10
    //
    // STICKY : un pays ≥ orange reste au moins jaune (10 pts) pendant 7 jours
+   //
+   // HOMOLOGATION NORMES INTERNATIONALES (GAFI/FATF) :
+   //   Un pays absent des listes GAFI (liste grise "surveillance renforcée"
+   //   et liste noire "action requise") est considéré homologué. Pour ces
+   //   pays, les incidents de catégorie institutionnelle (Politique,
+   //   Diplomatie, Économie) sont pondérés ×0.7 — un bruit politico-
+   //   économique pèse moins pour un pays aux standards de conformité
+   //   reconnus. Les catégories Sécurité/Terrorisme/Défense/Humanitaire ne
+   //   sont JAMAIS réduites : l'homologation ne change rien à un risque
+   //   physique réel.
    ============================================================ */
 
 const ALERT_WEIGHTS: Record<string, number> = {
@@ -213,6 +223,41 @@ const FEED_WEIGHTS: Record<string, number> = {
   medium: 2,
   low: 0.5,
 };
+
+/**
+ * Pays actuellement sous surveillance renforcée ou sanctionnés par le GAFI
+ * (FATF) — liste grise + liste noire. Tout pays d'AFRICA_54 absent de cet
+ * ensemble est considéré « homologué aux normes internationales ».
+ *
+ * Source : plénière GAFI de juin 2026 (liste grise, mise à jour du
+ * 19/06/2026 — Algérie et Namibie retirées, Irak et Bosnie-Herzégovine
+ * ajoutées ; aucun pays d'Afrique sur liste noire à cette date).
+ * https://www.fatf-gafi.org/en/countries/black-and-grey-lists.html
+ *
+ * À RÉVISER À CHAQUE PLÉNIÈRE GAFI (février / juin / octobre) : cette
+ * liste se périme. Étendre à l'adhésion UE/OTAN si le périmètre de veille
+ * dépasse l'Afrique.
+ */
+const PAYS_SOUS_SURVEILLANCE_GAFI = new Set<string>([
+  'Angola', 'Cameroun', "Côte d'Ivoire", 'RDC', 'Kenya', 'Soudan du Sud',
+]);
+
+/** Catégories institutionnelles éligibles à la pondération réduite. */
+const CATEGORIES_HOMOLOGATION_ELIGIBLES = new Set([
+  'Politique', 'Diplomatie', 'Économie', 'politique', 'diplomatie', 'économie', 'economie',
+]);
+
+/** Facteur appliqué au poids d'un incident institutionnel pour un pays homologué. */
+const HOMOLOGATION_DISCOUNT = 0.7;
+
+function estHomologueNormesIntl(country: string): boolean {
+  return AFRICA_54.includes(country) && !PAYS_SOUS_SURVEILLANCE_GAFI.has(country);
+}
+
+function facteurHomologation(country: string, category: string): number {
+  if (!CATEGORIES_HOMOLOGATION_ELIGIBLES.has(category)) return 1;
+  return estHomologueNormesIntl(country) ? HOMOLOGATION_DISCOUNT : 1;
+}
 
 function getTemporalWeight(timestamp: string, nowMs: number): number {
   const ageHours = (nowMs - new Date(timestamp).getTime()) / 3600000;
@@ -644,11 +689,15 @@ export function useAlertLevels() {
         alertBySev[alert.severity as keyof typeof alertBySev] += 1;
       });
 
-      let alertScore =
-        alertBySev.critical * ALERT_WEIGHTS.critical +
-        alertBySev.high * ALERT_WEIGHTS.high +
-        alertBySev.medium * ALERT_WEIGHTS.medium +
-        alertBySev.low * ALERT_WEIGHTS.low;
+      // Pondération réduite (×0.7) sur les incidents institutionnels
+      // (Politique/Diplomatie/Économie) pour les pays homologués GAFI —
+      // voir HOMOLOGATION_DISCOUNT ci-dessus. Ne s'applique jamais aux
+      // catégories sécuritaires/humanitaires.
+      let alertScore = 0;
+      data.alerts.forEach((alert) => {
+        const weight = ALERT_WEIGHTS[alert.severity] || 0;
+        alertScore += weight * facteurHomologation(country, alert.category);
+      });
 
       // 2. Feeds RSS avec déclin temporel — pondérés par fiabilité de vérification
       let feedScore = 0;
@@ -675,7 +724,9 @@ export function useAlertLevels() {
           unverifiedFeedsCount++;
         }
 
-        feedScore += weight * temporal * reliabilityMultiplier;
+        const homologation = facteurHomologation(country, feed.category);
+
+        feedScore += weight * temporal * reliabilityMultiplier * homologation;
       });
 
       // 3. Bonus concentration sécuritaire : si >60% des feeds sont sécuritaires
