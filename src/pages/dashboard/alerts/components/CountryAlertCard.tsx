@@ -1,5 +1,5 @@
 import { LEVEL_BG, LEVEL_DOT, LEVEL_HEADER, LEVEL_HEADER_TEXT, LEVEL_COLORS } from '@/hooks/useAlertLevels';
-import type { LocalizedCountryAlertLevel } from '@/hooks/useLocalizedAlertLevels';
+import type { DisplayCountryLevel } from '@/hooks/useCombinedCountryLevels';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/i18n';
@@ -7,7 +7,7 @@ import { formatTimeSince } from '@/utils/timeFormat';
 import { SEVERITY_DOT } from '@/utils/severityColors';
 
 interface Props {
-  data: LocalizedCountryAlertLevel;
+  data: DisplayCountryLevel;
   compact?: boolean;
 }
 
@@ -32,23 +32,28 @@ export default function CountryAlertCard({ data, compact = false }: Props) {
   if (compact) {
     return (
       <div
-        className={`rounded-lg border overflow-hidden flex flex-col ${LEVEL_BG[data.level] || 'bg-white border-gray-100'} anim-entry-up cursor-pointer hover:shadow-md transition-shadow`}
+        className={`rounded-lg border overflow-hidden flex flex-col ${LEVEL_BG[data.displayLevel] || 'bg-white border-gray-100'} anim-entry-up cursor-pointer hover:shadow-md transition-shadow`}
         onClick={handleClick}
       >
-        <div className={`${LEVEL_HEADER[data.level] || 'bg-gray-500'} ${LEVEL_HEADER_TEXT[data.level] || 'text-white'} px-3 py-2 flex items-center justify-between`}>
+        <div className={`${LEVEL_HEADER[data.displayLevel] || 'bg-gray-500'} ${LEVEL_HEADER_TEXT[data.displayLevel] || 'text-white'} px-3 py-2 flex items-center justify-between`}>
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded bg-white/20 flex items-center justify-center text-[10px] font-bold tracking-wider">
               {data.countryCode}
             </div>
             <span className="text-xs font-bold truncate max-w-[100px]">{data.country}</span>
           </div>
-          <span className="text-[9px] font-bold uppercase tracking-wider">{data.level}</span>
+          <div className="flex items-center gap-1">
+            {data.isValidated && (
+              <i className="ri-shield-check-fill text-[11px]" title={isFr ? 'Posture validée' : 'Validated posture'} />
+            )}
+            <span className="text-[9px] font-bold uppercase tracking-wider">{data.displayLevel}</span>
+          </div>
         </div>
         <div className="px-3 py-2 flex-1 space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-[10px] text-gray-500">{isFr ? 'Score' : 'Score'}</span>
             <span className="text-sm font-bold text-sentiqs-navy">
-              {data.score.toFixed(1)}<span className="text-[9px] text-gray-400 font-normal">/100</span>
+              {data.displayScore.toFixed(1)}<span className="text-[9px] text-gray-400 font-normal">/100</span>
             </span>
           </div>
           <div className="flex items-center justify-between">
@@ -82,10 +87,11 @@ export default function CountryAlertCard({ data, compact = false }: Props) {
   }
 
   // ── MODE DÉTAILLÉ ──
-  const bgClass = LEVEL_BG[data.level];
-  const headerBg = LEVEL_HEADER[data.level];
-  const headerText = LEVEL_HEADER_TEXT[data.level];
-  const badgeClass = LEVEL_COLORS[data.level];
+  const bgClass = LEVEL_BG[data.displayLevel];
+  const headerBg = LEVEL_HEADER[data.displayLevel];
+  const headerText = LEVEL_HEADER_TEXT[data.displayLevel];
+  const badgeClass = LEVEL_COLORS[data.displayLevel];
+  const showAutoDivergence = data.isValidated && data.autoLevel !== data.displayLevel;
 
   const incidents = data.triggeringIncidents;
   const showScroll = incidents.length > 8;
@@ -116,23 +122,72 @@ export default function CountryAlertCard({ data, compact = false }: Props) {
           </div>
           <div className="text-right">
             <span className={`inline-block px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider ${badgeClass}`}>
-              {data.level.toUpperCase()}
+              {data.isValidated && <i className="ri-shield-check-fill mr-1" />}
+              {data.displayLevel.toUpperCase()}
             </span>
-            <p className="text-[10px] text-white/80 mt-1 font-medium">{data.levelLabel}</p>
+            <p className="text-[10px] text-white/80 mt-1 font-medium">
+              {data.isValidated ? (data.validated?.confidence ? `${data.levelLabel} · confiance ${data.validated.confidence}` : data.levelLabel) : data.levelLabel}
+            </p>
           </div>
         </div>
         <div className="mt-2 flex items-center justify-between">
           <p className="text-[10px] text-white/70">
-            {isFr ? 'Dernier incident vérifié/corroboré :' : 'Latest verified incident:'}{' '}
-            {data.latestIncidentVerifiedAt
-              ? new Date(data.latestIncidentVerifiedAt).toLocaleDateString(isFr ? 'fr-FR' : 'en-US')
-              : '—'}
+            {data.isValidated
+              ? (isFr ? 'Posture validée le :' : 'Validated on:')
+              : (isFr ? 'Dernier incident vérifié/corroboré :' : 'Latest verified incident:')}{' '}
+            {data.isValidated
+              ? (data.validated?.lockedAt ? new Date(data.validated.lockedAt).toLocaleDateString(isFr ? 'fr-FR' : 'en-US') : '—')
+              : (data.latestIncidentVerifiedAt ? new Date(data.latestIncidentVerifiedAt).toLocaleDateString(isFr ? 'fr-FR' : 'en-US') : '—')}
           </p>
           <p className="text-sm font-bold">
-            Score : <span className="text-white">{data.score.toFixed(1)}</span>/100
+            Score : <span className="text-white">{data.displayScore.toFixed(1)}</span>/100
           </p>
         </div>
       </div>
+
+      {/* Posture validée : rationale, facteurs, sources, zones */}
+      {data.isValidated && data.validated && (
+        <div className="px-4 py-3 bg-white/70 border-b border-black/5 space-y-2">
+          <div className="flex items-start gap-2">
+            <i className="ri-file-text-line text-sentiqs-navy text-xs mt-0.5 flex-shrink-0" />
+            <p className="text-[11px] text-gray-700 leading-relaxed">{data.validated.rationale}</p>
+          </div>
+          {data.validated.factors.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {data.validated.factors.map((f) => (
+                <span key={f} className="px-1.5 py-0.5 rounded bg-sentiqs-navy/5 text-sentiqs-navy text-[9px] font-semibold border border-sentiqs-navy/10">
+                  {f}
+                </span>
+              ))}
+            </div>
+          )}
+          {data.validated.subZones.length > 0 && (
+            <div className="space-y-1 pt-1">
+              <h5 className="text-[9px] font-bold uppercase tracking-wider text-gray-500">{isFr ? 'Zones différenciées' : 'Sub-national zones'}</h5>
+              {data.validated.subZones.map((z) => (
+                <div key={z.zone} className="flex items-start gap-1.5 text-[10px]">
+                  <span className={`px-1 py-0.5 rounded text-[8px] font-bold uppercase text-white flex-shrink-0 ${LEVEL_HEADER[z.niveau] || 'bg-gray-500'}`}>{z.niveau}</span>
+                  <span className="text-gray-600"><strong className="text-gray-800">{z.zone}</strong> — {z.motif}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          <div className="flex items-center justify-between pt-1 flex-wrap gap-1">
+            <div className="flex flex-wrap gap-1">
+              {data.validated.sources.map((s) => (
+                <span key={s} className="text-[9px] text-sentiqs-blue">
+                  <i className="ri-links-line mr-0.5" />{s}
+                </span>
+              ))}
+            </div>
+            {showAutoDivergence && (
+              <span className="text-[9px] text-gray-400 italic">
+                {isFr ? 'Signal automatique actuel : ' : 'Current automatic signal: '}{data.autoLevel} ({data.autoScore.toFixed(0)})
+              </span>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Stats bar */}
       <div className="px-4 py-2 bg-white/60 border-b border-black/5 flex items-center gap-3 flex-wrap text-[10px]">
@@ -140,7 +195,10 @@ export default function CountryAlertCard({ data, compact = false }: Props) {
         <span className="text-gray-300">|</span>
         <span className="font-semibold text-gray-700">{t('common.verifiedCount')} : <span className="text-emerald-600">{data.verifiedCount}</span></span>
         <span className="text-gray-300">|</span>
-        <span className="font-semibold text-gray-700">Score : <span className="text-sentiqs-navy">{data.score.toFixed(1)}</span>/100</span>
+        <span className="font-semibold text-gray-700">
+          {data.isValidated ? (isFr ? 'Signal auto :' : 'Auto signal:') : 'Score :'}{' '}
+          <span className="text-sentiqs-navy">{(data.isValidated ? data.autoScore : data.displayScore).toFixed(1)}</span>/100
+        </span>
       </div>
 
       {/* Content */}
@@ -149,7 +207,9 @@ export default function CountryAlertCard({ data, compact = false }: Props) {
           {/* Incidents déclencheurs */}
           <div>
             <h4 className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-2">
-              {isFr ? `INCIDENTS DÉCLENCHEURS (${incidents.length})` : `TRIGGERING INCIDENTS (${incidents.length})`}
+              {data.isValidated
+                ? (isFr ? `SIGNAL AUTOMATIQUE — FLUX BRUTS (${incidents.length})` : `AUTOMATIC SIGNAL — RAW FEEDS (${incidents.length})`)
+                : (isFr ? `INCIDENTS DÉCLENCHEURS (${incidents.length})` : `TRIGGERING INCIDENTS (${incidents.length})`)}
             </h4>
             <div className={`space-y-2 ${showScroll ? 'max-h-64 overflow-y-auto pr-1' : ''}`}>
               {incidents.map((inc) => (
