@@ -2,6 +2,9 @@ import { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAlertLevels, LEVEL_COLORS } from '@/hooks/useAlertLevels';
 import { useLocalizedAlertLevels } from '@/hooks/useLocalizedAlertLevels';
+import { useValidatedPosture } from '@/hooks/useValidatedPosture';
+import { useCombinedCountryLevels, type DisplayCountryLevel } from '@/hooks/useCombinedCountryLevels';
+import { BASELINE_METHODOLOGY_NOTE } from '@/data/countryRiskBaseline';
 import AlertsUnifiedView from './components/AlertsUnifiedView';
 import ErrorState from '@/components/base/ErrorState';
 import i18n from '@/i18n';
@@ -51,7 +54,12 @@ export default function AlertsPage() {
   const [levelFilter, setLevelFilter] = useState<LevelFilter>('all');
   const [regionFilter, setRegionFilter] = useState<string>('all');
   const { alertLevels: rawAlertLevels, loading, error, stats, recalculate } = useAlertLevels();
-  const { levels: alertLevels } = useLocalizedAlertLevels(rawAlertLevels);
+  const { postures, loading: posturesLoading } = useValidatedPosture();
+  const combinedLevels = useCombinedCountryLevels(rawAlertLevels, postures);
+  const { levels: localizedCombined } = useLocalizedAlertLevels(combinedLevels);
+  const alertLevels = localizedCombined as unknown as DisplayCountryLevel[];
+
+  const validatedCount = useMemo(() => alertLevels.filter((l) => l.isValidated).length, [alertLevels]);
 
   const regions = useMemo(() => {
     const r = new Set<string>();
@@ -64,7 +72,7 @@ export default function AlertsPage() {
 
   const filteredLevels = useMemo(() => {
     let result = [...alertLevels];
-    if (levelFilter !== 'all') result = result.filter((l) => l.level === levelFilter);
+    if (levelFilter !== 'all') result = result.filter((l) => l.displayLevel === levelFilter);
     if (regionFilter !== 'all') result = result.filter((l) => COUNTRY_REGION[l.country] === regionFilter);
     return result;
   }, [alertLevels, levelFilter, regionFilter]);
@@ -73,7 +81,7 @@ export default function AlertsPage() {
   const filteredStats = useMemo(() => {
     const counts: Record<string, number> = { rouge: 0, orange: 0, jaune: 0, vert: 0, totalIncidents: 0, totalVerified: 0 };
     filteredLevels.forEach((l) => {
-      counts[l.level]++;
+      counts[l.displayLevel]++;
       counts.totalIncidents += l.incidents;
       counts.totalVerified += l.verifiedCount;
     });
@@ -117,8 +125,12 @@ export default function AlertsPage() {
           <span className="px-2 py-0.5 rounded-full bg-sentiqs-navy/10 text-sentiqs-navy text-[10px] font-bold">
             {t('dashboard.alerts.africanCountries')}
           </span>
-          <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold border border-emerald-200">
-            Feed-driven
+          <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-semibold border border-emerald-200 inline-flex items-center gap-1">
+            <i className="ri-shield-check-line" />
+            {validatedCount}/{alertLevels.length} {i18n.language.startsWith('fr') ? 'pays validés' : 'countries validated'}
+          </span>
+          <span className="px-2 py-0.5 rounded-full bg-gray-100 text-gray-600 text-[10px] font-semibold border border-gray-200">
+            Feed-driven (signal complémentaire)
           </span>
         </div>
         <p className="text-xs text-sentiqs-gray-text">
@@ -239,6 +251,14 @@ export default function AlertsPage() {
           <i className="ri-brain-line text-sentiqs-blue" />
           {t('dashboard.methodology.title')}
         </h3>
+        <div className="bg-emerald-50/60 border border-emerald-100 rounded-lg px-3 py-2.5 flex items-start gap-2">
+          <i className="ri-shield-check-line text-emerald-600 text-sm mt-0.5 flex-shrink-0" />
+          <p className="text-xs text-emerald-900 leading-relaxed">
+            <strong>Niveau affiché en priorité : posture validée.</strong> Pour {validatedCount} pays sur {alertLevels.length}, le niveau ci-dessus provient
+            d'une posture verrouillée (revue documentaire sourcée ou validation analyste) — pas seulement du volume d'articles.
+            {' '}{BASELINE_METHODOLOGY_NOTE}
+          </p>
+        </div>
         <p className="text-xs text-gray-600 leading-relaxed"
           dangerouslySetInnerHTML={{ __html: t('dashboard.methodology.coverage') }} />
         <p className="text-xs text-gray-600 leading-relaxed"
