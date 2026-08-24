@@ -1,5 +1,5 @@
 import { LEVEL_BADGE_BORDERED } from '@/hooks/useAlertLevels';
-import type { LocalizedCountryAlertLevel } from '@/hooks/useLocalizedAlertLevels';
+import type { DisplayCountryLevel } from '@/hooks/useCombinedCountryLevels';
 import type { LocalizedIncident } from '@/hooks/useLocalizedIncidents';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/i18n';
@@ -9,7 +9,7 @@ import VerificationBadge from '@/components/base/VerificationBadge';
 import { SEVERITY_STRIPE, SEVERITY_BADGE } from '@/utils/severityColors';
 
 interface Props {
-  levels: LocalizedCountryAlertLevel[];
+  levels: DisplayCountryLevel[];
   levelFilter: string;
 }
 
@@ -31,13 +31,13 @@ export default function AlertsUnifiedView({ levels, levelFilter }: Props) {
 
   const filtered = levelFilter === 'all'
     ? levels
-    : levels.filter((l) => l.level === levelFilter);
+    : levels.filter((l) => l.displayLevel === levelFilter);
 
   // ── Timeline : collecter tous les incidents des pays filtrés ──
   const allIncidents: (LocalizedIncident & { country: string; level: string; score: number })[] = [];
   filtered.forEach((l) => {
     l.triggeringIncidents.forEach((inc) => {
-      allIncidents.push({ ...inc, country: l.country, level: l.level, score: l.score });
+      allIncidents.push({ ...inc, country: l.country, level: l.displayLevel, score: l.displayScore });
     });
   });
   allIncidents.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
@@ -61,7 +61,7 @@ export default function AlertsUnifiedView({ levels, levelFilter }: Props) {
     );
   }
 
-  const featured = filtered.filter((l) => l.level === 'rouge' || l.level === 'orange').slice(0, 4);
+  const featured = filtered.filter((l) => l.displayLevel === 'rouge' || l.displayLevel === 'orange').slice(0, 4);
   const showFeatured = levelFilter === 'all' && featured.length > 0;
   const remaining = showFeatured ? filtered.filter((l) => !featured.includes(l)) : filtered;
 

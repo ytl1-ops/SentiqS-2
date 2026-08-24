@@ -355,6 +355,41 @@ export function getFeedSeverity(feed: SupabaseFeed): 'critical' | 'high' | 'medi
   return 'low';
 }
 
+/* ============================================================
+   FILTRE DE PERTINENCE SÉCURITAIRE
+   ============================================================
+   Correctif architecture (août 2026) : le pipeline RSS ingère des
+   flux généralistes « tout-venant » (ex. agrégateurs de presse
+   nationale) qui contiennent une écrasante majorité d'articles sans
+   rapport avec la sûreté (sport, économie ordinaire, célébrités...).
+   Avant ce correctif, TOUT article non reconnu retombait par défaut
+   sur la sévérité 'low' (0.5 pt) et contribuait quand même au bonus
+   de volume — un pays simplement très couvert par la presse (ex.
+   Ghana, presse anglophone abondante) se retrouvait donc noté comme
+   si ce volume reflétait une dégradation sécuritaire réelle.
+   Désormais, un article ne compte dans le scoring QUE s'il déclenche
+   un des motifs de sévérité (critical/high/medium) OU si sa
+   catégorie est intrinsèquement liée à la sûreté. Le reste continue
+   d'apparaître dans le module Flux (transparence totale des sources)
+   mais n'alimente plus le score pays.
+   ============================================================ */
+
+const SECURITY_RELEVANT_CATEGORIES = new Set([
+  'Sécurité', 'sécurité', 'Terrorisme', 'terrorisme', 'Défense', 'défense',
+  'Trafics illicites', 'Humanitaire', 'humanitaire', 'Politique', 'politique',
+  'Diplomatie', 'diplomatie', 'Cyber', 'cyber', 'Santé', 'santé',
+  'Environnement', 'environnement', 'Social', 'social',
+]);
+
+export function isSecurityRelevantFeed(feed: SupabaseFeed): boolean {
+  // Une catégorie explicitement sûreté/politique/humanitaire suffit.
+  if (SECURITY_RELEVANT_CATEGORIES.has(feed.category)) return true;
+  // Sinon, il faut que le contenu déclenche réellement un motif de
+  // sévérité reconnu (critical/high/medium) — pas le simple défaut.
+  const sev = getFeedSeverity(feed);
+  return sev === 'critical' || sev === 'high' || sev === 'medium';
+}
+
 function calculateAlertLevel(score: number): { level: CountryAlertLevel['level']; label: string } {
   if (score >= 70) return { level: 'rouge', label: 'Conflit majeur' };
   if (score >= 35) return { level: 'orange', label: 'Risque élevé' };
@@ -601,8 +636,11 @@ export function useAlertLevels() {
     const recentAlerts = alerts.filter((a) => new Date(a.timestamp) >= alertCutoff);
     const recentFeeds = feeds.filter((f) => new Date(f.timestamp) >= feedCutoff);
 
+    // --- FILTRE DE PERTINENCE : exclure le bruit hors-sujet avant tout calcul ---
+    const relevantFeeds = recentFeeds.filter(isSecurityRelevantFeed);
+
     // --- DÉDUPLICATION : grouper les feeds similaires, ne compter que les canoniques ---
-    const { canonicalFeeds } = deduplicateFeeds(recentFeeds);
+    const { canonicalFeeds } = deduplicateFeeds(relevantFeeds);
 
     const prevMap = previousLevelsRef.current;
 
