@@ -2,13 +2,13 @@
 
 **Dispositif :** SENTIQS-OSINT CORE — Veille sûreté pays
 **Pays suivi :** Côte d'Ivoire (CIV)
-**Date de mise à jour :** 25/08/2026 (recoupement et correction de la fiche 4)
+**Date de mise à jour :** 25/08/2026 (recoupement des fiches 4 et 5 — correction de la fiche 4, confirmation et renforcement du sourcing de la fiche 5)
 **Sources configurées du projet :** [Présidence de la Côte d'Ivoire (Facebook)](https://facebook.com/Presidenceci), [Portail officiel du Gouvernement (gouv.ci)](https://www.gouv.ci)
-**Sources complémentaires mobilisées pour cette synthèse :** KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, FratMat, Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr (voir sourcing par fiche)
+**Sources complémentaires mobilisées pour cette synthèse :** KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, FratMat, Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr, AIP (Agence Ivoirienne de Presse), Présidence de la Côte d'Ivoire (site officiel) (voir sourcing par fiche)
 
 > Note méthodologique : le portail gouv.ci et la page Facebook de la Présidence n'exposent pas de flux d'actualités directement exploitable en lecture automatisée au moment de cette synthèse (page d'accueil de type vitrine pour gouv.ci ; contenu Facebook non accessible sans authentification). Les faits ci-dessous ont donc été recoupés via la presse ivoirienne et panafricaine, dont plusieurs relais directs des communiqués officiels de la Présidence et du Conseil National de Sécurité (CNS). Chaque fiche précise sa source et son niveau de fiabilité, conformément au protocole de veille.
 
-> **Recoupement du 25/08/2026 :** la fiche 4 (initialement sourcée sur un média secondaire unique, Africtelegraph) a été recoupée avec le texte intégral du discours présidentiel et 4 médias ivoiriens indépendants. Le fait rapporté était mal qualifié — voir le détail dans la fiche 4 ci-dessous et dans « Limites de cette synthèse ».
+> **Recoupement du 25/08/2026 :** la fiche 4 (initialement sourcée sur un média secondaire unique, Africtelegraph) a été recoupée avec le texte intégral du discours présidentiel et 4 médias ivoiriens indépendants. Le fait rapporté était mal qualifié — voir le détail dans la fiche 4 ci-dessous et dans « Limites de cette synthèse ». La fiche 5, recoupée le même jour, ne présentait en revanche aucune erreur factuelle : le recoupement a permis de renforcer la qualification de sa source (voir la note dans la fiche 5).
 
 ## Vue d'ensemble — Niveau de sûreté pays
 
@@ -25,7 +25,7 @@
 
 **9 fiches actives — répartition : 1 Faible · 6 Modéré · 2 Élevé · 0 Critique**
 
-**Lecture d'ensemble :** la criminalité de droit commun est en baisse tendancielle selon les autorités, et l'indice sécuritaire officiel s'est nettement amélioré depuis 2012. Le principal point de vigilance reste la sécurité de l'extrême nord frontalier (Tchologo, Bounkani, Poro) : à la menace jihadiste résiduelle s'ajoutent des incursions armées directes attribuées à des milices burkinabées (VDP), illustrées par l'attaque du village de Difita et l'enlèvement de fonctionnaires à Kalan 2 fin août 2025 — deux événements distincts qui restent le référentiel de gravité le plus élevé de ce dispositif. La déclaration présidentielle du 6 août 2026 sur la « libération des zones à risque », initialement mal rattachée à cette menace nord (voir fiche 4), concerne en réalité un enjeu distinct de gouvernance urbaine : l'encadrement légal des opérations de déguerpissement dans les zones inondables d'Abidjan. Sur le plan politique, la réélection du président Ouattara pour un quatrième mandat (fin 2025) s'est déroulée sans large contestation violente rapportée, mais s'inscrit dans un contexte de tensions pré-électorales et de restrictions signalées sur les libertés de manifester, à surveiller pour la cohésion sociale à moyen terme.
+**Lecture d'ensemble :** la criminalité de droit commun est en baisse tendancielle selon les autorités, et l'indice sécuritaire officiel s'est nettement amélioré depuis 2012. Le principal point de vigilance reste la sécurité de l'extrême nord frontalier (Tchologo, Bounkani, Poro) : à la menace jihadiste résiduelle s'ajoutent des incursions armées directes attribuées à des milices burkinabées (VDP), illustrées par l'attaque du village de Difita et l'enlèvement de fonctionnaires à Kalan 2 fin août 2025 — deux événements distincts qui restent le référentiel de gravité le plus élevé de ce dispositif. La déclaration présidentielle du 6 août 2026 sur la « libération des zones à risque », initialement mal rattachée à cette menace nord (voir fiche 4), concerne en réalité un enjeu distinct de gouvernance urbaine : l'encadrement légal des opérations de déguerpissement dans les zones inondables d'Abidjan. Le sujet des réfugiés et de la frontière nord (fiche 5) reste quant à lui bien confirmé et documenté : plus de 115 000 demandeurs d'asile sont recensés, dans une zone où la couverture réseau insuffisante freine encore le déploiement sécuritaire selon le CNS lui-même. Sur le plan politique, la réélection du président Ouattara pour un quatrième mandat (fin 2025) s'est déroulée sans large contestation violente rapportée, mais s'inscrit dans un contexte de tensions pré-électorales et de restrictions signalées sur les libertés de manifester, à surveiller pour la cohésion sociale à moyen terme.
 
 ---
 
@@ -107,7 +107,7 @@ assainissement.
 
 **Note de recoupement (25/08/2026) :** la version initiale de cette fiche, datée du 07/08/2026 et sourcée sur le seul média secondaire Africtelegraph, présentait cette déclaration présidentielle comme portant à la fois sur la menace jihadiste et les opérations de sécurisation dans les régions frontalières du nord (Tchologo, Bounkani, Poro) et sur des « zones à risque » urbaines non précisées (Abidjan, San Pedro, Bouaké). Le recoupement avec le texte intégral du discours (FratMat) et quatre médias ivoiriens indépendants (Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr) montre qu'il s'agissait d'une erreur de qualification : le discours du 6 août 2026 ne mentionne à aucun moment le nord du pays ni la menace jihadiste dans ce passage — les « zones à risque » désignent exclusivement des zones urbaines inondables à Abidjan, dans le contexte des déguerpissements contestés de Koumassi Campement. La fiche a été entièrement réécrite, reclassée de « Sécurité frontalière — nord » vers une nouvelle catégorie « Gouvernance urbaine — zones à risque », et son niveau d'alerte abaissé d'Élevé à Modéré en conséquence. La menace jihadiste résiduelle dans le nord frontalier reste réelle et documentée (voir fiches 8 et 9), mais n'est plus rattachée à cet événement précis.
 
-### Fiche 5 — Gestion des réfugiés et sécurisation de la frontière nord
+### Fiche 5 — Gestion des réfugiés et sécurisation de la frontière nord *(sourcing renforcé après recoupement — voir note ci-dessous)*
 
 ```
 CIV — 12/02/2026 (date de survenance — réunion du Conseil National de Sécurité) — Niveau :
@@ -118,14 +118,23 @@ Fait : Le CNS a acté la poursuite de l'enregistrement biométrique et de l'assi
 de 115 000 demandeurs d'asile originaires du Mali, du Burkina Faso, du Ghana et de la Guinée,
 ainsi que le renforcement du dispositif sécuritaire à la frontière nord par l'état-major
 général des armées.
-Source : AllAfrica (relais de presse panafricain d'un communiqué officiel) — fiabilité correcte.
+Source : Communiqué officiel du Conseil National de Sécurité (Présidence de la Côte d'Ivoire),
+rapporté initialement par FratMat et relayé sans modification éditoriale par AllAfrica ;
+recoupé indépendamment par l'Agence Ivoirienne de Presse (AIP — agence de presse publique,
+plusieurs articles distincts), Afrique-sur7.fr, Connectionivoirienne, Le Mandat Express,
+Africa24 TV et yessouan.ci — fiabilité élevée, forte convergence multi-sources.
 Impact sur la sûreté pays : Une population réfugiée de cette ampleur en zone frontalière nord
 constitue à la fois un enjeu humanitaire et un facteur de vulnérabilité sécuritaire (pression
 sur les ressources locales, risque d'infiltration profitant des flux migratoires) dans une zone
 déjà exposée à la menace jihadiste.
-À surveiller / action : Rythme des retours volontaires (modèle Ghana) et adéquation du
-dispositif sécuritaire frontalier face aux flux.
+À surveiller / action : Rythme des retours volontaires (modèle Ghana) ; adéquation du
+dispositif sécuritaire frontalier face aux flux ; mise en œuvre du Programme National de
+Connectivité Rurale (PNCR) et des solutions satellite en zone frontalière, la couverture réseau
+insuffisante y étant identifiée par le CNS lui-même comme un frein actuel au dispositif
+sécuritaire.
 ```
+
+**Note de recoupement (25/08/2026) :** contrairement à la fiche 4, ce recoupement n'a révélé aucune erreur factuelle. Les faits rapportés (plus de 115 000 demandeurs d'asile originaires du Mali, du Burkina Faso, du Ghana et de la Guinée ; poursuite de l'enregistrement biométrique et de l'assistance humanitaire ; retours volontaires sur le modèle du Ghana ; renforcement du dispositif sécuritaire à la frontière nord) sont intégralement confirmés par le communiqué officiel du CNS et par au moins six médias ivoiriens indépendants, dont l'agence de presse publique (AIP). La fiche initiale citait AllAfrica comme source unique ; le recoupement montre qu'AllAfrica ne fait que relayer sans modification l'article de FratMat lui-même adossé au communiqué officiel — la mention de source a donc été réécrite pour refléter la chaîne réelle de sourcing et la convergence multi-médias effective, ce qui relève le niveau de fiabilité de « correct » à « élevé ». Le recoupement a également permis d'intégrer un élément du communiqué absent de la version initiale de la fiche : le CNS a identifié une couverture réseau insuffisante en zone frontalière comme un obstacle au déploiement sécuritaire, et a chargé le Premier ministre d'accélérer le Programme National de Connectivité Rurale (PNCR) ainsi que l'exploration de solutions satellite — un point désormais repris en « À surveiller ».
 
 ### Fiche 6 — Réélection d'Alassane Ouattara pour un quatrième mandat
 
@@ -213,6 +222,9 @@ Côte d'Ivoire–Burkina Faso.
 - [Adresse à la Nation : Alassane Ouattara annonce la poursuite des opérations de libération des zones à risques — linfodrome.com](https://www.linfodrome.com/politique/124218-adresse-a-la-nation-alassane-ouattara-annonce-la-poursuite-des-operations-de-liberation-des-zones-a-risques)
 - [Côte d'Ivoire : ce qu'il faut retenir du message à la Nation d'Alassane Ouattara — afrique-sur7.fr](https://www.afrique-sur7.fr/cote-divoire-ce-quil-faut-retenir-du-message-a-la-nation-dalassane-ouattara)
 - [Ouattara promet de poursuivre la sécurisation des zones à risque — Africtelegraph](https://africtelegraph.com/blog/ouattara-promet-de-poursuivre-la-securisation-des-zones-a-risque/) *(source initiale de la fiche 4, dont la qualification a été corrigée le 25/08/2026)*
+- [Communiqué du Conseil National de Sécurité — Présidence de la Côte d'Ivoire](https://www.presidence.ci/communiques-presidence/communique-du-conseil-national-de-securite-2/) *(source officielle primaire de la fiche 5)*
+- [Conseil national de sécurité : les grandes décisions de l'organe de l'État — FratMat](https://www.fratmat.info/article/2639970/politique/conseil-national-de-securite-les-grandes-decisions-de-lorgane-de-letat) *(article original recoupant la fiche 5, relayé ensuite par AllAfrica)*
+- [Côte d'Ivoire-AIP/115 000 demandeurs d'asile en provenance du Burkina Faso, de la Guinée, du Mali et du Ghana accueillis aux frontières Nord du pays (CNS) — AIP (Agence Ivoirienne de Presse)](https://www.aip.ci/318842/cote-divoire-aip-115-000-demandeurs-dasile-en-provenance-du-burkina-faso-de-la-guinee-du-mali-et-du-ghana-accueillis-aux-frontieres-nord-du-pays-cns/) *(corroboration indépendante de la fiche 5 par l'agence de presse publique)*
 - [Conseil national de sécurité — Les grandes décisions de l'organe de l'État (12/02/2026) — AllAfrica](https://fr.allafrica.com/stories/202602130522.html)
 - [Transports terrestres — Déjà 81 motocyclistes tués durant le premier semestre 2026 — AllAfrica](https://fr.allafrica.com/stories/202608150162.html)
 - [Présidentielle en Côte d'Ivoire : Alassane Ouattara réélu, selon des résultats provisoires — France 24](https://www.france24.com/fr/afrique/20251027-pr%C3%A9sidentielle-c%C3%B4te-ivoire-alassane-ouattara-r%C3%A9%C3%A9lu-selon-r%C3%A9sultats-provisoires)
@@ -229,7 +241,8 @@ Côte d'Ivoire–Burkina Faso.
 
 - La page Facebook officielle de la Présidence (source configurée du projet) n'a pas pu être consultée directement : Facebook ne permet pas la lecture programmatique de son contenu public sans authentification. Les communiqués de la Présidence ont donc été recoupés via leurs relais de presse (KOACI, AllAfrica), qui les citent en source primaire.
 - **Fiche 4 — recoupée et corrigée le 25/08/2026.** La version initiale, fondée sur un média secondaire unique (Africtelegraph), qualifiait à tort une déclaration présidentielle sur des « zones à risque » urbaines (inondations, déguerpissements à Koumassi) comme portant aussi sur la sécurisation du nord frontalier. Ce cas illustre l'utilité du recoupement systématique des fiches à source unique : voir la note dans la fiche 4 pour le détail de la correction.
+- **Fiche 5 — recoupée le 25/08/2026, sans erreur factuelle identifiée.** Contrairement à la fiche 4, le recoupement confirme intégralement les faits rapportés (plus de 115 000 demandeurs d'asile, quatre pays d'origine, renforcement du dispositif à la frontière nord) via le communiqué officiel du CNS et au moins six médias ivoiriens indépendants, dont l'agence de presse publique (AIP). Seule la mention de la source a été renforcée : voir la note dans la fiche 5.
 - Les fiches 8 et 9 (Difita, Kalan 2) datent d'août 2025 — un an avant la date de cette synthèse. Elles sont conservées comme antécédents directement pertinents pour la même zone frontalière, mais ne reflètent pas nécessairement l'état actuel du terrain ; une actualisation via une source récente est recommandée.
 - Aucune donnée n'a pu être intégrée depuis des connecteurs ACLED ou GDELT à ce stade (non activés dans ce dispositif) : les fiches 8 et 9 reposent sur du sourcing presse classique, pas sur un flux structuré d'événements.
-- Cette synthèse a été mise à jour le 25/08/2026 pour le recoupement de la fiche 4 ; plusieurs autres faits couverts (CNS de février et juillet 2026) sont des points de situation périodiques qui appellent une mise à jour au prochain communiqué.
+- Cette synthèse a été mise à jour le 25/08/2026 pour le recoupement des fiches 4 et 5 ; plusieurs autres faits couverts (CNS de février et juillet 2026) sont des points de situation périodiques qui appellent une mise à jour au prochain communiqué.
 - Le discours présidentiel du 6 août 2026 (source de la fiche 4 corrigée) contient d'autres annonces non couvertes par ce dispositif à ce stade — notamment la dissolution de la Commission Électorale Indépendante (réforme de la gouvernance électorale) et la grâce présidentielle de 4 661 détenus de droit commun — qui pourraient justifier des fiches distinctes si le périmètre de veille est étendu à ces thématiques.

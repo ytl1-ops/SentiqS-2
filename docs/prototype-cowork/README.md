@@ -16,12 +16,16 @@ Ce dossier documente le travail produit dans une session Claude Cowork : un prot
 
 ## Sources couvertes dans la synthèse
 
-KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, Afrik Soir, FratMat, Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr, gouv.ci, page Facebook de la Présidence de Côte d'Ivoire.
+KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, Afrik Soir, FratMat, Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr, AIP (Agence Ivoirienne de Presse), Présidence de la Côte d'Ivoire (site officiel), gouv.ci, page Facebook de la Présidence de Côte d'Ivoire.
 
 ## État des connecteurs (dans le prototype)
 
 Réseaux sociaux (Telegram), ACLED et GDELT ne sont pas encore connectés dans ce prototype — affichés honnêtement comme inactifs (0 donnée), sans données inventées.
 
-## Recoupement du 25/08/2026 — Fiche 4 corrigée
+## Recoupement du 25/08/2026 — fiches 4 et 5
 
-La fiche 4 (initialement sourcée sur le seul média secondaire Africtelegraph) affirmait à tort qu'une déclaration présidentielle du 6 août 2026 portait sur la menace jihadiste dans le nord frontalier. Le recoupement avec le texte intégral du discours et 4 médias ivoiriens indépendants a montré qu'il s'agissait en réalité d'un enjeu de gouvernance urbaine (déguerpissements et risque d'inondation à Abidjan, quartier de Koumassi), sans rapport avec le nord du pays. La fiche a été réécrite, reclassée, et son niveau abaissé d'Élevé à Modéré. Détail complet dans `synthese-cote-divoire-2026-08-24.md`.
+**Fiche 4 — corrigée.** La fiche (initialement sourcée sur le seul média secondaire Africtelegraph) affirmait à tort qu'une déclaration présidentielle du 6 août 2026 portait sur la menace jihadiste dans le nord frontalier. Le recoupement avec le texte intégral du discours et 4 médias ivoiriens indépendants a montré qu'il s'agissait en réalité d'un enjeu de gouvernance urbaine (déguerpissements et risque d'inondation à Abidjan, quartier de Koumassi), sans rapport avec le nord du pays. La fiche a été réécrite, reclassée, et son niveau abaissé d'Élevé à Modéré.
+
+**Fiche 5 — sourcing renforcé, aucune erreur factuelle.** Contrairement à la fiche 4, le recoupement de la fiche 5 (115 000+ demandeurs d'asile originaires du Mali, Burkina Faso, Ghana et Guinée ; renforcement du dispositif à la frontière nord) n'a révélé aucune erreur : les faits sont confirmés par le communiqué officiel du Conseil National de Sécurité et par au moins six médias ivoiriens indépendants, dont l'agence de presse publique (AIP). Seule la citation de source a été réécrite pour refléter la chaîne réelle de sourcing (communiqué CNS → FratMat → AllAfrica, recoupé indépendamment par l'AIP et 5 autres médias), ce qui relève le niveau de fiabilité affiché de « correct » à « élevé ».
+
+Détail complet des deux recoupements dans `synthese-cote-divoire-2026-08-24.md`.

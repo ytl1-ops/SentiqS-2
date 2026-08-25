@@ -174,15 +174,18 @@ const FICHES = [
    sourceUrl:"https://www.fratmat.info/article/2643754/politique/an-66-lintegralite-du-message-du-president-alassane-ouattara-a-la-nation",
    impact:"Signal de gouvernance sur l'encadrement légal des opérations d'évacuation urbaine et la gestion du risque d'inondation à Abidjan ; la Présidence reconnaît elle-même un risque social lié à des déguerpissements hors cadre légal et promet une enquête.",
    watch:"Résultats de l'enquête annoncée sur les déguerpissements de Koumassi Campement ; mise en œuvre des investissements annoncés en drainage et assainissement.",
-   correction:"Correction du 25/08/2026 (recoupement) : la fiche initiale (source unique Africtelegraph) associait à tort cette déclaration à la menace jihadiste et aux opérations de sécurisation du nord frontalier (Tchologo, Bounkani, Poro). Le texte intégral du discours et 4 médias ivoiriens indépendants montrent que les « zones à risque » citées par le Président concernent exclusivement des zones urbaines inondables à Abidjan, sans aucune référence au nord du pays."},
+   recoupement:"Correction du 25/08/2026 (recoupement) : la fiche initiale (source unique Africtelegraph) associait à tort cette déclaration à la menace jihadiste et aux opérations de sécurisation du nord frontalier (Tchologo, Bounkani, Poro). Le texte intégral du discours et 4 médias ivoiriens indépendants montrent que les « zones à risque » citées par le Président concernent exclusivement des zones urbaines inondables à Abidjan, sans aucune référence au nord du pays.",
+   recoupementLabel:"FICHE CORRIGÉE APRÈS RECOUPEMENT"},
   {id:5, cat:'Frontières / réfugiés', level:'modere', date:'2026-02-12', dateLabel:'12/02/2026',
    title:'Gestion des réfugiés et sécurisation de la frontière nord',
    lieu:'Frontière nord (limitrophe Mali / Burkina Faso)',
    fait:"Le CNS a acté la poursuite de l'enregistrement biométrique et de l'assistance aux plus de 115 000 demandeurs d'asile originaires du Mali, du Burkina Faso, du Ghana et de la Guinée, ainsi que le renforcement du dispositif sécuritaire à la frontière nord.",
-   source:"AllAfrica (relais de presse panafricain d'un communiqué officiel) — fiabilité correcte.",
-   sourceUrl:"https://fr.allafrica.com/stories/202602130522.html",
+   source:"Communiqué officiel du CNS, rapporté par FratMat et relayé par AllAfrica ; recoupé indépendamment par l'AIP (agence de presse publique), Afrique-sur7.fr, Connectionivoirienne, Le Mandat Express, Africa24 TV et yessouan.ci — fiabilité élevée, forte convergence multi-sources.",
+   sourceUrl:"https://www.presidence.ci/communiques-presidence/communique-du-conseil-national-de-securite-2/",
    impact:"Une population réfugiée de cette ampleur en zone frontalière constitue un enjeu humanitaire et un facteur de vulnérabilité sécuritaire.",
-   watch:"Rythme des retours volontaires et adéquation du dispositif sécuritaire frontalier face aux flux."},
+   watch:"Rythme des retours volontaires (modèle Ghana) ; adéquation du dispositif sécuritaire frontalier face aux flux ; mise en œuvre du Programme National de Connectivité Rurale (PNCR) et des solutions satellite en zone frontalière, la couverture réseau insuffisante y étant identifiée par le CNS comme un frein actuel au dispositif sécuritaire.",
+   recoupement:"Recoupement du 25/08/2026 : aucune erreur factuelle identifiée, contrairement à la fiche 4. Les faits (115 000+ demandeurs d'asile, 4 pays d'origine, renforcement de la frontière nord) sont confirmés par le communiqué officiel du CNS et au moins 6 médias ivoiriens indépendants dont l'AIP (agence de presse publique). La source, initialement présentée comme un relais unique (AllAfrica), a été réécrite pour refléter la chaîne réelle de sourcing — le niveau de fiabilité passe de « correct » à « élevé ». Le recoupement a aussi permis d'ajouter un point du communiqué absent de la version initiale : le déficit de couverture réseau en zone frontalière, désormais repris en « À surveiller ».",
+   recoupementLabel:"SOURCING RENFORCÉ APRÈS RECOUPEMENT"},
   {id:6, cat:'Stabilité politique', level:'modere', date:'2025-11-04', dateLabel:"27/10/2025 – 04/11/2025",
    title:"Réélection d'Alassane Ouattara pour un quatrième mandat",
    lieu:'Ensemble du territoire national',
@@ -221,7 +224,7 @@ const ARTICLES = [
   {date:'2026-08-15', dateLabel:'15/08/2026', title:'Transports terrestres : déjà 81 motocyclistes tués durant le premier semestre 2026', excerpt:'Le ministère des Transports annonce un renforcement des contrôles techniques face à ce bilan.', src:'AllAfrica', url:'https://fr.allafrica.com/stories/202608150162.html', fiches:[3]},
   {date:'2026-08-06', dateLabel:'06/08/2026', title:"An 66 : l'intégralité du message du Président à la nation", excerpt:"Zones à risque d'inondation à Abidjan, déguerpissements à Koumassi et promesse de sanctions contre les opérations hors cadre légal.", src:'FratMat', url:'https://www.fratmat.info/article/2643754/politique/an-66-lintegralite-du-message-du-president-alassane-ouattara-a-la-nation', fiches:[4]},
   {date:'2026-07-23', dateLabel:'23/07/2026', title:'Communiqué du Conseil National de Sécurité du 23 juillet 2026', excerpt:"Baisse de la criminalité générale, bilan de la lutte contre l'orpaillage illégal, accidents de la route.", src:'KOACI', url:'https://www.koaci.com/article/2026/07/23/cote-divoire/politique/cote-divoire-communique-du-conseil-national-de-securite-du-23-juillet-2026_198861.html', fiches:[1,2]},
-  {date:'2026-02-12', dateLabel:'12/02/2026', title:"Conseil national de sécurité — Les grandes décisions de l'organe de l'État", excerpt:"Gestion de 115 000 demandeurs d'asile et renforcement du dispositif à la frontière nord.", src:'AllAfrica', url:'https://fr.allafrica.com/stories/202602130522.html', fiches:[5]},
+  {date:'2026-02-12', dateLabel:'12/02/2026', title:"115 000 demandeurs d'asile accueillis aux frontières Nord du pays (CNS)", excerpt:"Gestion de 115 000 demandeurs d'asile et renforcement du dispositif à la frontière nord — confirmé par l'agence de presse publique.", src:'AIP', url:'https://www.aip.ci/318842/cote-divoire-aip-115-000-demandeurs-dasile-en-provenance-du-burkina-faso-de-la-guinee-du-mali-et-du-ghana-accueillis-aux-frontieres-nord-du-pays-cns/', fiches:[5]},
   {date:'2025-11-04', dateLabel:'04/11/2025', title:"Le Conseil constitutionnel confirme l'élection d'Alassane Ouattara au premier tour", excerpt:'Validation officielle des résultats de la présidentielle 2025 pour un quatrième mandat.', src:'AllAfrica', url:'https://fr.allafrica.com/stories/202511040549.html', fiches:[6]},
   {date:'2025-10-27', dateLabel:'27/10/2025', title:'Alassane Ouattara réélu, selon des résultats provisoires (89,77 % des voix)', excerpt:'Victoire dès le premier tour annoncée par la Commission électorale indépendante.', src:'France 24', url:'https://www.france24.com/fr/afrique/20251027-pr%C3%A9sidentielle-c%C3%B4te-ivoire-alassane-ouattara-r%C3%A9%C3%A9lu-selon-r%C3%A9sultats-provisoires', fiches:[6]},
   {date:'2025-10-16', dateLabel:'16/10/2025', title:'26 manifestants écopent de trois ans de prison ferme pour « troubles à l\'ordre public »', excerpt:'Amnesty International dénonce un climat de répression des manifestations pacifiques avant le scrutin.', src:'Jeune Afrique', url:'https://www.jeuneafrique.com/1732174/politique/cote-divoire-26-manifestants-ecopent-de-trois-ans-de-prison-ferme-pour-troubles-a-lordre-public/', fiches:[7]},
@@ -349,7 +352,7 @@ function topbar(crumbs, rightExtra){
   return '\
   <div class="topbar">\
     <div class="crumbs">'+crumbs+'</div>\
-    <div style="display:flex;align-items:center;gap:20px;">'+(rightExtra||'')+'<span class="mono" style="font-size:11.5px;color:var(--text-3);white-space:nowrap;">MAJ 25/08/2026 · 03:52</span></div>\
+    <div style="display:flex;align-items:center;gap:20px;">'+(rightExtra||'')+'<span class="mono" style="font-size:11.5px;color:var(--text-3);white-space:nowrap;">MAJ 25/08/2026 · 05:18</span></div>\
   </div>';
 }
 function shell(route, crumbs, body, rightExtra){
@@ -548,7 +551,7 @@ function viewFiche(id){
           <h1 style="font-size:25px;font-weight:600;line-height:1.3;">'+esc(f.title)+'</h1>\
           <div class="mono" style="display:flex;gap:14px;font-size:12px;color:var(--text-3);flex-wrap:wrap;"><span>'+f.dateLabel+'</span><span>·</span><span>'+esc(f.lieu)+'</span></div>\
         </div>\
-        '+(f.correction ? '<div class="card" style="padding:14px 18px;border-color:var(--modere);background:var(--accent-wash);"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span class="mono" style="font-size:10.5px;font-weight:600;letter-spacing:.04em;color:var(--modere);">FICHE CORRIGÉE APRÈS RECOUPEMENT</span></div><p style="font-size:12.5px;line-height:1.6;color:var(--text-2);">'+esc(f.correction)+'</p></div>' : '')+'\
+        '+(f.recoupement ? '<div class="card" style="padding:14px 18px;border-color:var(--modere);background:var(--accent-wash);"><div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span class="mono" style="font-size:10.5px;font-weight:600;letter-spacing:.04em;color:var(--modere);">'+esc(f.recoupementLabel||'FICHE CORRIGÉE APRÈS RECOUPEMENT')+'</span></div><p style="font-size:12.5px;line-height:1.6;color:var(--text-2);">'+esc(f.recoupement)+'</p></div>' : '')+'\
         <div style="height:1px;background:var(--border);"></div>\
         <div style="display:flex;flex-direction:column;gap:18px;">\
           <div><span class="eyebrow">Fait</span><p style="font-size:14.5px;line-height:1.65;margin-top:8px;">'+esc(f.fait)+'</p></div>\
