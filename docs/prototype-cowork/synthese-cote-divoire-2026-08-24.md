@@ -2,13 +2,13 @@
 
 **Dispositif :** SENTIQS-OSINT CORE — Veille sûreté pays
 **Pays suivi :** Côte d'Ivoire (CIV)
-**Date de mise à jour :** 25/08/2026 (recoupement des fiches 4, 5 et 6 — correction des fiches 4 et 6, confirmation et renforcement du sourcing de la fiche 5, ajout de la fiche 10)
+**Date de mise à jour :** 25/08/2026 (recoupement des fiches 4 à 9 — corrections des fiches 4, 6 et 8, confirmation/renforcement du sourcing des fiches 5, 7 et 9, ajout de la fiche 10)
 **Sources configurées du projet :** [Présidence de la Côte d'Ivoire (Facebook)](https://facebook.com/Presidenceci), [Portail officiel du Gouvernement (gouv.ci)](https://www.gouv.ci)
-**Sources complémentaires mobilisées pour cette synthèse :** KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, FratMat, Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr, AIP (Agence Ivoirienne de Presse), Présidence de la Côte d'Ivoire (site officiel), Africa Radio, Connectionivoirienne, Xinhua, Africa Check (voir sourcing par fiche)
+**Sources complémentaires mobilisées pour cette synthèse :** KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, FratMat, Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr, AIP (Agence Ivoirienne de Presse), Présidence de la Côte d'Ivoire (site officiel), Africa Radio, Connectionivoirienne, Xinhua, Africa Check, Informateur.ci, L'Orient-Le Jour/AFP, Mondafrique (voir sourcing par fiche)
 
 > Note méthodologique : le portail gouv.ci et la page Facebook de la Présidence n'exposent pas de flux d'actualités directement exploitable en lecture automatisée au moment de cette synthèse (page d'accueil de type vitrine pour gouv.ci ; contenu Facebook non accessible sans authentification). Les faits ci-dessous ont donc été recoupés via la presse ivoirienne et panafricaine, dont plusieurs relais directs des communiqués officiels de la Présidence et du Conseil National de Sécurité (CNS). Chaque fiche précise sa source et son niveau de fiabilité, conformément au protocole de veille.
 
-> **Recoupement du 25/08/2026 :** la fiche 4 (initialement sourcée sur un média secondaire unique, Africtelegraph) a été recoupée avec le texte intégral du discours présidentiel et 4 médias ivoiriens indépendants. Le fait rapporté était mal qualifié — voir le détail dans la fiche 4 ci-dessous et dans « Limites de cette synthèse ». La fiche 5, recoupée le même jour, ne présentait en revanche aucune erreur factuelle : le recoupement a permis de renforcer la qualification de sa source (voir la note dans la fiche 5). La fiche 6 a également été recoupée : son champ « Impact » affirmait à tort une absence de contestation violente ; un bilan officiel du Conseil National de Sécurité fait état de 11 morts, 71 blessés et 1 658 interpellations liés au scrutin — cet événement, distinct de l'élection elle-même, fait désormais l'objet d'une fiche à part entière (fiche 10), conformément au principe « un événement = une fiche ».
+> **Recoupement du 25/08/2026 :** la fiche 4 (source unique, Africtelegraph) a été recoupée et corrigée — le fait rapporté était mal qualifié. La fiche 5 ne présentait aucune erreur factuelle : seul son sourcing a été renforcé. La fiche 6 a été corrigée : son champ « Impact » affirmait à tort une absence de contestation violente ; l'événement omis fait désormais l'objet d'une fiche à part entière (fiche 10). Les fiches 7, 8 et 9 ont ensuite été recoupées à leur tour : la fiche 7 était incomplète (une seconde vague de condamnations n'était pas mentionnée), la fiche 8 attribuait la responsabilité de l'attaque de Difita à un acteur (VDP) de façon plus affirmative que ne le permettent les sources disponibles, et la fiche 9 a été considérablement enrichie et confirmée par de nombreuses sources indépendantes. Le détail de chaque recoupement figure sous chaque fiche concernée et dans « Limites de cette synthèse ».
 
 ## Vue d'ensemble — Niveau de sûreté pays
 
@@ -17,15 +17,15 @@
 | Criminalité générale | Baisse constatée par le CNS | 23/07/2026 | Faible | 1 |
 | Orpaillage illégal | Bilan GS-LOI depuis 2021 | 23/07/2026 | Modéré | 1 |
 | Sécurité routière | 81 motocyclistes tués au premier semestre 2026 | 15/08/2026 | Modéré | 1 |
-| Sécurité frontalière — nord (menace jihadiste et incursions armées) | Attaque armée du village de Difita | 25/08/2025 | Élevé | 2 |
+| Sécurité frontalière — nord (menace jihadiste et incursions armées) | Attaque armée du village de Difita (auteurs non confirmés) | 25/08/2025 | Élevé | 2 |
 | Gouvernance urbaine — zones à risque (inondations, déguerpissements) | Déguerpissements à Koumassi : promesse de sanctions | 06/08/2026 | Modéré | 1 |
 | Frontières / réfugiés | Gestion de 115 000 demandeurs d'asile | 12/02/2026 | Modéré | 1 |
 | Stabilité politique / électorale | Bilan officiel de l'opération « Espérance » : 11 morts, 1 658 interpellations | 13/11/2025 | Élevé | 2 |
-| Libertés publiques | Condamnation de 26 manifestants | 16/10/2025 | Modéré | 1 |
+| Libertés publiques | Deuxième vague de condamnations de manifestants (32, 21/10/2025) | 21/10/2025 | Modéré | 1 |
 
 **10 fiches actives — répartition : 1 Faible · 6 Modéré · 3 Élevé · 0 Critique**
 
-**Lecture d'ensemble :** la criminalité de droit commun est en baisse tendancielle selon les autorités, et l'indice sécuritaire officiel s'est nettement amélioré depuis 2012. Le principal point de vigilance reste la sécurité de l'extrême nord frontalier (Tchologo, Bounkani, Poro) : à la menace jihadiste résiduelle s'ajoutent des incursions armées directes attribuées à des milices burkinabées (VDP), illustrées par l'attaque du village de Difita et l'enlèvement de fonctionnaires à Kalan 2 fin août 2025. La déclaration présidentielle du 6 août 2026 sur la « libération des zones à risque », initialement mal rattachée à cette menace nord (voir fiche 4), concerne en réalité un enjeu distinct de gouvernance urbaine : l'encadrement légal des opérations de déguerpissement dans les zones inondables d'Abidjan. Le sujet des réfugiés et de la frontière nord (fiche 5) reste quant à lui bien confirmé et documenté : plus de 115 000 demandeurs d'asile sont recensés, dans une zone où la couverture réseau insuffisante freine encore le déploiement sécuritaire selon le CNS lui-même. Sur le plan politique, la réélection du président Ouattara pour un quatrième mandat (fin 2025, fiche 6) s'est accompagnée d'un épisode de violence électorale bien plus significatif qu'initialement rapporté dans ce dispositif : un bilan officiel du CNS fait état de 11 morts, 71 blessés et 1 658 interpellations liés au scrutin, dans un contexte d'exclusion judiciaire des deux principaux candidats d'opposition et de contestation de la légitimité du processus (fiche 10) — un point de vigilance de premier plan pour la cohésion sociale à moyen terme, à mettre en regard des élections législatives du 27 décembre 2025.
+**Lecture d'ensemble :** la criminalité de droit commun est en baisse tendancielle selon les autorités, et l'indice sécuritaire officiel s'est nettement amélioré depuis 2012. Le principal point de vigilance reste la sécurité de l'extrême nord-est frontalier (Tchologo, Bounkani, Poro) : l'attaque du village de Difita (4 morts) et l'enlèvement de six agents ivoiriens de la DAARA à Kalan 2, fin août 2025, y restent les événements de référence — mais le recoupement a montré que l'attribution de l'attaque de Difita à la milice burkinabée VDP, présentée jusqu'ici comme l'hypothèse la plus probable, n'est en réalité confirmée par aucune source officielle et fait l'objet d'hypothèses concurrentes (voir fiche 8). La déclaration présidentielle du 6 août 2026 sur la « libération des zones à risque », initialement mal rattachée à cette menace nord (voir fiche 4), concerne en réalité un enjeu distinct de gouvernance urbaine à Abidjan. Le sujet des réfugiés et de la frontière nord (fiche 5) reste bien confirmé et documenté. Sur le plan politique, la réélection du président Ouattara pour un quatrième mandat (fin 2025, fiche 6) s'est accompagnée d'un épisode de violence électorale bien plus significatif qu'initialement rapporté (11 morts, fiche 10), ainsi que d'une répression judiciaire de grande ampleur des manifestants de la marche du 11 octobre 2025 — au moins 58 condamnations à trois ans de prison ferme en deux vagues, sur environ 700 interpellations rapportées (fiche 7) — un point de vigilance de premier plan pour la cohésion sociale à moyen terme, à mettre en regard des élections législatives du 27 décembre 2025.
 
 ---
 
@@ -160,61 +160,99 @@ l'investiture, et déroulement des élections législatives du 27 décembre 2025
 
 **Note de recoupement (25/08/2026) :** la version initiale de cette fiche affirmait que la réélection s'était déroulée « sans large contestation violente rapportée ». Le recoupement montre que cette affirmation était inexacte : un bilan officiel du Conseil National de Sécurité (communiqué du 13/11/2025) fait état de 11 morts (dont un gendarme), 71 blessés et 1 658 interpellations liés aux violences entourant le scrutin — un épisode documenté indépendamment par Africa Check, qui a identifié individuellement au moins 8 décès distincts après un imbroglio médiatique sur les chiffres (voir la note méthodologique de la fiche 10). La phrase erronée a été retirée et remplacée par un renvoi vers une nouvelle fiche 10, dédiée à cet événement distinct, conformément au principe « un événement = une fiche ». Le taux de participation (50,1 %, avec de forts écarts géographiques) et l'exclusion judiciaire des deux principaux candidats d'opposition — des éléments de contexte absents de la version initiale — ont également été ajoutés.
 
-### Fiche 7 — Condamnation de manifestants pour troubles à l'ordre public
+### Fiche 7 — Condamnations en série des manifestants du 11 octobre 2025 *(fiche complétée après recoupement — voir note ci-dessous)*
 
 ```
-CIV — 16/10/2025 (date de survenance — jugement) — Niveau : Modéré
-Lieu de survenance : Côte d'Ivoire (juridiction non précisée dans la source consultée) —
-déduit : contexte pré-électoral national
-Fait : 26 manifestants ont été condamnés à trois ans de prison ferme pour « troubles à l'ordre
-public », dans un climat qu'Amnesty International a qualifié de répression des manifestations
-pacifiques à l'approche de l'élection présidentielle.
-Source : Jeune Afrique (presse) pour le jugement ; Amnesty International (ONG) pour la
-qualification du climat général — fiabilité correcte pour les faits, l'appréciation de la
-« répression » relevant d'une position d'ONG à mettre en regard du discours officiel.
-Impact sur la sûreté pays : Signal de tension sur les libertés publiques en période électorale,
-facteur à surveiller pour le climat social et le risque de contestation future, sans qu'il
-s'agisse à ce stade d'un basculement vers l'instabilité.
-À surveiller / action : Évolution du cadre légal encadrant le droit de manifester après
-l'élection.
+CIV — 11/10/2025 (date de survenance de la marche interdite) ; jugements les 16/10/2025 et
+21/10/2025 (au moins deux vagues) — Niveau : Modéré
+Lieu de survenance : Abidjan — marche dans la commune de Cocody ; jugements au tribunal de
+première instance d'Abidjan-Plateau ; détentions à la Maca
+Fait : Après une marche interdite organisée le 11 octobre 2025 par la coalition d'opposition
+« Front commun » (PPA-CI, PDCI-RDA) pour protester contre l'exclusion des candidatures de
+Laurent Gbagbo et Tidjane Thiam et contre la candidature contestée d'Alassane Ouattara à un
+4e mandat, la police a procédé à environ 700 interpellations selon le parquet d'Abidjan. Au
+moins deux vagues de jugements ont suivi : le 16 octobre, 26 manifestants ont été condamnés à
+trois ans de prison ferme (sur 32 jugés, 2 peines avec sursis, 4 acquittements) ; le 21
+octobre, 32 manifestants supplémentaires ont été condamnés à la même peine assortie de cinq
+ans de privation de droits civiques et d'une interdiction de séjour de trois ans à Abidjan
+(sur 40 jugés, 8 acquittements) — soit au moins 58 condamnations à trois ans de prison ferme
+au total pour ce seul épisode, à quatre jours de la présidentielle.
+Source : Jeune Afrique, KOACI, Africa Radio, afrique-sur7.fr, AllAfrica (presse ivoirienne et
+panafricaine, forte convergence multi-sources sur les deux vagues de jugement) ; Amnesty
+International (ONG) pour la qualification du climat de répression — fiabilité correcte à
+élevée pour les faits judiciaires ; le nombre total exact de personnes poursuivies au-delà de
+ces deux vagues n'est pas confirmé de façon indépendante (voir note ci-dessous).
+Impact sur la sûreté pays : Durcissement judiciaire de grande ampleur visant spécifiquement des
+manifestants liés à la coalition d'opposition Front commun, en amont et en aval du scrutin
+présidentiel — directement lié au contexte de contestation de légitimité électorale documenté
+en fiche 6 et aux violences plus larges recensées en fiche 10 ; plusieurs familles de détenus
+rapportent un refus systématique de droit de visite à la Maca.
+À surveiller / action : Issue des appels (délai de 20 jours après le jugement du 21/10) ;
+existence d'éventuelles vagues de jugements supplémentaires ; conditions de détention à la
+Maca.
 ```
 
-### Fiche 8 — Attaque armée du village de Difita (extrême nord)
+**Note de recoupement (25/08/2026) :** le fait initial (26 manifestants condamnés le 16/10/2025) était exact mais incomplet — la même méthode qui a servi à corriger la fiche 4 et à renforcer la fiche 5 a été appliquée ici. Le recoupement a mis au jour une seconde vague de jugements, le 21/10/2025, condamnant 32 personnes supplémentaires à la même peine, portant à au moins 58 le nombre total de manifestants condamnés à trois ans de prison ferme pour ce seul épisode — sans compter d'éventuelles vagues ultérieures non recensées à ce stade. La localisation (commune de Cocody, tribunal d'Abidjan-Plateau), initialement « déduite » et non précisée, a également été confirmée. Le total des interpellations rapporté varie selon les sources (environ 700 selon le parquet d'Abidjan cité par AllAfrica, contre 237 selon un article ultérieur de KOACI, cette dernière donnée pouvant refléter un sous-ensemble référé aux tribunaux plutôt que le total des arrestations) — cette divergence est signalée plutôt que résolue arbitrairement. Le lien exact avec le bilan global du CNS du 13/11/2025 (1 658 interpellations, fiche 10) n'est pas établi avec certitude : ce bilan pourrait couvrir une période et un périmètre plus larges que la seule marche du 11 octobre.
+
+### Fiche 8 — Attaque armée du village de Difita (extrême nord-est) *(fiche corrigée après recoupement — voir note ci-dessous)*
 
 ```
-CIV — 25/08/2025 (date de survenance, nuit du 24 au 25 août) — Niveau : Élevé
-Lieu de survenance : Village de Difita, département de Téhini (extrême nord), à environ 2 km
-de la frontière avec le Burkina Faso
-Fait : Une attaque armée attribuée à des membres présumés des VDP (milices civiles
-burkinabées) a fait 4 morts et 1 disparu (probable enlèvement), avec une femme grièvement
-brûlée, des habitations incendiées et du bétail volé.
-Source : AllAfrica, relayant notamment France 24 (presse internationale et panafricaine de
-référence) — fiabilité correcte.
-Impact sur la sûreté pays : Incursion armée directe d'un groupe étranger sur le territoire
-ivoirien avec morts civils — distincte de la menace jihadiste mais alimentant la même zone de
-vulnérabilité frontalière (Tchologo, Bounkani, Poro) évoquée en fiche 4.
-À surveiller / action : Réponse des autorités ivoiriennes et suites diplomatiques avec le
-Burkina Faso ; coïncide avec l'enlèvement de six fonctionnaires ivoiriens à Kalan 2 quelques
-heures plus tôt (voir fiche 9).
-```
-
-### Fiche 9 — Enlèvement de six fonctionnaires ivoiriens à Kalan 2
-
-```
-CIV — 24/08/2025 (date de survenance, quelques heures avant l'attaque de Difita) — Niveau :
+CIV — 25/08/2025 (date de survenance, nuit du 24 au 25 août, vers 2h du matin) — Niveau :
 Élevé
-Lieu de survenance : Localité de Kalan 2, extrême nord de la Côte d'Ivoire — zone frontalière
-proche de Téhini/Difita (localisation précise non détaillée dans la source disponible)
-Fait : Six fonctionnaires ivoiriens ont été enlevés à Kalan 2, dans un contexte de tensions
-frontalières croissantes avec le Burkina Faso.
-Source : AllAfrica (presse panafricaine) — fiabilité correcte, détails opérationnels limités
-dans la source disponible, à recouper.
-Impact sur la sûreté pays : Ciblage direct de représentants de l'État ivoirien par des acteurs
-armés transfrontaliers — signal fort de dégradation sécuritaire dans l'extrême nord, avec
-risque pour le personnel officiel en zone frontalière.
-À surveiller / action : Sort des personnes enlevées et évolution des relations sécuritaires
-Côte d'Ivoire–Burkina Faso.
+Lieu de survenance : Village de Difita, département de Téhini, région du Bounkani (extrême
+nord-est), à environ 2 km de la frontière avec le Burkina Faso
+Fait : Une attaque armée par des individus non identifiés a fait 4 morts (des paysans) et 1
+disparu, avec une femme grièvement brûlée, plusieurs habitations incendiées, du bétail volé et
+des véhicules détruits ou emportés. L'état-major général des Forces armées de Côte d'Ivoire
+(FACI), qui a déployé des renforts aériens et terrestres, a qualifié l'attaque d'« acte
+terroriste » sans désigner d'auteurs, précisant que les assaillants avaient fui avant l'arrivée
+des troupes.
+Source : AllAfrica, France 24, L'Orient-Le Jour/AFP (presse internationale et panafricaine de
+référence) pour les faits matériels ; communiqué de l'État-major des Forces armées de Côte
+d'Ivoire pour la version officielle — fiabilité correcte pour les faits matériels ; l'attribution
+de responsabilité reste incertaine et contestée entre sources (voir note ci-dessous).
+Impact sur la sûreté pays : Incursion armée meurtrière sur le territoire ivoirien dans une zone
+déjà exposée à la menace jihadiste et aux tensions liées à la présence de milices VDP
+burkinabées (Tchologo, Bounkani, Poro) ; l'incertitude sur l'identité et les motivations des
+auteurs est elle-même un facteur d'inquiétude pour la lecture de la menace dans cette zone
+frontalière.
+À surveiller / action : Résultats de l'enquête des autorités ivoiriennes sur l'identité des
+assaillants ; suites diplomatiques avec le Burkina Faso ; coïncide avec l'enlèvement de six
+agents ivoiriens à Kalan 2 quelques heures plus tôt (voir fiche 9).
 ```
+
+**Note de recoupement (25/08/2026) :** la version initiale attribuait l'attaque « à des membres présumés des VDP », en reprenant une hypothèse d'AllAfrica elle-même présentée comme une suspicion (« on soupçonne plutôt que... »), et non comme un fait établi. Le recoupement confirme que cette hypothèse reste non confirmée : le communiqué officiel de l'État-major des Forces armées ne désigne aucun auteur et ne mentionne pas les VDP ; une dépêche AFP relayée par L'Orient-Le Jour cite une source gouvernementale avançant au contraire l'hypothèse d'un « règlement de compte » visant des personnes soupçonnées de soutenir les VDP — soit les VDP comme cibles potentielles, et non comme auteurs ; un site d'analyse (Mondafrique), à traiter avec prudence compte tenu d'un sourcing reposant sur des « documents confidentiels » non vérifiables, avance une troisième hypothèse non confirmée d'un mouvement politico-militaire anti-Ouattara, tout en écartant explicitement la piste jihadiste classique. Les champs « Fait » et « Source » ont été révisés pour ne plus présenter l'attribution aux VDP comme acquise ; les faits matériels (morts, disparu, dégâts) restent inchangés et bien corroborés.
+
+### Fiche 9 — Enlèvement de six agents ivoiriens de la DAARA à Kalan 2 *(fiche complétée après recoupement — voir note ci-dessous)*
+
+```
+CIV — 24/08/2025 (date de survenance, dimanche, quelques heures avant l'attaque de Difita) —
+Niveau : Élevé
+Lieu de survenance : Kalan 2, localité frontalière du nord-est de la Côte d'Ivoire, à proximité
+de Téhini/Difita
+Fait : Six agents ivoiriens de la Direction d'aide et d'assistance aux réfugiés et apatrides
+(DAARA), en mission de recensement des populations déplacées, ont été interceptés dans leur
+véhicule de service et enlevés par des éléments se réclamant des VDP (milices civiles
+burkinabées), qui les ont conduits en territoire burkinabè jusqu'à Moussokantou avant de les
+remettre à des hommes de l'armée régulière burkinabè, lesquels les auraient ensuite transférés
+par hélicoptère vers un lieu non identifié.
+Source : AIP (Agence Ivoirienne de Presse), KOACI, Jeune Afrique, Africa Radio, afrique-sur7.fr,
+Informateur.ci, FratMat (relais AIP), AllAfrica — fiabilité correcte à élevée pour les faits de
+l'enlèvement (forte convergence multi-sources) ; le sort ultérieur des agents (remise à l'armée
+burkinabè, transfert par hélicoptère) repose sur la seule source AllAfrica et n'est pas confirmé
+de façon indépendante.
+Impact sur la sûreté pays : Ciblage direct d'agents publics ivoiriens engagés dans l'assistance
+aux réfugiés (dispositif documenté en fiche 5) par des acteurs armés transfrontaliers, avec
+transfert présumé vers l'armée régulière d'un pays voisin — signal fort de dégradation
+sécuritaire et diplomatique dans l'extrême nord-est, dans un contexte de relations tendues avec
+le Burkina Faso depuis l'arrivée au pouvoir du capitaine Ibrahim Traoré.
+À surveiller / action : Sort exact des six agents et confirmation officielle de leur
+localisation ; évolution des relations sécuritaires Côte d'Ivoire–Burkina Faso ; un précédent
+comparable existe (cinq gendarmes ivoiriens capturés par des VDP fin juin 2025, ensuite
+relâchés), ce qui pourrait indiquer un schéma de résolution possible.
+```
+
+**Note de recoupement (25/08/2026) :** contrairement à la version initiale (« détails opérationnels limités, à recouper »), le recoupement confirme largement les faits : au moins sept médias ivoiriens et panafricains indépendants rapportent l'enlèvement des six agents, dont l'agence de presse publique (AIP), qui les identifie précisément comme des agents de la DAARA en mission de recensement des demandeurs d'asile — une précision absente de la version initiale et qui recoupe directement le dispositif d'accueil documenté en fiche 5. Le devenir des agents après leur remise à l'armée burkinabè et leur transfert par hélicoptère repose en revanche sur la seule source AllAfrica et reste à confirmer indépendamment — cette incertitude est signalée plutôt que gommée. Un précédent (juin 2025, cinq gendarmes relâchés après capture par des VDP) a été ajouté au titre du « À surveiller », comme élément de comparaison utile sans présager de l'issue du cas présent.
 
 ### Fiche 10 — Violences électorales : bilan officiel de l'opération « Espérance » *(fiche ajoutée après recoupement de la fiche 6 — voir note ci-dessous)*
 
@@ -248,7 +286,7 @@ l'interdiction des réunions et manifestations politiques (initialement décidé
 climat sécuritaire à l'approche des élections législatives du 27 décembre 2025.
 ```
 
-**Note méthodologique (25/08/2026) :** le nombre exact de décès liés à ces violences électorales a fait l'objet d'un imbroglio médiatique documenté par Africa Check : la Commission Électorale Indépendante n'en reconnaissait initialement qu'un seul (un gendarme), le Conseil National des Droits de l'Homme en recensait 6 sur la période du 11 au 21 octobre, et des vérifications indépendantes ont permis d'identifier individuellement au moins 8 décès distincts. Le bilan officiel du CNS du 13 novembre 2025 (11 morts) est retenu ici comme référence car c'est la source la plus récente et la plus complète disponible, mais le chiffre exact reste débattu faute de communication coordonnée entre institutions au moment des faits — cette incertitude est signalée plutôt que gommée, conformément au protocole de veille.
+**Note méthodologique (25/08/2026) :** le nombre exact de décès liés à ces violences électorales a fait l'objet d'un imbroglio médiatique documenté par Africa Check : la Commission Électorale Indépendante n'en reconnaissait initialement qu'un seul (un gendarme), le Conseil National des Droits de l'Homme en recensait 6 sur la période du 11 au 21 octobre, et des vérifications indépendantes ont permis d'identifier individuellement au moins 8 décès distincts. Le bilan officiel du CNS du 13 novembre 2025 (11 morts) est retenu ici comme référence car c'est la source la plus récente et la plus complète disponible, mais le chiffre exact reste débattu faute de communication coordonnée entre institutions au moment des faits — cette incertitude est signalée plutôt que gommée, conformément au protocole de veille. Voir aussi la fiche 7 (condamnations judiciaires) et la fiche 9 (enlèvement à Kalan 2) pour des divergences comparables sur les chiffres d'interpellations et l'attribution des faits, propres à cette période de fortes tensions.
 
 ---
 
@@ -275,20 +313,34 @@ climat sécuritaire à l'approche des élections législatives du 27 décembre 2
 - [Présidentielle 2025 : 11 morts, 71 blessés et 1 658 interpellations, le CNS dresse un bilan contrasté de l'opération « Espérance » — Connectionivoirienne](https://connectionivoirienne.net/2025/11/14/presidentielle-2025-11-morts-71-blesses-et-1-658-interpellations-le-cns-dresse-un-bilan-contraste-de-loperation-esperance/) *(relais détaillé du communiqué du 13/11/2025)*
 - [Côte d'Ivoire : 11 morts et 1 658 interpellations lors des violences liées à l'élection présidentielle — Xinhua](http://french.xinhuanet.com/20251114/fa5496b8223b48a690299d1f827846cf/c.html)
 - [Imbroglio sur le nombre de décès enregistrés lors des manifestations en lien avec la présidentielle ivoirienne de 2025 — Africa Check](https://africacheck.org/fr/fact-checks/blog/imbroglio-deces-enregistres-manifestations-election-2025) *(fact-check indépendant du décompte des décès — fiche 10)*
-- [Côte d'Ivoire : 26 manifestants écopent de trois ans de prison ferme pour « troubles à l'ordre public » — Jeune Afrique](https://www.jeuneafrique.com/1732174/politique/cote-divoire-26-manifestants-ecopent-de-trois-ans-de-prison-ferme-pour-troubles-a-lordre-public/)
+- [Côte d'Ivoire : 26 manifestants écopent de trois ans de prison ferme pour « troubles à l'ordre public » — Jeune Afrique](https://www.jeuneafrique.com/1732174/politique/cote-divoire-26-manifestants-ecopent-de-trois-ans-de-prison-ferme-pour-troubles-a-lordre-public/) *(première vague de jugements — fiche 7)*
+- [En Côte d'Ivoire, 32 manifestants condamnés à trois ans de prison ferme — Jeune Afrique](https://www.jeuneafrique.com/1733155/politique/en-cote-divoire-32-manifestants-condamnes-a-trois-ans-de-prison-ferme/) *(seconde vague de jugements — recoupement de la fiche 7)*
+- [Tensions en Côte d'Ivoire : prison ferme pour 26 manifestants — afrique-sur7.fr](https://www.afrique-sur7.fr/tensions-en-cote-divoire-prison-ferme-pour-26-manifestants) *(700 interpellations rapportées par le parquet — recoupement de la fiche 7)*
+- [Côte d'Ivoire : Trois ans de prison ferme pour 32 manifestants à quatre jours de la présidentielle — Africa Radio](https://www.africaradio.com/actualite-111597-cote-d-ivoire-trois-ans-de-prison-ferme-pour-32-manifestants-a-quatre-jours-de-la-presidentielle) *(recoupement de la fiche 7)*
+- [Côte d'Ivoire : Marche interdite du 11 octobre, 32 manifestants condamnés... — KOACI](https://www.koaci.com/article/2025/10/22/cote-divoire/politique/cote-divoire-marche-interdite-du-11-octobre-32-manifestants-condamnes-a-trois-mois-de-prison-ferme-assortis-de-cinq-ans-de-privation-de-droits-civiques_191375.html) *(237 interpellations rapportées — recoupement de la fiche 7)*
+- [Cote d'Ivoire: A la prison de la Maca, les manifestants du 11 octobre — AllAfrica](https://fr.allafrica.com/stories/202511040121.html) *(conditions de détention — recoupement de la fiche 7)*
 - [Côte d'Ivoire: The authorities must stop stifling peaceful protests ahead of presidential election — Amnesty International](https://www.amnesty.org/en/latest/news/2025/10/cote-divoire-protests-election/)
 - [Côte d'Ivoire : quatre villageois tués dans une attaque armée près de la frontière du Burkina — France 24](https://www.france24.com/fr/afrique/20250826-c%C3%B4te-d-ivoire-quatre-villageois-tu%C3%A9s-dans-une-attaque-arm%C3%A9e-pr%C3%A8s-de-la-fronti%C3%A8re-du-burkina)
-- [Attaque de Difita et enlèvement à Kalan 2 — détails — AllAfrica](https://fr.allafrica.com/stories/202508290109.html)
+- [Côte d'Ivoire : quatre morts et un disparu dans une attaque près de la frontière du Burkina — L'Orient-Le Jour/AFP](https://www.lorientlejour.com/article/1475039/cote-divoire-quatre-morts-et-un-disparu-dans-une-attaque-pres-de-la-frontiere-du-burkina-papier-general.html) *(hypothèse gouvernementale d'un « règlement de compte » — recoupement de la fiche 8)*
+- [L'attaque au Nord de la Côte d'Ivoire qui déstabilise le régime — Mondafrique](https://mondafrique.com/politique/lattaque-au-nord-de-la-cote-divoire-qui-menace-le-regime/) *(hypothèse alternative non confirmée, sourcing à traiter avec prudence — recoupement de la fiche 8)*
+- [Attaque de Difita et enlèvement à Kalan 2 — détails — AllAfrica](https://fr.allafrica.com/stories/202508290109.html) *(source de l'hypothèse VDP, présentée comme une suspicion — recoupement des fiches 8 et 9)*
+- [Côte d'Ivoire–Burkina Faso : des supplétifs burkinabè enlèvent six agents ivoiriens — Africa Radio](https://www.africaradio.com/actualite-110745-cote-d-ivoire-burkina-faso-des-suppletifs-burkinabe-enlevent-six-agents-ivoiriens) *(identification des agents comme personnel de la DAARA — recoupement de la fiche 9)*
+- [Côte d'Ivoire–Burkina Faso : six fonctionnaires ivoiriens enlevés par des VDP burkinabè, la frontière sous tension — Jeune Afrique](https://www.jeuneafrique.com/1717640/politique/cote-divoire-burkina-faso-six-fonctionnaires-ivoiriens-enleves-par-des-vdp-burkinabe-la-frontiere-sous-tension/) *(recoupement de la fiche 9)*
+- [Côte d'Ivoire-AIP/ Frontière Nord-est : six agents ivoiriens enlevés par des VDP du Burkina Faso — AIP (Agence Ivoirienne de Presse)](https://www.aip.ci/239810/cote-divoire-aip-frontiere-nord-est-six-agents-ivoiriens-enleves-par-des-vdp-du-burkina-faso/) *(source officielle de l'identification DAARA — recoupement de la fiche 9)*
+- [Côte d'Ivoire : six agents ivoiriens enlevés par des VDP du Burkina Faso à la frontière Nord-est du pays — Informateur.ci](https://www.informateur.ci/sur-le-vif/cote-divoire-six-ivoiriens-enleves-par-des-vdp-burkinabe-a-la-frontiere-est/) *(recoupement de la fiche 9)*
 - [Côte d'Ivoire : Plus de 80 motocyclistes tués en 2026 — Afrik Soir](https://afriksoir.net/cote-divoire-plus-de-80-motocyclistes-tues-en-2026-le-ministere-des-transports-renforce-la-sensibilisation/)
 - Portail officiel du Gouvernement de Côte d'Ivoire — [gouv.ci](https://www.gouv.ci) (consulté, page d'accueil sans flux d'actualité exploitable au moment de la synthèse)
 
 ## Limites de cette synthèse
 
 - La page Facebook officielle de la Présidence (source configurée du projet) n'a pas pu être consultée directement : Facebook ne permet pas la lecture programmatique de son contenu public sans authentification. Les communiqués de la Présidence ont donc été recoupés via leurs relais de presse (KOACI, AllAfrica), qui les citent en source primaire.
-- **Fiche 4 — recoupée et corrigée le 25/08/2026.** La version initiale, fondée sur un média secondaire unique (Africtelegraph), qualifiait à tort une déclaration présidentielle sur des « zones à risque » urbaines (inondations, déguerpissements à Koumassi) comme portant aussi sur la sécurisation du nord frontalier. Ce cas illustre l'utilité du recoupement systématique des fiches à source unique : voir la note dans la fiche 4 pour le détail de la correction.
-- **Fiche 5 — recoupée le 25/08/2026, sans erreur factuelle identifiée.** Contrairement à la fiche 4, le recoupement confirme intégralement les faits rapportés (plus de 115 000 demandeurs d'asile, quatre pays d'origine, renforcement du dispositif à la frontière nord) via le communiqué officiel du CNS et au moins six médias ivoiriens indépendants, dont l'agence de presse publique (AIP). Seule la mention de la source a été renforcée : voir la note dans la fiche 5.
-- **Fiche 6 — recoupée et corrigée le 25/08/2026 ; fiche 10 ajoutée.** La version initiale affirmait à tort une absence de contestation violente autour de la réélection présidentielle. Un bilan officiel du CNS (13/11/2025) documente 11 morts, 71 blessés et 1 658 interpellations liés au scrutin. Cet événement, distinct de l'élection elle-même, a été isolé dans une nouvelle fiche 10 conformément au principe « un événement = une fiche » ; le décompte exact des décès reste débattu entre sources (voir la note méthodologique de la fiche 10).
-- Les fiches 8 et 9 (Difita, Kalan 2) datent d'août 2025 — un an avant la date de cette synthèse. Elles sont conservées comme antécédents directement pertinents pour la même zone frontalière, mais ne reflètent pas nécessairement l'état actuel du terrain ; une actualisation via une source récente est recommandée.
-- Aucune donnée n'a pu être intégrée depuis des connecteurs ACLED ou GDELT à ce stade (non activés dans ce dispositif) : les fiches 8, 9 et 10 reposent sur du sourcing presse et communiqués officiels classiques, pas sur un flux structuré d'événements.
-- Cette synthèse a été mise à jour le 25/08/2026 pour le recoupement des fiches 4, 5 et 6 (et l'ajout de la fiche 10) ; plusieurs autres faits couverts (CNS de février et juillet 2026) sont des points de situation périodiques qui appellent une mise à jour au prochain communiqué.
+- **Fiche 4 — recoupée et corrigée le 25/08/2026.** La version initiale, fondée sur un média secondaire unique (Africtelegraph), qualifiait à tort une déclaration présidentielle sur des « zones à risque » urbaines (inondations, déguerpissements à Koumassi) comme portant aussi sur la sécurisation du nord frontalier. Voir la note dans la fiche 4.
+- **Fiche 5 — recoupée le 25/08/2026, sans erreur factuelle identifiée.** Seule la mention de la source a été renforcée. Voir la note dans la fiche 5.
+- **Fiche 6 — recoupée et corrigée le 25/08/2026 ; fiche 10 ajoutée.** La version initiale affirmait à tort une absence de contestation violente autour de la réélection présidentielle. Voir la note dans la fiche 6 et la fiche 10.
+- **Fiche 7 — recoupée et complétée le 25/08/2026.** La version initiale (26 condamnations, 16/10/2025) était exacte mais incomplète : une seconde vague de jugements (32 condamnations, 21/10/2025) portant le total à au moins 58 n'était pas mentionnée. Voir la note dans la fiche 7.
+- **Fiche 8 — recoupée et corrigée le 25/08/2026.** L'attribution de l'attaque de Difita à la milice VDP, présentée comme l'hypothèse la plus probable, s'avère non confirmée par les sources officielles et concurrencée par au moins une autre hypothèse gouvernementale. Voir la note dans la fiche 8.
+- **Fiche 9 — recoupée et largement complétée le 25/08/2026.** Les faits étaient corrects mais peu détaillés (« à recouper ») ; le recoupement identifie précisément les victimes (agents de la DAARA) et confirme l'enlèvement par au moins sept sources indépendantes. Voir la note dans la fiche 9.
+- Les fiches 8 et 9 (Difita, Kalan 2) datent d'août 2025 — un an avant la date de cette synthèse. Elles sont conservées comme antécédents directement pertinents pour la même zone frontalière, mais ne reflètent pas nécessairement l'état actuel du terrain ; une actualisation via une source récente est recommandée, notamment pour confirmer le sort final des six agents de la DAARA.
+- Aucune donnée n'a pu être intégrée depuis des connecteurs ACLED ou GDELT à ce stade (non activés dans ce dispositif) : les fiches 7, 8, 9 et 10 reposent sur du sourcing presse et communiqués officiels classiques, pas sur un flux structuré d'événements.
+- Cette synthèse a été mise à jour le 25/08/2026 pour le recoupement complet des fiches 4 à 9 (et l'ajout de la fiche 10) ; plusieurs autres faits couverts (CNS de février et juillet 2026) sont des points de situation périodiques qui appellent une mise à jour au prochain communiqué.
 - Le discours présidentiel du 6 août 2026 (source de la fiche 4 corrigée) contient d'autres annonces non couvertes par ce dispositif à ce stade — notamment la dissolution de la Commission Électorale Indépendante (réforme de la gouvernance électorale) et la grâce présidentielle de 4 661 détenus de droit commun — qui pourraient justifier des fiches distinctes si le périmètre de veille est étendu à ces thématiques.
