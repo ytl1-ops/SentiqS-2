@@ -5,7 +5,7 @@ Ce dossier documente le travail produit dans une session Claude Cowork : un prot
 ## Liens en ligne
 
 - **Prototype fonctionnel (Artifact)** : https://claude.ai/code/artifact/4c87495c-14bd-4b99-958f-d1d7122ab465
-- **Canvas de conception (Artifact, maquettes éditables clair/sombre)** : https://claude.ai/code/artifact/c63ae820-25b0-4b48-a727-b8a78095fd57
+- **Canvas de conception (Artifact, maquettes éditables clair/sombre)** : https://claude.ai/code/artifact/bb0c3cfc-fd0b-48bc-a732-549f9d08ab64
 
 ## Contenu
 
@@ -16,8 +16,12 @@ Ce dossier documente le travail produit dans une session Claude Cowork : un prot
 
 ## Sources couvertes dans la synthèse
 
-KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, Afrik Soir, gouv.ci, page Facebook de la Présidence de Côte d'Ivoire.
+KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, Afrik Soir, FratMat, Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr, gouv.ci, page Facebook de la Présidence de Côte d'Ivoire.
 
 ## État des connecteurs (dans le prototype)
 
 Réseaux sociaux (Telegram), ACLED et GDELT ne sont pas encore connectés dans ce prototype — affichés honnêtement comme inactifs (0 donnée), sans données inventées.
+
+## Recoupement du 25/08/2026 — Fiche 4 corrigée
+
+La fiche 4 (initialement sourcée sur le seul média secondaire Africtelegraph) affirmait à tort qu'une déclaration présidentielle du 6 août 2026 portait sur la menace jihadiste dans le nord frontalier. Le recoupement avec le texte intégral du discours et 4 médias ivoiriens indépendants a montré qu'il s'agissait en réalité d'un enjeu de gouvernance urbaine (déguerpissements et risque d'inondation à Abidjan, quartier de Koumassi), sans rapport avec le nord du pays. La fiche a été réécrite, reclassée, et son niveau abaissé d'Élevé à Modéré. Détail complet dans `synthese-cote-divoire-2026-08-24.md`.
