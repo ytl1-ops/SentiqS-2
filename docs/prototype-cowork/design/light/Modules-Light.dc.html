@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    :root{
+      --bg:#F7F8FA;
+      --surface:#FFFFFF;
+      --surface-2:#F1F3F6;
+      --surface-3:#E7EAEF;
+      --border: rgba(15,23,42,0.08);
+      --border-strong: rgba(15,23,42,0.16);
+      --text:#12161D;
+      --text-2:#57606F;
+      --text-3:#8A93A3;
+      --accent:#0E9488;
+      --accent-strong:#0B7A70;
+      --accent-wash: rgba(14,148,136,0.08);
+      --faible:#1F9D57;
+      --modere:#B9791A;
+      --eleve:#C15A1E;
+      --critique:#C23B32;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+    h1,h2,h3{font-family:'Space Grotesk',system-ui,sans-serif;margin:0;letter-spacing:-0.01em;}
+    p{margin:0;}
+    a{color:var(--accent);text-decoration:none;}
+    a:hover{color:var(--accent-strong);}
+    .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;}
+  </style>
+</helmet>
+
+<div style="width:1440px; height:1040px; background:var(--bg); display:flex; overflow:hidden;">
+
+  <!-- SIDEBAR -->
+  <div style="width:240px; min-width:240px; height:100%; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column;">
+    <div style="padding:22px 22px 20px; display:flex; align-items:baseline; gap:8px; border-bottom:1px solid var(--border);">
+      <div style="width:22px; height:22px; border-radius:5px; background:var(--accent-wash); border:1px solid var(--accent-strong); display:flex; align-items:center; justify-content:center; margin-right:2px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0E9488" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg>
+      </div>
+      <span style="font-family:'Space Grotesk'; font-weight:700; font-size:16px;">SENTIQS</span>
+    </div>
+
+    <div style="padding:18px 14px; display:flex; flex-direction:column; gap:2px;">
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; color:var(--text-2);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.2"/></svg>
+        <span style="font-size:13.5px;">Vue d'ensemble</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; color:var(--text-2);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4.5c1.8-1.3 3.6-1.3 5.4 0s3.6 1.3 5.4 0c1.8-1.3 2.7-.7 2.7-.7v9.6s-.9-.6-2.7.7c-1.8 1.3-3.6 1.3-5.4 0s-3.6-1.3-5.4 0"/></svg>
+        <span style="font-size:13.5px;">Pays suivis</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; color:var(--text-2);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15.5h5M9.5 8.5h2"/></svg>
+        <span style="font-size:13.5px;">Fiches de synthèse</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; color:var(--text-2);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h13a2 2 0 012 2V19a1.5 1.5 0 01-1.5 1.5H6A2 2 0 014 18.5v-13z"/><path d="M19 8v11a1.5 1.5 0 001.5-1.5V8"/><path d="M7.5 9h6M7.5 12.5h6M7.5 16h4"/></svg>
+        <span style="font-size:13.5px;">Actualités</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; background:var(--surface-3); color:var(--text);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0E9488" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5-8 4.5-8-4.5L12 3z"/><path d="M4 12l8 4.5 8-4.5"/><path d="M4 16.5L12 21l8-4.5"/></svg>
+        <span style="font-size:13.5px; font-weight:500;">Modules</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; color:var(--text-2);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.2-1.6l2-1.5-2-3.4-2.3.9a7 7 0 00-2.8-1.6L13.2 2h-2.4l-.5 2.8a7 7 0 00-2.8 1.6l-2.3-.9-2 3.4 2 1.5A7 7 0 005 12c0 .5.1 1.1.2 1.6l-2 1.5 2 3.4 2.3-.9c.8.7 1.8 1.3 2.8 1.6l.5 2.8h2.4l.5-2.8c1-.3 2-.9 2.8-1.6l2.3.9 2-3.4-2-1.5c.1-.5.2-1.1.2-1.6z"/></svg>
+        <span style="font-size:13.5px;">Paramètres</span>
+      </div>
+    </div>
+
+    <div style="margin-top:auto; padding:18px 22px; border-top:1px solid var(--border); display:flex; align-items:center; gap:10px;">
+      <div style="width:30px; height:30px; border-radius:50%; background:var(--surface-3); display:flex; align-items:center; justify-content:center;">
+        <span class="mono" style="font-size:11px; color:var(--text-2);">RS</span>
+      </div>
+      <div style="display:flex; flex-direction:column;">
+        <span style="font-size:12.5px; font-weight:500;">Responsable sûreté</span>
+        <span class="mono" style="font-size:10.5px; color:var(--text-3);">Accès habilité</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div style="flex:1; height:100%; display:flex; flex-direction:column; overflow:hidden;">
+
+    <!-- TOPBAR -->
+    <div style="height:68px; min-height:68px; display:flex; align-items:center; justify-content:space-between; padding:0 32px; border-bottom:1px solid var(--border);">
+      <span style="font-size:13.5px; color:var(--text); font-weight:500;">Modules &amp; sources</span>
+      <span class="mono" style="font-size:11.5px; color:var(--text-3);">MAJ 24/08/2026 · 14:27</span>
+    </div>
+
+    <!-- CONTENT -->
+    <div style="flex:1; padding:28px 32px; overflow:hidden; display:flex; flex-direction:column; gap:18px;">
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <h1 style="font-size:19px; font-weight:600;">État des modules de collecte</h1>
+        <p style="font-size:12.5px; color:var(--text-2);">Chaque module alimente le niveau de sûreté pays. Les modules non connectés n'affectent aucun score tant qu'ils ne sont pas activés.</p>
+      </div>
+
+      <div style="flex:1; display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); grid-template-rows:repeat(2, minmax(0,1fr)); gap:16px;">
+
+        <!-- Fiches -->
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px 24px; display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E9488" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15.5h5M9.5 8.5h2"/></svg>
+            <span class="mono" style="font-size:10px; color:var(--faible); border:1px solid rgba(31,157,87,0.35); padding:3px 9px; border-radius:20px;">● ACTIF</span>
+          </div>
+          <div>
+            <h3 style="font-size:14.5px; font-weight:600; margin-bottom:4px;">Fiches de synthèse</h3>
+            <p style="font-size:12px; color:var(--text-2); line-height:1.5;">Événements qualifiés et notés selon l'échelle Faible → Critique.</p>
+          </div>
+          <span class="mono" style="font-size:20px; font-weight:600; margin-top:auto;">9</span>
+        </div>
+
+        <!-- Actualités -->
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px 24px; display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E9488" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h13a2 2 0 012 2V19a1.5 1.5 0 01-1.5 1.5H6A2 2 0 014 18.5v-13z"/><path d="M19 8v11a1.5 1.5 0 001.5-1.5V8"/><path d="M7.5 9h6M7.5 12.5h6M7.5 16h4"/></svg>
+            <span class="mono" style="font-size:10px; color:var(--faible); border:1px solid rgba(31,157,87,0.35); padding:3px 9px; border-radius:20px;">● ACTIF</span>
+          </div>
+          <div>
+            <h3 style="font-size:14.5px; font-weight:600; margin-bottom:4px;">Actualités</h3>
+            <p style="font-size:12px; color:var(--text-2); line-height:1.5;">Flux brut d'articles de presse, avant qualification en fiche.</p>
+          </div>
+          <span class="mono" style="font-size:20px; font-weight:600; margin-top:auto;">9</span>
+        </div>
+
+        <!-- Sources web -->
+        <div style="background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px 24px; display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E9488" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.5 3.8 5.4 3.8 8.5s-1.3 6-3.8 8.5c-2.5-2.5-3.8-5.4-3.8-8.5S9.5 6 12 3.5z"/></svg>
+            <span class="mono" style="font-size:10px; color:var(--faible); border:1px solid rgba(31,157,87,0.35); padding:3px 9px; border-radius:20px;">● ACTIF</span>
+          </div>
+          <div>
+            <h3 style="font-size:14.5px; font-weight:600; margin-bottom:4px;">Sources web &amp; officielles</h3>
+            <p style="font-size:12px; color:var(--text-2); line-height:1.5;">gouv.ci et la page Facebook de la Présidence, suivies en continu.</p>
+          </div>
+          <span class="mono" style="font-size:20px; font-weight:600; margin-top:auto;">2</span>
+        </div>
+
+        <!-- Telegram -->
+        <div style="background:var(--surface); border:1px dashed var(--border-strong); border-radius:14px; padding:22px 24px; display:flex; flex-direction:column; gap:14px; opacity:0.85;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4L3 11l6 2.5M21 4l-4 16-7-6.5M21 4L10 13.5"/></svg>
+            <span class="mono" style="font-size:10px; color:var(--text-3); border:1px solid var(--border-strong); padding:3px 9px; border-radius:20px;">○ NON CONNECTÉ</span>
+          </div>
+          <div>
+            <h3 style="font-size:14.5px; font-weight:600; margin-bottom:4px; color:var(--text-2);">Réseaux sociaux — Telegram</h3>
+            <p style="font-size:12px; color:var(--text-3); line-height:1.5;">Aucun canal Telegram connecté pour le moment.</p>
+          </div>
+          <span class="mono" style="font-size:20px; font-weight:600; margin-top:auto; color:var(--text-3);">0</span>
+        </div>
+
+        <!-- ACLED -->
+        <div style="background:var(--surface); border:1px dashed var(--border-strong); border-radius:14px; padding:22px 24px; display:flex; flex-direction:column; gap:14px; opacity:0.85;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-11.5A7 7 0 105 9.5C5 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.2"/></svg>
+            <span class="mono" style="font-size:10px; color:var(--text-3); border:1px solid var(--border-strong); padding:3px 9px; border-radius:20px;">○ NON ACTIVÉ</span>
+          </div>
+          <div>
+            <h3 style="font-size:14.5px; font-weight:600; margin-bottom:4px; color:var(--text-2);">Événements ACLED</h3>
+            <p style="font-size:12px; color:var(--text-3); line-height:1.5;">Connecteur vers la base d'événements armés non activé. Les fiches 8–9 restent sourcées presse.</p>
+          </div>
+          <span class="mono" style="font-size:20px; font-weight:600; margin-top:auto; color:var(--text-3);">0</span>
+        </div>
+
+        <!-- GDELT -->
+        <div style="background:var(--surface); border:1px dashed var(--border-strong); border-radius:14px; padding:22px 24px; display:flex; flex-direction:column; gap:14px; opacity:0.85;">
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8A93A3" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.7"/><path d="M4.5 5.5v13c0 1.5 3.4 2.7 7.5 2.7s7.5-1.2 7.5-2.7v-13"/><path d="M4.5 12c0 1.5 3.4 2.7 7.5 2.7s7.5-1.2 7.5-2.7"/></svg>
+            <span class="mono" style="font-size:10px; color:var(--text-3); border:1px solid var(--border-strong); padding:3px 9px; border-radius:20px;">○ NON ACTIVÉ</span>
+          </div>
+          <div>
+            <h3 style="font-size:14.5px; font-weight:600; margin-bottom:4px; color:var(--text-2);">Événements GDELT</h3>
+            <p style="font-size:12px; color:var(--text-3); line-height:1.5;">Connecteur vers la base d'événements mondiale non activé pour ce pays.</p>
+          </div>
+          <span class="mono" style="font-size:20px; font-weight:600; margin-top:auto; color:var(--text-3);">0</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    :root{
+      --bg:#0A0D12;
+      --surface:#11151D;
+      --surface-2:#171C26;
+      --surface-3:#1D2330;
+      --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.16);
+      --text:#EEF1F5;
+      --text-2:#98A2B3;
+      --text-3:#5B6472;
+      --accent:#4FD8C4;
+      --accent-strong:#2FB9A6;
+      --accent-wash: rgba(79,216,196,0.10);
+      --faible:#52C77E;
+      --modere:#E3A94A;
+      --eleve:#DB7C46;
+      --critique:#D9524A;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+    h1,h2,h3{font-family:'Space Grotesk',system-ui,sans-serif;margin:0;letter-spacing:-0.01em;}
+    p{margin:0;}
+    a{color:var(--accent);text-decoration:none;}
+    a:hover{color:var(--accent-strong);}
+    .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;}
+  </style>
+</helmet>
+
+<div style="width:1440px; height:1040px; background:var(--bg); display:flex; overflow:hidden;">
+
+  <!-- SIDEBAR -->
+  <div style="width:240px; min-width:240px; height:100%; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column;">
+    <div style="padding:22px 22px 20px; display:flex; align-items:baseline; gap:8px; border-bottom:1px solid var(--border);">
+      <div style="width:22px; height:22px; border-radius:5px; background:var(--accent-wash); border:1px solid var(--accent-strong); display:flex; align-items:center; justify-content:center; margin-right:2px;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4FD8C4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg>
+      </div>
+      <span style="font-family:'Space Grotesk'; font-weight:700; font-size:16px;">SENTIQS</span>
+    </div>
+
+    <div style="padding:18px 14px; display:flex; flex-direction:column; gap:2px;">
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; color:var(--text-2);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.2"/></svg>
+        <span style="font-size:13.5px;">Vue d'ensemble</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; color:var(--text-2);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4.5c1.8-1.3 3.6-1.3 5.4 0s3.6 1.3 5.4 0c1.8-1.3 2.7-.7 2.7-.7v9.6s-.9-.6-2.7.7c-1.8 1.3-3.6 1.3-5.4 0s-3.6-1.3-5.4 0"/></svg>
+        <span style="font-size:13.5px;">Pays suivis</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; color:var(--text-2);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15.5h5M9.5 8.5h2"/></svg>
+        <span style="font-size:13.5px;">Fiches de synthèse</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; background:var(--surface-3); color:var(--text);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#4FD8C4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h13a2 2 0 012 2V19a1.5 1.5 0 01-1.5 1.5H6A2 2 0 014 18.5v-13z"/><path d="M19 8v11a1.5 1.5 0 001.5-1.5V8"/><path d="M7.5 9h6M7.5 12.5h6M7.5 16h4"/></svg>
+        <span style="font-size:13.5px; font-weight:500;">Actualités</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; color:var(--text-2);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5-8 4.5-8-4.5L12 3z"/><path d="M4 12l8 4.5 8-4.5"/><path d="M4 16.5L12 21l8-4.5"/></svg>
+        <span style="font-size:13.5px;">Modules</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; color:var(--text-2);">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.2-1.6l2-1.5-2-3.4-2.3.9a7 7 0 00-2.8-1.6L13.2 2h-2.4l-.5 2.8a7 7 0 00-2.8 1.6l-2.3-.9-2 3.4 2 1.5A7 7 0 005 12c0 .5.1 1.1.2 1.6l-2 1.5 2 3.4 2.3-.9c.8.7 1.8 1.3 2.8 1.6l.5 2.8h2.4l.5-2.8c1-.3 2-.9 2.8-1.6l2.3.9 2-3.4-2-1.5c.1-.5.2-1.1.2-1.6z"/></svg>
+        <span style="font-size:13.5px;">Paramètres</span>
+      </div>
+    </div>
+
+    <div style="margin-top:auto; padding:18px 22px; border-top:1px solid var(--border); display:flex; align-items:center; gap:10px;">
+      <div style="width:30px; height:30px; border-radius:50%; background:var(--surface-3); display:flex; align-items:center; justify-content:center;">
+        <span class="mono" style="font-size:11px; color:var(--text-2);">RS</span>
+      </div>
+      <div style="display:flex; flex-direction:column;">
+        <span style="font-size:12.5px; font-weight:500;">Responsable sûreté</span>
+        <span class="mono" style="font-size:10.5px; color:var(--text-3);">Accès habilité</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div style="flex:1; height:100%; display:flex; flex-direction:column; overflow:hidden;">
+
+    <!-- TOPBAR -->
+    <div style="height:68px; min-height:68px; display:flex; align-items:center; justify-content:space-between; padding:0 32px; border-bottom:1px solid var(--border);">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:13.5px; color:var(--text); font-weight:500;">Actualités</span>
+        <span class="mono" style="font-size:11px; color:var(--text-3); padding:3px 9px; background:var(--surface-2); border-radius:20px;">Côte d'Ivoire</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:20px;">
+        <div style="display:flex; align-items:center; gap:8px; padding:8px 14px; background:var(--surface); border:1px solid var(--border); border-radius:7px; width:220px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5B6472" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/></svg>
+          <span class="mono" style="font-size:12px; color:var(--text-3);">Filtrer les actualités…</span>
+        </div>
+        <span class="mono" style="font-size:11.5px; color:var(--text-3);">MAJ 24/08/2026 · 14:27</span>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div style="flex:1; padding:28px 32px; overflow:hidden; display:flex; flex-direction:column; gap:16px;">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; flex-direction:column; gap:4px;">
+          <h1 style="font-size:19px; font-weight:600;">Flux d'actualités brutes</h1>
+          <p style="font-size:12.5px; color:var(--text-2);">Articles collectés avant synthèse — chaque élément lié à une fiche est signalé.</p>
+        </div>
+        <span class="mono" style="font-size:11px; color:var(--text-3); padding:5px 12px; border:1px solid var(--border); border-radius:20px;">9 articles suivis</span>
+      </div>
+
+      <div style="flex:1; background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow-y:auto; overflow-x:hidden;">
+
+        <a href="https://fr.allafrica.com/stories/202608150162.html" target="_blank" rel="noopener" style="display:flex; align-items:flex-start; gap:16px; padding:16px 22px; border-bottom:1px solid var(--border); text-decoration:none; color:inherit;">
+          <span class="mono" style="font-size:11px; color:var(--text-3); min-width:78px; padding-top:2px;">15/08/2026</span>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size:13.5px; font-weight:500;">Transports terrestres : déjà 81 motocyclistes tués durant le premier semestre 2026</span>
+            <span style="font-size:12px; color:var(--text-2);">Le ministère des Transports annonce un renforcement des contrôles techniques face à ce bilan.</span>
+          </div>
+          <span class="mono" style="font-size:10px; color:var(--text-3); min-width:70px; text-align:right;">AllAfrica</span>
+          <span class="mono" style="font-size:10px; color:var(--modere); border:1px solid rgba(227,169,74,0.35); padding:3px 8px; border-radius:20px; white-space:nowrap;">Fiche 3</span>
+        </a>
+
+        <a href="https://africtelegraph.com/blog/ouattara-promet-de-poursuivre-la-securisation-des-zones-a-risque/" target="_blank" rel="noopener" style="display:flex; align-items:flex-start; gap:16px; padding:16px 22px; border-bottom:1px solid var(--border); text-decoration:none; color:inherit;">
+          <span class="mono" style="font-size:11px; color:var(--text-3); min-width:78px; padding-top:2px;">07/08/2026</span>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size:13.5px; font-weight:500;">Ouattara promet de poursuivre la sécurisation des zones à risque</span>
+            <span style="font-size:12px; color:var(--text-2);">Opérations dans le nord frontalier et dans plusieurs zones urbaines, dans le respect de l'État de droit.</span>
+          </div>
+          <span class="mono" style="font-size:10px; color:var(--text-3); min-width:70px; text-align:right;">Africtelegraph</span>
+          <span class="mono" style="font-size:10px; color:var(--eleve); border:1px solid rgba(219,124,70,0.35); padding:3px 8px; border-radius:20px; white-space:nowrap;">Fiche 4</span>
+        </a>
+
+        <a href="https://www.koaci.com/article/2026/07/23/cote-divoire/politique/cote-divoire-communique-du-conseil-national-de-securite-du-23-juillet-2026_198861.html" target="_blank" rel="noopener" style="display:flex; align-items:flex-start; gap:16px; padding:16px 22px; border-bottom:1px solid var(--border); text-decoration:none; color:inherit;">
+          <span class="mono" style="font-size:11px; color:var(--text-3); min-width:78px; padding-top:2px;">23/07/2026</span>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size:13.5px; font-weight:500;">Communiqué du Conseil National de Sécurité du 23 juillet 2026</span>
+            <span style="font-size:12px; color:var(--text-2);">Baisse de la criminalité générale, bilan de la lutte contre l'orpaillage illégal, accidents de la route.</span>
+          </div>
+          <span class="mono" style="font-size:10px; color:var(--text-3); min-width:70px; text-align:right;">KOACI</span>
+          <span class="mono" style="font-size:10px; color:var(--text-2); border:1px solid var(--border); padding:3px 8px; border-radius:20px; white-space:nowrap;">Fiches 1–2</span>
+        </a>
+
+        <a href="https://fr.allafrica.com/stories/202602130522.html" target="_blank" rel="noopener" style="display:flex; align-items:flex-start; gap:16px; padding:16px 22px; border-bottom:1px solid var(--border); text-decoration:none; color:inherit;">
+          <span class="mono" style="font-size:11px; color:var(--text-3); min-width:78px; padding-top:2px;">12/02/2026</span>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size:13.5px; font-weight:500;">Conseil national de sécurité — Les grandes décisions de l'organe de l'État</span>
+            <span style="font-size:12px; color:var(--text-2);">Gestion de 115 000 demandeurs d'asile et renforcement du dispositif à la frontière nord.</span>
+          </div>
+          <span class="mono" style="font-size:10px; color:var(--text-3); min-width:70px; text-align:right;">AllAfrica</span>
+          <span class="mono" style="font-size:10px; color:var(--modere); border:1px solid rgba(227,169,74,0.35); padding:3px 8px; border-radius:20px; white-space:nowrap;">Fiche 5</span>
+        </a>
+
+        <a href="https://fr.allafrica.com/stories/202511040549.html" target="_blank" rel="noopener" style="display:flex; align-items:flex-start; gap:16px; padding:16px 22px; border-bottom:1px solid var(--border); text-decoration:none; color:inherit;">
+          <span class="mono" style="font-size:11px; color:var(--text-3); min-width:78px; padding-top:2px;">04/11/2025</span>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size:13.5px; font-weight:500;">Le Conseil constitutionnel confirme l'élection d'Alassane Ouattara au premier tour</span>
+            <span style="font-size:12px; color:var(--text-2);">Validation officielle des résultats de la présidentielle 2025 pour un quatrième mandat.</span>
+          </div>
+          <span class="mono" style="font-size:10px; color:var(--text-3); min-width:70px; text-align:right;">AllAfrica</span>
+          <span class="mono" style="font-size:10px; color:var(--modere); border:1px solid rgba(227,169,74,0.35); padding:3px 8px; border-radius:20px; white-space:nowrap;">Fiche 6</span>
+        </a>
+
+        <a href="https://www.france24.com/fr/afrique/20251027-pr%C3%A9sidentielle-c%C3%B4te-ivoire-alassane-ouattara-r%C3%A9%C3%A9lu-selon-r%C3%A9sultats-provisoires" target="_blank" rel="noopener" style="display:flex; align-items:flex-start; gap:16px; padding:16px 22px; border-bottom:1px solid var(--border); text-decoration:none; color:inherit;">
+          <span class="mono" style="font-size:11px; color:var(--text-3); min-width:78px; padding-top:2px;">27/10/2025</span>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size:13.5px; font-weight:500;">Alassane Ouattara réélu, selon des résultats provisoires (89,77 % des voix)</span>
+            <span style="font-size:12px; color:var(--text-2);">Victoire dès le premier tour annoncée par la Commission électorale indépendante.</span>
+          </div>
+          <span class="mono" style="font-size:10px; color:var(--text-3); min-width:70px; text-align:right;">France 24</span>
+          <span class="mono" style="font-size:10px; color:var(--modere); border:1px solid rgba(227,169,74,0.35); padding:3px 8px; border-radius:20px; white-space:nowrap;">Fiche 6</span>
+        </a>
+
+        <a href="https://www.jeuneafrique.com/1732174/politique/cote-divoire-26-manifestants-ecopent-de-trois-ans-de-prison-ferme-pour-troubles-a-lordre-public/" target="_blank" rel="noopener" style="display:flex; align-items:flex-start; gap:16px; padding:16px 22px; border-bottom:1px solid var(--border); text-decoration:none; color:inherit;">
+          <span class="mono" style="font-size:11px; color:var(--text-3); min-width:78px; padding-top:2px;">16/10/2025</span>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size:13.5px; font-weight:500;">26 manifestants écopent de trois ans de prison ferme pour « troubles à l'ordre public »</span>
+            <span style="font-size:12px; color:var(--text-2);">Amnesty International dénonce un climat de répression des manifestations pacifiques avant le scrutin.</span>
+          </div>
+          <span class="mono" style="font-size:10px; color:var(--text-3); min-width:70px; text-align:right;">Jeune Afrique</span>
+          <span class="mono" style="font-size:10px; color:var(--modere); border:1px solid rgba(227,169,74,0.35); padding:3px 8px; border-radius:20px; white-space:nowrap;">Fiche 7</span>
+        </a>
+
+        <a href="https://www.france24.com/fr/afrique/20250826-c%C3%B4te-d-ivoire-quatre-villageois-tu%C3%A9s-dans-une-attaque-arm%C3%A9e-pr%C3%A8s-de-la-fronti%C3%A8re-du-burkina" target="_blank" rel="noopener" style="display:flex; align-items:flex-start; gap:16px; padding:16px 22px; border-bottom:1px solid var(--border); text-decoration:none; color:inherit;">
+          <span class="mono" style="font-size:11px; color:var(--text-3); min-width:78px; padding-top:2px;">25/08/2025</span>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size:13.5px; font-weight:500;">Quatre villageois tués dans une attaque armée près de la frontière du Burkina</span>
+            <span style="font-size:12px; color:var(--text-2);">Village de Difita (Téhini) : attaque attribuée à des VDP burkinabés, une disparition, des habitations incendiées.</span>
+          </div>
+          <span class="mono" style="font-size:10px; color:var(--text-3); min-width:70px; text-align:right;">France 24</span>
+          <span class="mono" style="font-size:10px; color:var(--eleve); border:1px solid rgba(219,124,70,0.35); padding:3px 8px; border-radius:20px; white-space:nowrap;">Fiche 8</span>
+        </a>
+
+        <a href="https://fr.allafrica.com/stories/202508290109.html" target="_blank" rel="noopener" style="display:flex; align-items:flex-start; gap:16px; padding:16px 22px; text-decoration:none; color:inherit;">
+          <span class="mono" style="font-size:11px; color:var(--text-3); min-width:78px; padding-top:2px;">24/08/2025</span>
+          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
+            <span style="font-size:13.5px; font-weight:500;">Six fonctionnaires ivoiriens enlevés à Kalan 2</span>
+            <span style="font-size:12px; color:var(--text-2);">Tensions frontalières croissantes avec le Burkina Faso, quelques heures avant l'attaque de Difita.</span>
+          </div>
+          <span class="mono" style="font-size:10px; color:var(--text-3); min-width:70px; text-align:right;">AllAfrica</span>
+          <span class="mono" style="font-size:10px; color:var(--eleve); border:1px solid rgba(219,124,70,0.35); padding:3px 8px; border-radius:20px; white-space:nowrap;">Fiche 9</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

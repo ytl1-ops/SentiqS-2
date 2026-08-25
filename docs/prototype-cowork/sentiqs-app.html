@@ -1,0 +1,689 @@
+<title>SENTIQS OSINT CORE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root{
+    --bg:#0A0D12; --surface:#11151D; --surface-2:#171C26; --surface-3:#1D2330;
+    --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.16);
+    --text:#EEF1F5; --text-2:#98A2B3; --text-3:#5B6472;
+    --accent:#4FD8C4; --accent-strong:#2FB9A6; --accent-wash: rgba(79,216,196,0.10); --accent-ink:#08201C;
+    --faible:#52C77E; --modere:#E3A94A; --eleve:#DB7C46; --critique:#D9524A;
+    --faible-wash: rgba(82,199,126,0.10); --modere-wash: rgba(227,169,74,0.10); --eleve-wash: rgba(219,124,70,0.10); --critique-wash: rgba(217,82,74,0.10);
+    --shadow: 0 30px 60px -20px rgba(0,0,0,0.5);
+  }
+  @media (prefers-color-scheme: light){
+    :root:not([data-theme="dark"]){
+      --bg:#F7F8FA; --surface:#FFFFFF; --surface-2:#F1F3F6; --surface-3:#E7EAEF;
+      --border: rgba(15,23,42,0.08); --border-strong: rgba(15,23,42,0.16);
+      --text:#12161D; --text-2:#57606F; --text-3:#8A93A3;
+      --accent:#0E9488; --accent-strong:#0B7A70; --accent-wash: rgba(14,148,136,0.08); --accent-ink:#FFFFFF;
+      --faible:#1F9D57; --modere:#B9791A; --eleve:#C15A1E; --critique:#C23B32;
+      --faible-wash: rgba(31,157,87,0.08); --modere-wash: rgba(185,121,26,0.08); --eleve-wash: rgba(193,90,30,0.08); --critique-wash: rgba(194,59,50,0.08);
+      --shadow: 0 30px 60px -20px rgba(15,23,42,0.14);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#F7F8FA; --surface:#FFFFFF; --surface-2:#F1F3F6; --surface-3:#E7EAEF;
+    --border: rgba(15,23,42,0.08); --border-strong: rgba(15,23,42,0.16);
+    --text:#12161D; --text-2:#57606F; --text-3:#8A93A3;
+    --accent:#0E9488; --accent-strong:#0B7A70; --accent-wash: rgba(14,148,136,0.08); --accent-ink:#FFFFFF;
+    --faible:#1F9D57; --modere:#B9791A; --eleve:#C15A1E; --critique:#C23B32;
+    --faible-wash: rgba(31,157,87,0.08); --modere-wash: rgba(185,121,26,0.08); --eleve-wash: rgba(193,90,30,0.08); --critique-wash: rgba(194,59,50,0.08);
+    --shadow: 0 30px 60px -20px rgba(15,23,42,0.14);
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A0D12; --surface:#11151D; --surface-2:#171C26; --surface-3:#1D2330;
+    --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.16);
+    --text:#EEF1F5; --text-2:#98A2B3; --text-3:#5B6472;
+    --accent:#4FD8C4; --accent-strong:#2FB9A6; --accent-wash: rgba(79,216,196,0.10); --accent-ink:#08201C;
+    --faible:#52C77E; --modere:#E3A94A; --eleve:#DB7C46; --critique:#D9524A;
+    --faible-wash: rgba(82,199,126,0.10); --modere-wash: rgba(227,169,74,0.10); --eleve-wash: rgba(219,124,70,0.10); --critique-wash: rgba(217,82,74,0.10);
+    --shadow: 0 30px 60px -20px rgba(0,0,0,0.5);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3{font-family:'Space Grotesk',system-ui,sans-serif;margin:0;letter-spacing:-0.01em;text-wrap:balance;}
+  p{margin:0;}
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{color:var(--accent-strong);}
+  button{font-family:inherit;cursor:pointer;}
+  .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+  .eyebrow{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);}
+  ::selection{background:var(--accent-wash);}
+  a:focus-visible, button:focus-visible, [tabindex]:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px;}
+  @media (prefers-reduced-motion: no-preference){
+    .view-enter{animation:viewIn .28s ease both;}
+  }
+  @keyframes viewIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+
+  #app{min-height:100%;}
+
+  /* ---- app shell ---- */
+  .shell{display:flex; min-height:100vh;}
+  .sidebar{width:248px; min-width:248px; background:var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; position:sticky; top:0; height:100vh;}
+  .brand{padding:22px 22px 20px; display:flex; align-items:baseline; gap:8px; border-bottom:1px solid var(--border);}
+  .brand-mark{width:24px; height:24px; border-radius:6px; background:var(--accent-wash); border:1px solid var(--accent-strong); display:flex; align-items:center; justify-content:center;}
+  .brand-name{font-family:'Space Grotesk'; font-weight:700; font-size:16px;}
+  .brand-tag{font-size:10.5px; color:var(--text-3); letter-spacing:0.08em;}
+  .brand-link{display:flex; align-items:baseline; gap:8px; text-decoration:none; color:inherit;}
+  nav.primary{padding:16px 12px; display:flex; flex-direction:column; gap:2px;}
+  .navlink{display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:8px; color:var(--text-2); text-decoration:none; font-size:13.5px; border:none; background:none; width:100%; text-align:left;}
+  .navlink svg{flex:none;}
+  .navlink.active{background:var(--surface-3); color:var(--text); font-weight:500;}
+  .navlink:hover:not(.active){background:var(--surface-2); color:var(--text);}
+  .side-sub{padding:16px 22px 8px;}
+  .side-sub-label{font-family:'IBM Plex Mono'; font-size:10.5px; color:var(--text-3); letter-spacing:0.1em;}
+  .country-pill{display:flex; align-items:center; justify-content:space-between; margin:0 14px; padding:11px 12px; border-radius:8px; background:var(--accent-wash); border:1px solid var(--accent-strong); text-decoration:none; color:inherit;}
+  .sidebar-foot{margin-top:auto; padding:18px 22px; border-top:1px solid var(--border); display:flex; align-items:center; gap:10px;}
+  .avatar{width:30px; height:30px; border-radius:50%; background:var(--surface-3); display:flex; align-items:center; justify-content:center; flex:none;}
+  .theme-toggle{display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:var(--surface-2); color:var(--text-2); font-size:12px; margin:14px 14px 0;}
+  .theme-toggle:hover{color:var(--text); border-color:var(--border-strong);}
+
+  .main{flex:1; min-width:0; display:flex; flex-direction:column;}
+  .topbar{height:68px; min-height:68px; display:flex; align-items:center; justify-content:space-between; padding:0 32px; border-bottom:1px solid var(--border); gap:20px;}
+  .crumbs{display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--text-3); min-width:0;}
+  .crumbs b{color:var(--text); font-weight:500;}
+  .search{display:flex; align-items:center; gap:8px; padding:8px 14px; background:var(--surface); border:1px solid var(--border); border-radius:7px; width:220px; color:var(--text-3);}
+  .search input{border:none; background:none; outline:none; color:var(--text); font-size:12px; width:100%; font-family:'IBM Plex Mono';}
+  .search input::placeholder{color:var(--text-3);}
+  .content{flex:1; padding:28px 32px; overflow:auto;}
+
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:14px;}
+  .btn{display:inline-flex; align-items:center; gap:8px; padding:12px 20px; border-radius:8px; font-size:14px; font-weight:600; border:1px solid transparent; text-decoration:none; cursor:pointer;}
+  .btn-primary{background:var(--accent); color:var(--accent-ink);}
+  .btn-ghost{border-color:var(--border-strong); color:var(--text); background:none;}
+
+  .level-badge{font-family:'IBM Plex Mono'; font-size:11px; font-weight:600; padding:4px 10px; border-radius:20px; white-space:nowrap;}
+  .level-faible{color:var(--faible); background:var(--faible-wash); border:1px solid var(--faible);}
+  .level-modere{color:var(--modere); background:var(--modere-wash); border:1px solid var(--modere);}
+  .level-eleve{color:var(--eleve); background:var(--eleve-wash); border:1px solid var(--eleve);}
+  .level-critique{color:var(--critique); background:var(--critique-wash); border:1px solid var(--critique);}
+  .dot{width:7px; height:7px; min-width:7px; border-radius:50%;}
+  .dot-faible{background:var(--faible);} .dot-modere{background:var(--modere);} .dot-eleve{background:var(--eleve);} .dot-critique{background:var(--critique);}
+
+  .row-link{display:flex; align-items:center; gap:14px; padding:13px 0; border-bottom:1px solid var(--border); text-decoration:none; color:inherit;}
+  .row-link:last-child{border-bottom:none;}
+  .row-link:hover{color:var(--accent);}
+  .row-link:hover .row-title{color:var(--accent);}
+
+  /* ---- landing ---- */
+  .landing{background:var(--bg);}
+  .landing-nav{display:flex; align-items:center; justify-content:space-between; height:76px; padding:0 56px; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--bg); z-index:5;}
+  .landing-navlinks{display:flex; align-items:center; gap:32px; font-size:14px; color:var(--text-2);}
+  .landing-navlinks a{color:var(--text-2);}
+  .grid-tex{position:absolute; inset:0; opacity:0.04; pointer-events:none; background-image:repeating-linear-gradient(0deg, var(--text) 0px, var(--text) 1px, transparent 1px, transparent 96px), repeating-linear-gradient(90deg, var(--text) 0px, var(--text) 1px, transparent 1px, transparent 96px);}
+  .hero{position:relative; display:grid; grid-template-columns:1.05fr 0.95fr; gap:64px; padding:110px 56px 90px; max-width:1440px; margin:0 auto;}
+  .section{padding:80px 56px; max-width:1440px; margin:0 auto;}
+  .feat-grid{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:14px; overflow:hidden; margin-top:44px;}
+  .feat-cell{background:var(--bg); padding:28px 24px; display:flex; flex-direction:column; gap:14px;}
+  .scale{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-top:36px;}
+  .scale-item{border-top:3px solid; padding-top:16px; display:flex; flex-direction:column; gap:8px;}
+  .footer{display:flex; align-items:center; justify-content:space-between; padding:36px 56px 44px; border-top:1px solid var(--border); max-width:1440px; margin:0 auto; flex-wrap:wrap; gap:16px;}
+
+  @media (max-width: 900px){
+    .shell{flex-direction:column;}
+    .sidebar{position:relative; height:auto; width:100%;}
+    .hero{grid-template-columns:1fr; padding:70px 24px;}
+    .landing-nav{padding:0 20px;}
+    .landing-navlinks{display:none;}
+    .section{padding:56px 24px;}
+    .feat-grid{grid-template-columns:1fr 1fr;}
+    .scale{grid-template-columns:1fr 1fr;}
+    .footer{padding:28px 24px;}
+    .content{padding:20px;}
+    .topbar{padding:0 16px;}
+  }
+</style>
+
+<div id="app"></div>
+
+<script>
+/* ---------------- data ---------------- */
+const FICHES = [
+  {id:1, cat:'Criminalité générale', level:'faible', date:'2026-07-23', dateLabel:'23/07/2026',
+   title:'Baisse de la criminalité générale constatée par le CNS',
+   lieu:'Abidjan (Présidence de la République)',
+   fait:"Le Conseil National de Sécurité, présidé par Alassane Ouattara, a constaté une baisse notable des attaques de domiciles, des attaques de commerces et des vols de route à l'échelle nationale, tout en relevant que les assassinats, vols de véhicules et accidents restent préoccupants.",
+   source:"Presse ivoirienne (KOACI, relais du communiqué officiel de la Présidence) — fiabilité correcte, communiqué officiel recoupé.",
+   sourceUrl:"https://www.koaci.com/article/2026/07/23/cote-divoire/politique/cote-divoire-communique-du-conseil-national-de-securite-du-23-juillet-2026_198861.html",
+   impact:"Tendance positive sur la criminalité de droit commun, cohérente avec l'amélioration de l'indice sécuritaire officiel ; les points résiduels restent un facteur de vigilance localisé plutôt qu'une menace systémique.",
+   watch:"Prochain communiqué du CNS pour confirmer la tendance dans la durée."},
+  {id:2, cat:'Orpaillage illégal', level:'modere', date:'2026-07-23', dateLabel:'23/07/2026',
+   title:"Bilan de la lutte contre l'orpaillage illégal (GS-LOI)",
+   lieu:'Territoire national, zones aurifères',
+   fait:"Le Groupement Spécial de Lutte contre l'Orpaillage Illégal (GS-LOI) a fait état, depuis 2021, du déguerpissement de plus de 8 500 sites d'orpaillage illégal et de la saisie de 960 millions de FCFA et 136 kg d'or.",
+   source:"Presse ivoirienne (KOACI, relais du communiqué officiel du CNS) — fiabilité correcte, chiffres officiels non vérifiables de façon indépendante.",
+   sourceUrl:"https://www.koaci.com/article/2026/07/23/cote-divoire/politique/cote-divoire-communique-du-conseil-national-de-securite-du-23-juillet-2026_198861.html",
+   impact:"L'orpaillage illégal reste un facteur de déstabilisation économique, environnementale et sécuritaire malgré l'ampleur de la répression menée depuis 2021.",
+   watch:"Évolution du phénomène dans les zones frontalières, souvent associées aux mêmes régions que la menace jihadiste."},
+  {id:3, cat:'Sécurité routière', level:'modere', date:'2026-08-15', dateLabel:'15/08/2026',
+   title:'81 motocyclistes tués durant le premier semestre 2026',
+   lieu:'Territoire national — axes Niakara–Katiola et Touba–Biankouma',
+   fait:"81 motocyclistes sont morts sur les routes ivoiriennes durant le premier semestre 2026 ; le ministère des Transports a annoncé un renforcement des contrôles techniques et de la sensibilisation à la sécurité routière.",
+   source:"AllAfrica, relayé par Afrik Soir — fiabilité correcte, chiffre officiel du ministère des Transports.",
+   sourceUrl:"https://fr.allafrica.com/stories/202608150162.html",
+   impact:"Risque récurrent et quantifié pour la sécurité des déplacements, pertinent pour la sûreté des déplacements du personnel sur le terrain.",
+   watch:"Mise en œuvre effective du renforcement des contrôles techniques annoncé par le ministre Oumar Sacko."},
+  {id:4, cat:'Sécurité frontalière — nord', level:'eleve', date:'2026-08-07', dateLabel:'07/08/2026',
+   title:'Poursuite des opérations de sécurisation dans le nord et en zone urbaine',
+   lieu:'Tchologo, Bounkani, Poro · Abidjan, San Pedro, Bouaké',
+   fait:"Le Président Ouattara a confirmé la poursuite des opérations de « libération des zones à risque » dans le nord du pays et dans plusieurs zones urbaines, en s'engageant à les conduire dans le respect strict de l'État de droit.",
+   source:"Africtelegraph (média secondaire) — fiabilité modérée, à recouper avec une source de référence.",
+   sourceUrl:"https://africtelegraph.com/blog/ouattara-promet-de-poursuivre-la-securisation-des-zones-a-risque/",
+   impact:"Confirme la persistance d'une menace jihadiste résiduelle dans le nord, dans la continuité de l'attaque de Kafolo (2020), ainsi qu'un volet sécuritaire urbain à clarifier.",
+   watch:"Nature précise des « zones à risque » urbaines visées et confirmation via une source officielle directe."},
+  {id:5, cat:'Frontières / réfugiés', level:'modere', date:'2026-02-12', dateLabel:'12/02/2026',
+   title:'Gestion des réfugiés et sécurisation de la frontière nord',
+   lieu:'Frontière nord (limitrophe Mali / Burkina Faso)',
+   fait:"Le CNS a acté la poursuite de l'enregistrement biométrique et de l'assistance aux plus de 115 000 demandeurs d'asile originaires du Mali, du Burkina Faso, du Ghana et de la Guinée, ainsi que le renforcement du dispositif sécuritaire à la frontière nord.",
+   source:"AllAfrica (relais de presse panafricain d'un communiqué officiel) — fiabilité correcte.",
+   sourceUrl:"https://fr.allafrica.com/stories/202602130522.html",
+   impact:"Une population réfugiée de cette ampleur en zone frontalière constitue un enjeu humanitaire et un facteur de vulnérabilité sécuritaire.",
+   watch:"Rythme des retours volontaires et adéquation du dispositif sécuritaire frontalier face aux flux."},
+  {id:6, cat:'Stabilité politique', level:'modere', date:'2025-11-04', dateLabel:"27/10/2025 – 04/11/2025",
+   title:"Réélection d'Alassane Ouattara pour un quatrième mandat",
+   lieu:'Ensemble du territoire national',
+   fait:"Alassane Ouattara a été réélu président de la Côte d'Ivoire dès le premier tour avec 89,77 % des voix selon les résultats provisoires, une élection validée par le Conseil constitutionnel le 4 novembre 2025 pour un quatrième mandat.",
+   source:"France 24, Jeune Afrique, AllAfrica — fiabilité correcte, résultats confirmés par une institution officielle.",
+   sourceUrl:"https://www.france24.com/fr/afrique/20251027-pr%C3%A9sidentielle-c%C3%B4te-ivoire-alassane-ouattara-r%C3%A9%C3%A9lu-selon-r%C3%A9sultats-provisoires",
+   impact:"Continuité politique assurée à court terme, mais un quatrième mandat contesté par une partie de l'opposition reste un facteur de fragilité potentielle à moyen terme.",
+   watch:"Positionnement de l'opposition et climat social dans les mois suivant l'investiture."},
+  {id:7, cat:'Libertés publiques', level:'modere', date:'2025-10-16', dateLabel:'16/10/2025',
+   title:"Condamnation de 26 manifestants pour troubles à l'ordre public",
+   lieu:"Côte d'Ivoire — contexte pré-électoral national",
+   fait:"26 manifestants ont été condamnés à trois ans de prison ferme pour « troubles à l'ordre public », dans un climat qu'Amnesty International a qualifié de répression des manifestations pacifiques à l'approche de l'élection présidentielle.",
+   source:"Jeune Afrique (jugement) ; Amnesty International (qualification du climat général) — fiabilité correcte pour les faits.",
+   sourceUrl:"https://www.jeuneafrique.com/1732174/politique/cote-divoire-26-manifestants-ecopent-de-trois-ans-de-prison-ferme-pour-troubles-a-lordre-public/",
+   impact:"Signal de tension sur les libertés publiques en période électorale, à surveiller pour le climat social.",
+   watch:"Évolution du cadre légal encadrant le droit de manifester après l'élection."},
+  {id:8, cat:'Sécurité frontalière — nord', level:'eleve', date:'2025-08-25', dateLabel:'25/08/2025',
+   title:'Attaque armée du village de Difita (extrême nord)',
+   lieu:'Village de Difita, département de Téhini — 2 km de la frontière burkinabée',
+   fait:"Une attaque armée attribuée à des membres présumés des VDP (milices civiles burkinabées) a fait 4 morts et 1 disparu (probable enlèvement), avec une femme grièvement brûlée, des habitations incendiées et du bétail volé.",
+   source:"AllAfrica, relayant notamment France 24 — fiabilité correcte.",
+   sourceUrl:"https://www.france24.com/fr/afrique/20250826-c%C3%B4te-d-ivoire-quatre-villageois-tu%C3%A9s-dans-une-attaque-arm%C3%A9e-pr%C3%A8s-de-la-fronti%C3%A8re-du-burkina",
+   impact:"Incursion armée directe d'un groupe étranger avec morts civils, distincte de la menace jihadiste mais alimentant la même zone de vulnérabilité frontalière.",
+   watch:"Réponse des autorités et suites diplomatiques avec le Burkina Faso ; coïncide avec l'enlèvement à Kalan 2 (fiche 9)."},
+  {id:9, cat:'Sécurité frontalière — nord', level:'eleve', date:'2025-08-24', dateLabel:'24/08/2025',
+   title:'Enlèvement de six fonctionnaires ivoiriens à Kalan 2',
+   lieu:'Kalan 2, extrême nord de la Côte d\'Ivoire',
+   fait:"Six fonctionnaires ivoiriens ont été enlevés à Kalan 2, dans un contexte de tensions frontalières croissantes avec le Burkina Faso.",
+   source:"AllAfrica — fiabilité correcte, détails opérationnels limités, à recouper.",
+   sourceUrl:"https://fr.allafrica.com/stories/202508290109.html",
+   impact:"Ciblage direct de représentants de l'État par des acteurs armés transfrontaliers — signal fort de dégradation sécuritaire dans l'extrême nord.",
+   watch:"Sort des personnes enlevées et évolution des relations sécuritaires Côte d'Ivoire–Burkina Faso."}
+];
+
+const ARTICLES = [
+  {date:'2026-08-15', dateLabel:'15/08/2026', title:'Transports terrestres : déjà 81 motocyclistes tués durant le premier semestre 2026', excerpt:'Le ministère des Transports annonce un renforcement des contrôles techniques face à ce bilan.', src:'AllAfrica', url:'https://fr.allafrica.com/stories/202608150162.html', fiches:[3]},
+  {date:'2026-08-07', dateLabel:'07/08/2026', title:'Ouattara promet de poursuivre la sécurisation des zones à risque', excerpt:"Opérations dans le nord frontalier et dans plusieurs zones urbaines, dans le respect de l'État de droit.", src:'Africtelegraph', url:'https://africtelegraph.com/blog/ouattara-promet-de-poursuivre-la-securisation-des-zones-a-risque/', fiches:[4]},
+  {date:'2026-07-23', dateLabel:'23/07/2026', title:'Communiqué du Conseil National de Sécurité du 23 juillet 2026', excerpt:"Baisse de la criminalité générale, bilan de la lutte contre l'orpaillage illégal, accidents de la route.", src:'KOACI', url:'https://www.koaci.com/article/2026/07/23/cote-divoire/politique/cote-divoire-communique-du-conseil-national-de-securite-du-23-juillet-2026_198861.html', fiches:[1,2]},
+  {date:'2026-02-12', dateLabel:'12/02/2026', title:"Conseil national de sécurité — Les grandes décisions de l'organe de l'État", excerpt:"Gestion de 115 000 demandeurs d'asile et renforcement du dispositif à la frontière nord.", src:'AllAfrica', url:'https://fr.allafrica.com/stories/202602130522.html', fiches:[5]},
+  {date:'2025-11-04', dateLabel:'04/11/2025', title:"Le Conseil constitutionnel confirme l'élection d'Alassane Ouattara au premier tour", excerpt:'Validation officielle des résultats de la présidentielle 2025 pour un quatrième mandat.', src:'AllAfrica', url:'https://fr.allafrica.com/stories/202511040549.html', fiches:[6]},
+  {date:'2025-10-27', dateLabel:'27/10/2025', title:'Alassane Ouattara réélu, selon des résultats provisoires (89,77 % des voix)', excerpt:'Victoire dès le premier tour annoncée par la Commission électorale indépendante.', src:'France 24', url:'https://www.france24.com/fr/afrique/20251027-pr%C3%A9sidentielle-c%C3%B4te-ivoire-alassane-ouattara-r%C3%A9%C3%A9lu-selon-r%C3%A9sultats-provisoires', fiches:[6]},
+  {date:'2025-10-16', dateLabel:'16/10/2025', title:'26 manifestants écopent de trois ans de prison ferme pour « troubles à l\'ordre public »', excerpt:'Amnesty International dénonce un climat de répression des manifestations pacifiques avant le scrutin.', src:'Jeune Afrique', url:'https://www.jeuneafrique.com/1732174/politique/cote-divoire-26-manifestants-ecopent-de-trois-ans-de-prison-ferme-pour-troubles-a-lordre-public/', fiches:[7]},
+  {date:'2025-08-25', dateLabel:'25/08/2025', title:'Quatre villageois tués dans une attaque armée près de la frontière du Burkina', excerpt:'Village de Difita (Téhini) : attaque attribuée à des VDP burkinabés, une disparition, des habitations incendiées.', src:'France 24', url:'https://www.france24.com/fr/afrique/20250826-c%C3%B4te-d-ivoire-quatre-villageois-tu%C3%A9s-dans-une-attaque-arm%C3%A9e-pr%C3%A8s-de-la-fronti%C3%A8re-du-burkina', fiches:[8]},
+  {date:'2025-08-24', dateLabel:'24/08/2025', title:'Six fonctionnaires ivoiriens enlevés à Kalan 2', excerpt:'Tensions frontalières croissantes avec le Burkina Faso, quelques heures avant l\'attaque de Difita.', src:'AllAfrica', url:'https://fr.allafrica.com/stories/202508290109.html', fiches:[9]}
+];
+
+const SOURCES = [
+  {name:'gouv.ci', desc:'Portail officiel du gouvernement', url:'https://www.gouv.ci', icon:'globe'},
+  {name:'Présidence CI', desc:'Page officielle Facebook', url:'https://facebook.com/Presidenceci', icon:'facebook'}
+];
+
+const LEVEL_ORDER = {faible:0, modere:1, eleve:2, critique:3};
+const LEVEL_LABEL = {faible:'Faible', modere:'Modéré', eleve:'Élevé', critique:'Critique'};
+
+/* ---------------- icons ---------------- */
+const ICONS = {
+  shield:'<path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/>',
+  grid:'<rect x="3.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.2"/>',
+  flag:'<path d="M5 21V4"/><path d="M5 4.5c1.8-1.3 3.6-1.3 5.4 0s3.6 1.3 5.4 0c1.8-1.3 2.7-.7 2.7-.7v9.6s-.9-.6-2.7.7c-1.8 1.3-3.6 1.3-5.4 0s-3.6-1.3-5.4 0"/>',
+  doc:'<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15.5h5M9.5 8.5h2"/>',
+  news:'<path d="M4 5.5h13a2 2 0 012 2V19a1.5 1.5 0 01-1.5 1.5H6A2 2 0 014 18.5v-13z"/><path d="M19 8v11a1.5 1.5 0 001.5-1.5V8"/><path d="M7.5 9h6M7.5 12.5h6M7.5 16h4"/>',
+  layers:'<path d="M12 3l8 4.5-8 4.5-8-4.5L12 3z"/><path d="M4 12l8 4.5 8-4.5"/><path d="M4 16.5L12 21l8-4.5"/>',
+  settings:'<circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.2-1.6l2-1.5-2-3.4-2.3.9a7 7 0 00-2.8-1.6L13.2 2h-2.4l-.5 2.8a7 7 0 00-2.8 1.6l-2.3-.9-2 3.4 2 1.5A7 7 0 005 12c0 .5.1 1.1.2 1.6l-2 1.5 2 3.4 2.3-.9c.8.7 1.8 1.3 2.8 1.6l.5 2.8h2.4l.5-2.8c1-.3 2-.9 2.8-1.6l2.3.9 2-3.4-2-1.5c.1-.5.2-1.1.2-1.6z"/>',
+  search:'<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.3-4.3"/>',
+  globe:'<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.5 3.8 5.4 3.8 8.5s-1.3 6-3.8 8.5c-2.5-2.5-3.8-5.4-3.8-8.5S9.5 6 12 3.5z"/>',
+  facebook:'<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M14.5 8.2h-1.7c-.9 0-1.4.6-1.4 1.5v1.6H14l-.3 2.2h-2.3v6.2H8.2v-6.2H6.5v-2.2h1.7V9c0-2.1 1.2-3.4 3.3-3.4h2v2.6z"/>',
+  telegram:'<path d="M21 4L3 11l6 2.5M21 4l-4 16-7-6.5M21 4L10 13.5"/>',
+  pin:'<path d="M12 21s7-6.5 7-11.5A7 7 0 105 9.5C5 14.5 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.2"/>',
+  db:'<ellipse cx="12" cy="5.5" rx="7.5" ry="2.7"/><path d="M4.5 5.5v13c0 1.5 3.4 2.7 7.5 2.7s7.5-1.2 7.5-2.7v-13"/><path d="M4.5 12c0 1.5 3.4 2.7 7.5 2.7s7.5-1.2 7.5-2.7"/>',
+  arrow:'<path d="M5 12h13M13 6l6 6-6 6"/>',
+  back:'<path d="M19 12H6M12 5l-7 7 7 7"/>',
+  ext:'<path d="M7 17L17 7M9 7h8v8"/>',
+  bell:'<path d="M6 10a6 6 0 1112 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10z"/><path d="M10 19a2 2 0 004 0"/>',
+  check:'<circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.4 2.4L15.7 9.6"/>',
+  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>',
+  moon:'<path d="M20 14.5A8.5 8.5 0 1110.5 4a6.5 6.5 0 009.5 10.5z"/>'
+};
+function icon(name, size){ size = size||17; return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+ICONS[name]+'</svg>'; }
+
+/* ---------------- helpers ---------------- */
+function esc(s){ return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function byId(id){ return FICHES.find(f => f.id === Number(id)); }
+function fmtDate(iso){
+  const [y,m,d] = iso.split('-');
+  return d+'/'+m+'/'+y;
+}
+function counts(){
+  const c = {faible:0, modere:0, eleve:0, critique:0};
+  FICHES.forEach(f => c[f.level]++);
+  return c;
+}
+function categoryOverview(){
+  const map = {};
+  FICHES.forEach(f => {
+    if(!map[f.cat] || (LEVEL_ORDER[f.level] > LEVEL_ORDER[map[f.cat].level]) || (LEVEL_ORDER[f.level] === LEVEL_ORDER[map[f.cat].level] && f.date > map[f.cat].date)){
+      map[f.cat] = f;
+    }
+  });
+  return Object.keys(map).map(cat => ({cat, fiche: map[cat]}));
+}
+
+/* ---------------- theme ---------------- */
+function getSavedTheme(){
+  try { return localStorage.getItem('sentiqs-theme'); } catch(e){ return null; }
+}
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  try { localStorage.setItem('sentiqs-theme', t); } catch(e){}
+}
+function currentTheme(){
+  const stamped = document.documentElement.getAttribute('data-theme');
+  if(stamped) return stamped;
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+}
+function toggleTheme(){
+  setTheme(currentTheme() === 'dark' ? 'light' : 'dark');
+  render();
+}
+(function initTheme(){
+  const saved = getSavedTheme();
+  if(saved) document.documentElement.setAttribute('data-theme', saved);
+})();
+
+/* ---------------- shell chrome ---------------- */
+function navItem(href, iconName, label, active){
+  return '<a class="navlink'+(active?' active':'')+'" href="#'+href+'">'+icon(iconName)+'<span>'+label+'</span></a>';
+}
+function sidebar(activeRoute){
+  const t = currentTheme();
+  return '\
+  <div class="sidebar">\
+    <a class="brand brand-link" href="#dashboard">\
+      <div class="brand-mark">'+icon('shield',14)+'</div>\
+      <span class="brand-name">SENTIQS</span>\
+      <span class="mono brand-tag">OSINT&nbsp;CORE</span>\
+    </a>\
+    <nav class="primary">\
+      '+navItem('dashboard','grid',"Vue d'ensemble", activeRoute==='dashboard')+'\
+      '+navItem('pays','flag','Pays suivis', activeRoute==='pays')+'\
+      '+navItem('fiches','doc','Fiches de synthèse', activeRoute==='fiches' || activeRoute==='fiche')+'\
+      '+navItem('actualites','news','Actualités', activeRoute==='actualites')+'\
+      '+navItem('modules','layers','Modules', activeRoute==='modules')+'\
+      '+navItem('parametres','settings','Paramètres', activeRoute==='parametres')+'\
+    </nav>\
+    <button class="theme-toggle" onclick="toggleTheme()">'+icon(t==='dark'?'sun':'moon',15)+'<span>Thème '+(t==='dark'?'clair':'sombre')+'</span></button>\
+    <div class="side-sub"><span class="mono side-sub-label">PAYS SUIVIS · 1</span></div>\
+    <a class="country-pill" href="#dashboard">\
+      <span style="display:flex;align-items:center;gap:10px;">\
+        <span class="mono" style="font-size:10.5px;color:var(--accent);background:var(--surface-3);padding:2px 6px;border-radius:4px;">CIV</span>\
+        <span style="font-size:13px;font-weight:500;color:var(--text);">Côte d\'Ivoire</span>\
+      </span>\
+      <span class="dot dot-modere"></span>\
+    </a>\
+    <div class="sidebar-foot">\
+      <div class="avatar"><span class="mono" style="font-size:11px;color:var(--text-2);">RS</span></div>\
+      <div style="display:flex;flex-direction:column;">\
+        <span style="font-size:12.5px;font-weight:500;">Responsable sûreté</span>\
+        <span class="mono" style="font-size:10.5px;color:var(--text-3);">Accès habilité</span>\
+      </div>\
+    </div>\
+  </div>';
+}
+function topbar(crumbs, rightExtra){
+  return '\
+  <div class="topbar">\
+    <div class="crumbs">'+crumbs+'</div>\
+    <div style="display:flex;align-items:center;gap:20px;">'+(rightExtra||'')+'<span class="mono" style="font-size:11.5px;color:var(--text-3);white-space:nowrap;">MAJ 24/08/2026 · 14:27</span></div>\
+  </div>';
+}
+function shell(route, crumbs, body, rightExtra){
+  return '<div class="shell">'+sidebar(route)+'<div class="main">'+topbar(crumbs, rightExtra)+'<div class="content"><div class="view-enter">'+body+'</div></div></div></div>';
+}
+
+/* ---------------- views ---------------- */
+function viewLanding(){
+  return '\
+  <div class="landing">\
+    <div class="landing-nav">\
+      <a class="brand-link" href="#dashboard" style="display:flex;align-items:baseline;gap:10px;">\
+        <div class="brand-mark" style="width:26px;height:26px;">'+icon('shield',15)+'</div>\
+        <span class="brand-name" style="font-size:19px;">SENTIQS</span>\
+        <span class="mono" style="font-size:11px;color:var(--text-3);">OSINT&nbsp;CORE</span>\
+      </a>\
+      <div class="landing-navlinks">\
+        <a href="#plateforme">Plateforme</a><a href="#couverture">Couverture</a><a href="#methodologie">Méthodologie</a>\
+        <a href="#dashboard" class="btn btn-primary" style="padding:10px 18px;font-size:13.5px;">Entrer dans l\'application</a>\
+      </div>\
+    </div>\
+    <div class="hero" style="position:relative;">\
+      <div class="grid-tex"></div>\
+      <div style="position:relative;display:flex;flex-direction:column;gap:26px;">\
+        <div class="eyebrow">Veille sûreté pays</div>\
+        <h1 style="font-size:50px;line-height:1.1;font-weight:700;max-width:600px;">Le niveau de sûreté de chaque pays, vérifié et structuré en continu.</h1>\
+        <p style="font-size:17px;line-height:1.6;color:var(--text-2);max-width:540px;">SENTIQS transforme l\'actualité brute — presse, canaux officiels, réseaux sociaux, terrain — en fiches de synthèse normalisées et en niveaux d\'alerte objectivés.</p>\
+        <div style="display:flex;gap:16px;padding-top:6px;flex-wrap:wrap;">\
+          <a class="btn btn-primary" href="#dashboard">Entrer dans l\'application '+icon('arrow',15)+'</a>\
+          <a class="btn btn-ghost" href="#couverture">Voir la méthodologie</a>\
+        </div>\
+      </div>\
+      <div class="card" style="position:relative;box-shadow:var(--shadow);overflow:hidden;">\
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--border);background:var(--surface-2);">\
+          <span class="mono" style="font-size:12px;color:var(--text-2);">SENTIQS · CIV — CÔTE D\'IVOIRE</span>\
+          <span class="mono" style="font-size:11px;color:var(--text-3);">24/08/2026</span>\
+        </div>\
+        <div style="padding:24px;">'+overviewMini()+'</div>\
+      </div>\
+    </div>\
+    <div class="section" id="plateforme" style="border-top:1px solid var(--border);">\
+      <div class="eyebrow">Plateforme</div>\
+      <h2 style="font-size:32px;font-weight:600;margin-top:14px;">De l\'information brute à la décision.</h2>\
+      <div class="feat-grid">\
+        <div class="feat-cell">'+icon('doc',22)+'<h3 style="font-size:16px;">Fiches normalisées</h3><p style="font-size:13.5px;color:var(--text-2);line-height:1.55;">Un événement, une fiche courte et actionnable.</p></div>\
+        <div class="feat-cell">'+icon('shield',22)+'<h3 style="font-size:16px;">Niveaux objectivés</h3><p style="font-size:13.5px;color:var(--text-2);line-height:1.55;">Faible, Modéré, Élevé, Critique — appliqués avec la même rigueur.</p></div>\
+        <div class="feat-cell">'+icon('globe',22)+'<h3 style="font-size:16px;">Sources multi-canal</h3><p style="font-size:13.5px;color:var(--text-2);line-height:1.55;">Presse, canaux officiels, réseaux sociaux, terrain.</p></div>\
+        <div class="feat-cell">'+icon('check',22)+'<h3 style="font-size:16px;">Traçabilité complète</h3><p style="font-size:13.5px;color:var(--text-2);line-height:1.55;">Chaque fiche cite sa source et sa fiabilité.</p></div>\
+      </div>\
+    </div>\
+    <div class="section" id="couverture" style="padding-top:0;">\
+      <div class="eyebrow">Couverture en direct</div>\
+      <h2 style="font-size:32px;font-weight:600;margin-top:14px;">Côte d\'Ivoire — '+FICHES.length+' fiches actives.</h2>\
+      <p style="font-size:14.5px;color:var(--text-2);max-width:640px;margin-top:10px;">Recoupées auprès de la presse ivoirienne et panafricaine et des communiqués du Conseil National de Sécurité.</p>\
+      <div style="margin-top:28px;"><a class="btn btn-primary" href="#fiches">Parcourir les fiches '+icon('arrow',15)+'</a></div>\
+    </div>\
+    <div class="section" id="methodologie" style="padding-top:0;">\
+      <div class="eyebrow">Méthodologie</div>\
+      <h2 style="font-size:32px;font-weight:600;margin-top:14px;">Une échelle d\'alerte unique, appliquée avec rigueur.</h2>\
+      <div class="scale">\
+        <div class="scale-item" style="border-color:var(--faible);"><span class="mono" style="color:var(--faible);font-weight:600;font-size:13px;">FAIBLE</span><p style="font-size:13px;color:var(--text-2);">Signal isolé, sans effet mesurable sur la stabilité du pays.</p></div>\
+        <div class="scale-item" style="border-color:var(--modere);"><span class="mono" style="color:var(--modere);font-weight:600;font-size:13px;">MODÉRÉ</span><p style="font-size:13px;color:var(--text-2);">Facteur de vigilance identifié, à surveiller dans la durée.</p></div>\
+        <div class="scale-item" style="border-color:var(--eleve);"><span class="mono" style="color:var(--eleve);font-weight:600;font-size:13px;">ÉLEVÉ</span><p style="font-size:13px;color:var(--text-2);">Menace active, avec effet direct sur la sûreté des opérations.</p></div>\
+        <div class="scale-item" style="border-color:var(--critique);"><span class="mono" style="color:var(--critique);font-weight:600;font-size:13px;">CRITIQUE</span><p style="font-size:13px;color:var(--text-2);">Basculement vers l\'instabilité, réponse immédiate requise.</p></div>\
+      </div>\
+    </div>\
+    <div class="footer">\
+      <div>\
+        <div style="display:flex;align-items:baseline;gap:8px;"><span style="font-family:\'Space Grotesk\';font-weight:700;font-size:15px;">SENTIQS</span><span class="mono" style="font-size:10.5px;color:var(--text-3);">OSINT CORE</span></div>\
+        <p class="mono" style="font-size:11px;color:var(--text-3);margin-top:6px;">Dispositif de veille sûreté pays.</p>\
+      </div>\
+      <a class="btn btn-ghost" href="#dashboard">Entrer dans l\'application</a>\
+    </div>\
+  </div>';
+}
+
+function overviewMini(){
+  const c = counts();
+  return '\
+  <div style="display:flex;flex-direction:column;gap:18px;">\
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;">\
+      <div><div class="mono" style="font-size:11px;color:var(--text-3);letter-spacing:.08em;margin-bottom:6px;">NIVEAU DE SÛRETÉ PAYS</div><div style="font-family:\'Space Grotesk\';font-weight:700;font-size:32px;color:var(--modere);">Modéré</div></div>\
+      <span class="mono" style="font-size:11px;color:var(--text-3);">'+FICHES.length+' fiches actives</span>\
+    </div>\
+    <div style="height:1px;background:var(--border);"></div>\
+    <div style="display:flex;flex-direction:column;gap:10px;">'+
+      categoryOverview().slice(0,4).map(o => '\
+      <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;">\
+        <span style="color:var(--text-2);">'+esc(o.cat)+'</span>\
+        <span style="display:flex;align-items:center;gap:7px;"><span class="dot dot-'+o.fiche.level+'"></span><span class="mono" style="font-size:11.5px;color:var(--'+o.fiche.level+');">'+LEVEL_LABEL[o.fiche.level].toUpperCase()+'</span></span>\
+      </div>').join('')+'\
+    </div>\
+  </div>';
+}
+
+function viewDashboard(){
+  const c = counts();
+  const cats = categoryOverview();
+  const recent = FICHES.slice().sort((a,b)=> b.date.localeCompare(a.date));
+  return shell('dashboard', '<b>Pays suivis</b><span>/</span><span style="color:var(--text);font-weight:500;">Côte d\'Ivoire</span>', '\
+    <div class="card" style="padding:26px 28px;margin-bottom:20px;">\
+      <div style="display:flex;gap:40px;flex-wrap:wrap;">\
+        <div style="display:flex;flex-direction:column;gap:8px;min-width:180px;border-right:1px solid var(--border);padding-right:40px;">\
+          <span class="mono" style="font-size:11px;color:var(--text-3);letter-spacing:.08em;">NIVEAU DE SÛRETÉ PAYS</span>\
+          <span style="font-family:\'Space Grotesk\';font-weight:700;font-size:32px;color:var(--modere);">Modéré</span>\
+          <span style="font-size:12.5px;color:var(--text-2);">'+FICHES.length+' fiches actives</span>\
+          <div style="display:flex;gap:2px;margin-top:10px;border-radius:4px;overflow:hidden;height:7px;">\
+            <div style="flex:'+(c.faible||0.001)+';background:var(--faible);"></div>\
+            <div style="flex:'+(c.modere||0.001)+';background:var(--modere);"></div>\
+            <div style="flex:'+(c.eleve||0.001)+';background:var(--eleve);"></div>\
+            <div style="flex:'+(c.critique||0.001)+';background:var(--critique);"></div>\
+          </div>\
+          <div style="display:flex;gap:12px;margin-top:2px;flex-wrap:wrap;">\
+            <span class="mono" style="font-size:10.5px;color:var(--faible);">'+c.faible+' Faible</span>\
+            <span class="mono" style="font-size:10.5px;color:var(--modere);">'+c.modere+' Modéré</span>\
+            <span class="mono" style="font-size:10.5px;color:var(--eleve);">'+c.eleve+' Élevé</span>\
+            <span class="mono" style="font-size:10.5px;color:var(--critique);">'+c.critique+' Critique</span>\
+          </div>\
+        </div>\
+        <div style="flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;">'+
+          cats.map(o => '\
+          <a href="#fiche/'+o.fiche.id+'" style="text-decoration:none;display:flex;flex-direction:column;gap:8px;padding:14px 16px;background:var(--'+o.fiche.level+'-wash);border:1px solid var(--'+(o.fiche.level==='faible'||o.fiche.level==='modere' ? 'border' : o.fiche.level)+');border-radius:10px;color:inherit;">\
+            <span style="font-size:12px;color:var(--text-2);">'+esc(o.cat)+'</span>\
+            <span class="mono" style="font-size:12.5px;color:var(--'+o.fiche.level+');font-weight:600;">● '+LEVEL_LABEL[o.fiche.level]+'</span>\
+          </a>').join('')+'\
+        </div>\
+      </div>\
+    </div>\
+    <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:20px;" class="dash-lower">\
+      <div class="card" style="padding:22px 24px;">\
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">\
+          <h3 style="font-size:15px;font-weight:600;">Fiches récentes</h3>\
+          <a href="#fiches" class="mono" style="font-size:11px;color:var(--text-3);">'+FICHES.length+' au total →</a>\
+        </div>\
+        <div>'+recent.map(f => '\
+          <a class="row-link" href="#fiche/'+f.id+'">\
+            <span class="dot dot-'+f.level+'"></span>\
+            <span class="mono" style="font-size:11px;color:var(--text-3);min-width:70px;">'+f.dateLabel.split(' ')[0]+'</span>\
+            <span class="row-title" style="font-size:13px;flex:1;">'+esc(f.title)+'</span>\
+            <span class="mono" style="font-size:11px;color:var(--'+f.level+');">'+LEVEL_LABEL[f.level].toUpperCase()+'</span>\
+          </a>').join('')+'\
+        </div>\
+      </div>\
+      <div style="display:flex;flex-direction:column;gap:20px;">\
+        <div class="card" style="padding:22px 24px;">\
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><h3 style="font-size:15px;font-weight:600;">Sources suivies</h3><span class="mono" style="font-size:11px;color:var(--text-3);">2 actives</span></div>\
+          <div style="display:flex;flex-direction:column;gap:12px;">'+SOURCES.map(s => '\
+            <a href="'+s.url+'" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;">'+icon(s.icon,16)+'\
+              <div style="display:flex;flex-direction:column;flex:1;"><span style="font-size:13px;">'+s.name+'</span><span class="mono" style="font-size:10.5px;color:var(--text-3);">'+s.desc+'</span></div>'+icon('ext',11)+'\
+              <span class="dot dot-faible"></span>\
+            </a>').join('')+'\
+          </div>\
+        </div>\
+        <div class="card" style="padding:22px 24px;display:flex;flex-direction:column;gap:12px;flex:1;">\
+          <h3 style="font-size:15px;font-weight:600;">Point de vigilance</h3>\
+          <p style="font-size:12.5px;line-height:1.6;color:var(--text-2);">La sécurité de l\'extrême nord frontalier reste le principal facteur à surveiller : menace jihadiste résiduelle et incursions armées transfrontalières (3 fiches).</p>\
+          <a href="#fiche/4" class="mono" style="font-size:10.5px;color:var(--accent);margin-top:auto;">Voir la fiche 4 →</a>\
+        </div>\
+      </div>\
+    </div>\
+  ');
+}
+
+function viewFiches(){
+  const sorted = FICHES.slice().sort((a,b)=> b.date.localeCompare(a.date));
+  return shell('fiches', '<b>Fiches de synthèse</b>', '\
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">\
+      <div><h1 style="font-size:19px;font-weight:600;">Toutes les fiches</h1><p style="font-size:12.5px;color:var(--text-2);margin-top:4px;">'+FICHES.length+' fiches, triées par date décroissante.</p></div>\
+    </div>\
+    <div class="card" style="padding:6px 24px;">'+sorted.map(f => '\
+      <a class="row-link" href="#fiche/'+f.id+'" style="padding:16px 0;">\
+        <span class="dot dot-'+f.level+'"></span>\
+        <span class="mono" style="font-size:11px;color:var(--text-3);min-width:80px;">'+f.dateLabel+'</span>\
+        <div style="flex:1;display:flex;flex-direction:column;gap:2px;">\
+          <span class="row-title" style="font-size:13.5px;font-weight:500;">'+esc(f.title)+'</span>\
+          <span class="mono" style="font-size:10.5px;color:var(--text-3);">'+esc(f.cat)+'</span>\
+        </div>\
+        <span class="level-badge level-'+f.level+'">'+LEVEL_LABEL[f.level]+'</span>\
+      </a>').join('')+'\
+    </div>\
+  ');
+}
+
+function viewFiche(id){
+  const f = byId(id);
+  if(!f) return viewNotFound('fiche');
+  const related = FICHES.filter(x => x.id !== f.id && x.cat === f.cat).sort((a,b)=> b.date.localeCompare(a.date)).slice(0,4);
+  return shell('fiche', '<a href="#fiches" style="display:flex;align-items:center;gap:8px;color:var(--text-2);">'+icon('back',15)+'Fiches de synthèse</a><span>/</span><b>'+esc(f.cat)+'</b>', '\
+    <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:24px;">\
+      <div style="display:flex;flex-direction:column;gap:20px;">\
+        <div style="display:flex;flex-direction:column;gap:14px;">\
+          <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">\
+            <span class="level-badge level-'+f.level+'">NIVEAU · '+LEVEL_LABEL[f.level].toUpperCase()+'</span>\
+            <span class="mono" style="font-size:11px;color:var(--text-3);padding:4px 12px;border:1px solid var(--border);border-radius:20px;">CIV — CÔTE D\'IVOIRE</span>\
+          </div>\
+          <h1 style="font-size:25px;font-weight:600;line-height:1.3;">'+esc(f.title)+'</h1>\
+          <div class="mono" style="display:flex;gap:14px;font-size:12px;color:var(--text-3);flex-wrap:wrap;"><span>'+f.dateLabel+'</span><span>·</span><span>'+esc(f.lieu)+'</span></div>\
+        </div>\
+        <div style="height:1px;background:var(--border);"></div>\
+        <div style="display:flex;flex-direction:column;gap:18px;">\
+          <div><span class="eyebrow">Fait</span><p style="font-size:14.5px;line-height:1.65;margin-top:8px;">'+esc(f.fait)+'</p></div>\
+          <div><span class="eyebrow">Impact sur la sûreté pays</span><p style="font-size:14.5px;line-height:1.65;margin-top:8px;">'+esc(f.impact)+'</p></div>\
+          <div><span class="eyebrow">À surveiller / action</span><p style="font-size:14.5px;line-height:1.65;margin-top:8px;">'+esc(f.watch)+'</p></div>\
+        </div>\
+      </div>\
+      <div style="display:flex;flex-direction:column;gap:18px;">\
+        <div class="card" style="padding:20px 22px;display:flex;flex-direction:column;gap:10px;">\
+          <h3 style="font-size:13.5px;font-weight:600;">Source</h3>\
+          <p style="font-size:12.5px;line-height:1.6;color:var(--text-2);">'+esc(f.source)+'</p>\
+          <a href="'+f.sourceUrl+'" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;font-size:12px;">Voir l\'article source '+icon('ext',11)+'</a>\
+        </div>\
+        <div class="card" style="padding:20px 22px;display:flex;flex-direction:column;gap:12px;flex:1;">\
+          <h3 style="font-size:13.5px;font-weight:600;">Fiches liées</h3>\
+          <div>'+(related.length ? related.map(r => '\
+            <a class="row-link" href="#fiche/'+r.id+'" style="padding:10px 0;">\
+              <span class="dot dot-'+r.level+'"></span>\
+              <span style="font-size:12px;flex:1;color:var(--text-2);">'+esc(r.title)+'</span>\
+              <span class="mono" style="font-size:10px;color:var(--text-3);">'+r.dateLabel.split(' ')[0].slice(0,5)+'</span>\
+            </a>').join('') : '<p style="font-size:12px;color:var(--text-3);">Aucune autre fiche dans cette catégorie.</p>')+'\
+          </div>\
+        </div>\
+      </div>\
+    </div>\
+  ');
+}
+
+function viewActualites(){
+  const sorted = ARTICLES.slice().sort((a,b)=> b.date.localeCompare(a.date));
+  return shell('actualites', '<b>Actualités</b><span class="mono" style="font-size:11px;color:var(--text-3);padding:3px 9px;background:var(--surface-2);border-radius:20px;">Côte d\'Ivoire</span>', '\
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">\
+      <div><h1 style="font-size:19px;font-weight:600;">Flux d\'actualités brutes</h1><p style="font-size:12.5px;color:var(--text-2);margin-top:4px;">Articles collectés avant synthèse — chaque élément lié à une fiche est signalé.</p></div>\
+      <span class="mono" style="font-size:11px;color:var(--text-3);padding:5px 12px;border:1px solid var(--border);border-radius:20px;">'+ARTICLES.length+' articles suivis</span>\
+    </div>\
+    <div class="card">'+sorted.map(a => '\
+      <a href="'+a.url+'" target="_blank" rel="noopener" class="row-link" style="align-items:flex-start;padding:16px 22px;">\
+        <span class="mono" style="font-size:11px;color:var(--text-3);min-width:78px;padding-top:2px;">'+a.dateLabel+'</span>\
+        <div style="flex:1;display:flex;flex-direction:column;gap:4px;">\
+          <span class="row-title" style="font-size:13.5px;font-weight:500;">'+esc(a.title)+'</span>\
+          <span style="font-size:12px;color:var(--text-2);">'+esc(a.excerpt)+'</span>\
+        </div>\
+        <span class="mono" style="font-size:10px;color:var(--text-3);min-width:80px;text-align:right;">'+a.src+'</span>\
+        <span class="mono" style="font-size:10px;color:var(--text-2);border:1px solid var(--border);padding:3px 8px;border-radius:20px;white-space:nowrap;">'+(a.fiches.length>1?'Fiches '+a.fiches.join('–'):'Fiche '+a.fiches[0])+'</span>\
+      </a>').join('')+'\
+    </div>\
+  ');
+}
+
+function viewModules(){
+  const active = [
+    {name:'Fiches de synthèse', icon:'doc', desc:"Événements qualifiés et notés selon l'échelle Faible → Critique.", n: FICHES.length},
+    {name:'Actualités', icon:'news', desc:"Flux brut d'articles de presse, avant qualification en fiche.", n: ARTICLES.length},
+    {name:'Sources web & officielles', icon:'globe', desc:'gouv.ci et la page Facebook de la Présidence, suivies en continu.', n: SOURCES.length}
+  ];
+  const inactive = [
+    {name:'Réseaux sociaux — Telegram', icon:'telegram', desc:'Aucun canal Telegram connecté pour le moment.', status:'NON CONNECTÉ'},
+    {name:'Événements ACLED', icon:'pin', desc:'Connecteur vers la base d\'événements armés non activé. Les fiches 8–9 restent sourcées presse.', status:'NON ACTIVÉ'},
+    {name:'Événements GDELT', icon:'db', desc:'Connecteur vers la base d\'événements mondiale non activé pour ce pays.', status:'NON ACTIVÉ'}
+  ];
+  const card = (m, isActive) => '\
+    <div class="card" style="padding:22px 24px;display:flex;flex-direction:column;gap:14px;'+(isActive?'':'border-style:dashed;opacity:.85;')+'">\
+      <div style="display:flex;align-items:center;justify-content:space-between;">\
+        <span style="color:'+(isActive?'var(--accent)':'var(--text-3)')+';">'+icon(m.icon,20)+'</span>\
+        <span class="mono" style="font-size:10px;color:'+(isActive?'var(--faible)':'var(--text-3)')+';border:1px solid '+(isActive?'var(--faible)':'var(--border-strong)')+';padding:3px 9px;border-radius:20px;">'+(isActive?'● ACTIF':'○ '+m.status)+'</span>\
+      </div>\
+      <div><h3 style="font-size:14.5px;font-weight:600;margin-bottom:4px;color:'+(isActive?'var(--text)':'var(--text-2)')+';">'+m.name+'</h3><p style="font-size:12px;color:var(--text-3);line-height:1.5;">'+m.desc+'</p></div>\
+      <span class="mono" style="font-size:20px;font-weight:600;margin-top:auto;color:'+(isActive?'var(--text)':'var(--text-3)')+';">'+(isActive?m.n:0)+'</span>\
+    </div>';
+  return shell('modules', '<b>Modules &amp; sources</b>', '\
+    <div style="margin-bottom:18px;"><h1 style="font-size:19px;font-weight:600;">État des modules de collecte</h1><p style="font-size:12.5px;color:var(--text-2);margin-top:4px;">Chaque module alimente le niveau de sûreté pays. Les modules non connectés n\'affectent aucun score tant qu\'ils ne sont pas activés.</p></div>\
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;">'+
+      active.map(m => card(m, true)).join('') + inactive.map(m => card(m, false)).join('') +
+    '</div>\
+  ');
+}
+
+function viewPays(){
+  return shell('pays', '<b>Pays suivis</b>', '\
+    <div style="margin-bottom:18px;"><h1 style="font-size:19px;font-weight:600;">Pays suivis</h1><p style="font-size:12.5px;color:var(--text-2);margin-top:4px;">Un seul pays est instrumenté à ce stade sur ce dispositif.</p></div>\
+    <a href="#dashboard" class="card" style="display:flex;align-items:center;justify-content:space-between;padding:22px 24px;max-width:420px;text-decoration:none;color:inherit;">\
+      <div style="display:flex;align-items:center;gap:14px;">\
+        <span class="mono" style="font-size:11px;color:var(--accent);background:var(--surface-3);padding:3px 8px;border-radius:4px;">CIV</span>\
+        <div><div style="font-size:14.5px;font-weight:500;">Côte d\'Ivoire</div><div class="mono" style="font-size:11px;color:var(--text-3);">'+FICHES.length+' fiches actives</div></div>\
+      </div>\
+      <span class="level-badge level-modere">MODÉRÉ</span>\
+    </a>\
+  ');
+}
+
+function viewParametres(){
+  const t = currentTheme();
+  return shell('parametres', '<b>Paramètres</b>', '\
+    <div style="margin-bottom:18px;"><h1 style="font-size:19px;font-weight:600;">Paramètres</h1></div>\
+    <div style="display:flex;flex-direction:column;gap:16px;max-width:520px;">\
+      <div class="card" style="padding:20px 22px;display:flex;align-items:center;justify-content:space-between;">\
+        <div><div style="font-size:13.5px;font-weight:500;">Apparence</div><div class="mono" style="font-size:11px;color:var(--text-3);margin-top:2px;">Thème '+(t==='dark'?'sombre':'clair')+' actif</div></div>\
+        <button class="btn btn-ghost" onclick="toggleTheme()">'+icon(t==='dark'?'sun':'moon',15)+' Passer en thème '+(t==='dark'?'clair':'sombre')+'</button>\
+      </div>\
+      <div class="card" style="padding:20px 22px;display:flex;align-items:center;justify-content:space-between;">\
+        <div><div style="font-size:13.5px;font-weight:500;">Compte</div><div class="mono" style="font-size:11px;color:var(--text-3);margin-top:2px;">Responsable sûreté — accès habilité</div></div>\
+      </div>\
+      <div class="card" style="padding:20px 22px;display:flex;align-items:center;justify-content:space-between;">\
+        <div><div style="font-size:13.5px;font-weight:500;">Langue</div><div class="mono" style="font-size:11px;color:var(--text-3);margin-top:2px;">Français — par défaut sur ce dispositif</div></div>\
+      </div>\
+    </div>\
+  ');
+}
+
+function viewNotFound(kind){
+  return shell('dashboard', '<b>Introuvable</b>', '<p style="color:var(--text-2);">Cette fiche n\'existe pas (ou plus). <a href="#fiches">Retour aux fiches</a>.</p>');
+}
+
+/* ---------------- router ---------------- */
+function parseHash(){
+  const h = (location.hash || '').replace(/^#\/?/, '');
+  const parts = h.split('/').filter(Boolean);
+  return {route: parts[0] || '', param: parts[1]};
+}
+function render(){
+  const {route, param} = parseHash();
+  let html;
+  switch(route){
+    case '': html = viewLanding(); break;
+    case 'dashboard': html = viewDashboard(); break;
+    case 'fiches': html = viewFiches(); break;
+    case 'fiche': html = viewFiche(param); break;
+    case 'actualites': html = viewActualites(); break;
+    case 'modules': html = viewModules(); break;
+    case 'pays': html = viewPays(); break;
+    case 'parametres': html = viewParametres(); break;
+    default: html = viewLanding();
+  }
+  document.getElementById('app').innerHTML = html;
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange', render);
+window.addEventListener('DOMContentLoaded', render);
+render();
+</script>

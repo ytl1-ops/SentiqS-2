@@ -1,0 +1,28 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1440, "h": 3060, "title": "Landing — SENTIQS", "expand": "fit", "page": "dark" },
+    { "file": "Dashboard.dc.html", "x": 1600, "y": 0, "w": 1440, "h": 1040, "title": "App — Vue d'ensemble CIV", "expand": "fit", "page": "dark" },
+    { "file": "FicheDetail.dc.html", "x": 3160, "y": 0, "w": 1440, "h": 1040, "title": "App — Détail de fiche", "expand": "fit", "page": "dark" },
+    { "file": "Actualites.dc.html", "x": 1600, "y": 1160, "w": 1440, "h": 1040, "title": "App — Actualités", "expand": "fit", "page": "dark" },
+    { "file": "Modules.dc.html", "x": 3160, "y": 1160, "w": 1440, "h": 1040, "title": "App — Modules & sources", "expand": "fit", "page": "dark" },
+
+    { "file": "Main-Light.dc.html", "x": 0, "y": 0, "w": 1440, "h": 3060, "title": "Landing — SENTIQS (clair)", "expand": "fit", "page": "light" },
+    { "file": "Dashboard-Light.dc.html", "x": 1600, "y": 0, "w": 1440, "h": 1040, "title": "App — Vue d'ensemble CIV (clair)", "expand": "fit", "page": "light" },
+    { "file": "FicheDetail-Light.dc.html", "x": 3160, "y": 0, "w": 1440, "h": 1040, "title": "App — Détail de fiche (clair)", "expand": "fit", "page": "light" },
+    { "file": "Actualites-Light.dc.html", "x": 1600, "y": 1160, "w": 1440, "h": 1040, "title": "App — Actualités (clair)", "expand": "fit", "page": "light" },
+    { "file": "Modules-Light.dc.html", "x": 3160, "y": 1160, "w": 1440, "h": 1040, "title": "App — Modules & sources (clair)", "expand": "fit", "page": "light" }
+  ],
+  "annotations": [
+    { "id": "note-landing", "x": 0, "y": -100, "w": 420, "text": "Présentation — landing page SENTIQS-OSINT CORE", "page": "dark" },
+    { "id": "note-app", "x": 1600, "y": -100, "w": 420, "text": "Application — dashboard pays + détail de fiche (Côte d'Ivoire)", "page": "dark" },
+    { "id": "note-app2", "x": 1600, "y": 1060, "w": 420, "text": "Actualités (flux brut) + état des modules de collecte", "page": "dark" },
+    { "id": "note-landing-light", "x": 0, "y": -100, "w": 420, "text": "Version claire — mêmes écrans, thème clair", "page": "light" },
+    { "id": "note-app-light", "x": 1600, "y": -100, "w": 420, "text": "Application (thème clair) — dashboard + détail de fiche", "page": "light" },
+    { "id": "note-app2-light", "x": 1600, "y": 1060, "w": 420, "text": "Actualités + modules de collecte (thème clair)", "page": "light" }
+  ],
+  "pages": [
+    { "id": "dark", "name": "Version sombre" },
+    { "id": "light", "name": "Version claire" }
+  ],
+  "launch": { "view": "canvas", "page": "dark" }
+}

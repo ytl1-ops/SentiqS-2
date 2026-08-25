@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <style>
+    :root{
+      --bg:#0A0D12;
+      --surface:#11151D;
+      --surface-2:#171C26;
+      --border: rgba(255,255,255,0.08);
+      --border-strong: rgba(255,255,255,0.16);
+      --text:#EEF1F5;
+      --text-2:#98A2B3;
+      --text-3:#5B6472;
+      --accent:#4FD8C4;
+      --accent-strong:#2FB9A6;
+      --accent-wash: rgba(79,216,196,0.10);
+      --faible:#52C77E;
+      --modere:#E3A94A;
+      --eleve:#DB7C46;
+      --critique:#D9524A;
+    }
+    *{box-sizing:border-box;}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+    h1,h2,h3{font-family:'Space Grotesk',system-ui,sans-serif;margin:0;letter-spacing:-0.01em;}
+    p{margin:0;}
+    a{color:var(--accent);text-decoration:none;}
+    a:hover{color:var(--accent-strong);}
+    .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;}
+    .eyebrow{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);}
+  </style>
+</helmet>
+
+<div style="width:1440px; background:var(--bg); position:relative; overflow:hidden;">
+
+  <!-- subtle grid texture -->
+  <div style="position:absolute; inset:0; opacity:0.035; background-image: repeating-linear-gradient(0deg, #FFFFFF 0px, #FFFFFF 1px, transparent 1px, transparent 96px), repeating-linear-gradient(90deg, #FFFFFF 0px, #FFFFFF 1px, transparent 1px, transparent 96px); pointer-events:none;"></div>
+
+  <!-- NAV -->
+  <div style="position:relative; display:flex; align-items:center; justify-content:space-between; height:76px; padding:0 56px; border-bottom:1px solid var(--border);">
+    <div style="display:flex; align-items:baseline; gap:10px;">
+      <div style="width:26px; height:26px; border-radius:6px; background:var(--accent-wash); border:1px solid var(--accent-strong); display:flex; align-items:center; justify-content:center;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#4FD8C4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg>
+      </div>
+      <span style="font-family:'Space Grotesk'; font-weight:700; font-size:19px; letter-spacing:-0.01em;">SENTIQS</span>
+      <span class="mono" style="font-size:11px; color:var(--text-3); letter-spacing:0.08em; padding-left:2px;">OSINT&nbsp;CORE</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:40px;">
+      <div style="display:flex; align-items:center; gap:32px; font-size:14px; color:var(--text-2);">
+        <a href="#plateforme" style="color:var(--text-2); text-decoration:none;">Plateforme</a>
+        <a href="#couverture" style="color:var(--text-2); text-decoration:none;">Couverture</a>
+        <a href="#methodologie" style="color:var(--text-2); text-decoration:none;">Méthodologie</a>
+        <a href="#acces" style="color:var(--text-2); text-decoration:none;">Accès</a>
+      </div>
+      <a href="mailto:acces@sentiqs.example" style="padding:10px 20px; background:var(--text); color:var(--bg); border-radius:7px; font-size:13.5px; font-weight:600; text-decoration:none;">Demander un accès</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div style="position:relative; display:grid; grid-template-columns:1.05fr 0.95fr; gap:64px; padding:120px 56px 96px; max-width:1440px;">
+    <div style="display:flex; flex-direction:column; gap:28px; padding-top:8px;">
+      <div class="eyebrow">Veille sûreté pays</div>
+      <h1 style="font-size:52px; line-height:1.08; font-weight:700; max-width:600px;">Le niveau de sûreté de chaque pays, vérifié et structuré en continu.</h1>
+      <p style="font-size:17px; line-height:1.6; color:var(--text-2); max-width:540px;">SENTIQS transforme l'actualité brute — presse, canaux officiels, réseaux sociaux, terrain — en fiches de synthèse normalisées et en niveaux d'alerte objectivés, pour les responsables sûreté et les institutions qui ne peuvent pas se permettre l'approximation.</p>
+      <div style="display:flex; align-items:center; gap:16px; padding-top:8px;">
+        <a href="mailto:acces@sentiqs.example" style="display:flex; align-items:center; gap:8px; padding:13px 22px; background:var(--accent); color:#08201C; border-radius:8px; font-size:14.5px; font-weight:600; text-decoration:none;">
+          <span>Demander un accès</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#08201C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#couverture" style="padding:13px 22px; border:1px solid var(--border-strong); color:var(--text); border-radius:8px; font-size:14.5px; font-weight:500; text-decoration:none;">Explorer la démo — Côte d'Ivoire</a>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px; padding-top:20px; border-top:1px solid var(--border); margin-top:8px;">
+        <p class="mono" style="font-size:12px; color:var(--text-3);">Conçu pour les responsables sûreté, cellules de veille et institutions internationales opérant à l'international.</p>
+      </div>
+    </div>
+
+    <!-- Product preview card -->
+    <div style="background:var(--surface); border:1px solid var(--border); border-radius:16px; overflow:hidden; box-shadow:0 40px 80px -20px rgba(0,0,0,0.55);">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-bottom:1px solid var(--border); background:var(--surface-2);">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:8px; height:8px; border-radius:50%; background:var(--modere);"></div>
+          <span class="mono" style="font-size:12.5px; color:var(--text-2); letter-spacing:0.04em;">SENTIQS · CIV — CÔTE D'IVOIRE</span>
+        </div>
+        <span class="mono" style="font-size:11px; color:var(--text-3);">24/08/2026</span>
+      </div>
+      <div style="padding:26px 24px 22px; display:flex; flex-direction:column; gap:22px;">
+        <div style="display:flex; align-items:flex-end; justify-content:space-between;">
+          <div>
+            <div class="mono" style="font-size:11px; color:var(--text-3); letter-spacing:0.08em; margin-bottom:6px;">NIVEAU DE SÛRETÉ PAYS</div>
+            <div style="font-family:'Space Grotesk'; font-weight:700; font-size:34px; color:var(--modere);">Modéré</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="mono" style="font-size:11px; color:var(--text-3);">9 fiches actives</div>
+          </div>
+        </div>
+        <div style="height:1px; background:var(--border);"></div>
+        <div style="display:flex; flex-direction:column; gap:11px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:13px;">
+            <span style="color:var(--text-2);">Criminalité générale</span>
+            <span style="display:flex; align-items:center; gap:7px;"><span style="width:7px;height:7px;border-radius:50%;background:var(--faible);"></span><span class="mono" style="font-size:11.5px; color:var(--faible);">FAIBLE</span></span>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:13px;">
+            <span style="color:var(--text-2);">Sécurité frontalière — nord</span>
+            <span style="display:flex; align-items:center; gap:7px;"><span style="width:7px;height:7px;border-radius:50%;background:var(--eleve);"></span><span class="mono" style="font-size:11.5px; color:var(--eleve);">ÉLEVÉ</span></span>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:13px;">
+            <span style="color:var(--text-2);">Frontières &amp; réfugiés</span>
+            <span style="display:flex; align-items:center; gap:7px;"><span style="width:7px;height:7px;border-radius:50%;background:var(--modere);"></span><span class="mono" style="font-size:11.5px; color:var(--modere);">MODÉRÉ</span></span>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between; font-size:13px;">
+            <span style="color:var(--text-2);">Stabilité politique</span>
+            <span style="display:flex; align-items:center; gap:7px;"><span style="width:7px;height:7px;border-radius:50%;background:var(--modere);"></span><span class="mono" style="font-size:11.5px; color:var(--modere);">MODÉRÉ</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div id="plateforme" style="position:relative; padding:88px 56px 100px; border-top:1px solid var(--border);">
+    <div style="display:flex; flex-direction:column; gap:16px; max-width:640px; margin-bottom:56px;">
+      <div class="eyebrow">Plateforme</div>
+      <h2 style="font-size:34px; font-weight:600; line-height:1.2;">De l'information brute à la décision.</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:14px; overflow:hidden;">
+      <div style="background:var(--bg); padding:30px 26px; display:flex; flex-direction:column; gap:16px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4FD8C4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15.5h5M9.5 8.5h2"/></svg>
+        <h3 style="font-size:16.5px; font-weight:600;">Fiches normalisées</h3>
+        <p style="font-size:13.5px; line-height:1.55; color:var(--text-2);">Chaque événement devient une fiche courte et actionnable — fait, source, impact, action à surveiller — jamais un flux brut à interpréter seul.</p>
+      </div>
+      <div style="background:var(--bg); padding:30px 26px; display:flex; flex-direction:column; gap:16px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4FD8C4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg>
+        <h3 style="font-size:16.5px; font-weight:600;">Niveaux d'alerte objectivés</h3>
+        <p style="font-size:13.5px; line-height:1.55; color:var(--text-2);">Faible, Modéré, Élevé, Critique — une échelle unique, appliquée avec la même rigueur à chaque pays suivi.</p>
+      </div>
+      <div style="background:var(--bg); padding:30px 26px; display:flex; flex-direction:column; gap:16px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4FD8C4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.5 3.8 5.4 3.8 8.5s-1.3 6-3.8 8.5c-2.5-2.5-3.8-5.4-3.8-8.5S9.5 6 12 3.5z"/></svg>
+        <h3 style="font-size:16.5px; font-weight:600;">Sources multi-canal</h3>
+        <p style="font-size:13.5px; line-height:1.55; color:var(--text-2);">Presse locale et internationale, canaux officiels, réseaux sociaux, sources terrain — chaque fait est qualifié et recoupé avant publication.</p>
+      </div>
+      <div style="background:var(--bg); padding:30px 26px; display:flex; flex-direction:column; gap:16px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4FD8C4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M8.5 12.5l2.4 2.4L15.7 9.6"/></svg>
+        <h3 style="font-size:16.5px; font-weight:600;">Traçabilité complète</h3>
+        <p style="font-size:13.5px; line-height:1.55; color:var(--text-2);">Chaque fiche cite sa source et son niveau de fiabilité — aucune information non confirmée n'est présentée comme un fait acquis.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE COVERAGE -->
+  <div id="couverture" style="position:relative; padding:8px 56px 100px;">
+    <div style="display:flex; flex-direction:column; gap:16px; max-width:680px; margin-bottom:44px;">
+      <div class="eyebrow">Couverture en direct</div>
+      <h2 style="font-size:34px; font-weight:600; line-height:1.2;">Côte d'Ivoire — aperçu du dispositif.</h2>
+      <p style="font-size:15px; line-height:1.6; color:var(--text-2);">Premier pays instrumenté sur SENTIQS. Sept fiches actives, recoupées auprès de la presse ivoirienne et panafricaine et des communiqués du Conseil National de Sécurité.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:0.85fr 1.15fr; gap:24px;">
+      <!-- category grid -->
+      <div style="display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); border-radius:14px; overflow:hidden; align-content:start;">
+        <div style="background:var(--surface); padding:20px; display:flex; flex-direction:column; gap:10px;">
+          <span style="font-size:12.5px; color:var(--text-2);">Criminalité générale</span>
+          <span class="mono" style="font-size:13px; color:var(--faible); font-weight:500;">● Faible</span>
+        </div>
+        <div style="background:var(--surface); padding:20px; display:flex; flex-direction:column; gap:10px;">
+          <span style="font-size:12.5px; color:var(--text-2);">Orpaillage illégal</span>
+          <span class="mono" style="font-size:13px; color:var(--modere); font-weight:500;">● Modéré</span>
+        </div>
+        <div style="background:var(--surface); padding:20px; display:flex; flex-direction:column; gap:10px;">
+          <span style="font-size:12.5px; color:var(--text-2);">Sécurité routière</span>
+          <span class="mono" style="font-size:13px; color:var(--modere); font-weight:500;">● Modéré</span>
+        </div>
+        <div style="background:var(--surface); padding:20px; display:flex; flex-direction:column; gap:10px;">
+          <span style="font-size:12.5px; color:var(--text-2);">Sécurité frontalière — nord</span>
+          <span class="mono" style="font-size:13px; color:var(--eleve); font-weight:500;">● Élevé</span>
+        </div>
+        <div style="background:var(--surface); padding:20px; display:flex; flex-direction:column; gap:10px;">
+          <span style="font-size:12.5px; color:var(--text-2);">Frontières &amp; réfugiés</span>
+          <span class="mono" style="font-size:13px; color:var(--modere); font-weight:500;">● Modéré</span>
+        </div>
+        <div style="background:var(--surface); padding:20px; display:flex; flex-direction:column; gap:10px;">
+          <span style="font-size:12.5px; color:var(--text-2);">Stabilité politique</span>
+          <span class="mono" style="font-size:13px; color:var(--modere); font-weight:500;">● Modéré</span>
+        </div>
+        <div style="background:var(--surface); padding:20px; display:flex; flex-direction:column; gap:10px; grid-column: span 2;">
+          <span style="font-size:12.5px; color:var(--text-2);">Libertés publiques</span>
+          <span class="mono" style="font-size:13px; color:var(--modere); font-weight:500;">● Modéré</span>
+        </div>
+      </div>
+
+      <!-- example fiche -->
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:26px 28px; display:flex; flex-direction:column; gap:16px;">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span class="mono" style="font-size:11px; color:var(--text-3); letter-spacing:0.08em;">EXEMPLE DE FICHE DE SYNTHÈSE</span>
+          <span class="mono" style="font-size:11.5px; color:var(--eleve); font-weight:600; padding:4px 10px; border:1px solid rgba(219,124,70,0.4); border-radius:20px;">NIVEAU · ÉLEVÉ</span>
+        </div>
+        <h3 style="font-size:19px; font-weight:600; line-height:1.35;">Poursuite des opérations de sécurisation dans le nord et en zone urbaine</h3>
+        <div style="display:flex; gap:18px; font-size:12.5px; color:var(--text-3);" class="mono">
+          <span>07/08/2026</span>
+          <span>·</span>
+          <span>Tchologo, Bounkani, Poro</span>
+        </div>
+        <p style="font-size:13.5px; line-height:1.6; color:var(--text-2);">Le Président Ouattara a confirmé la poursuite des opérations de « libération des zones à risque » dans le nord du pays et dans plusieurs zones urbaines, en s'engageant à les conduire dans le respect strict de l'État de droit.</p>
+        <div style="height:1px; background:var(--border); margin:2px 0;"></div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="display:flex; gap:8px; font-size:12.5px;"><span class="mono" style="color:var(--text-3); min-width:64px;">SOURCE</span><a href="https://africtelegraph.com/blog/ouattara-promet-de-poursuivre-la-securisation-des-zones-a-risque/" target="_blank" rel="noopener" style="color:var(--accent);">Presse panafricaine — fiabilité modérée, à recouper ↗</a></div>
+          <div style="display:flex; gap:8px; font-size:12.5px;"><span class="mono" style="color:var(--text-3); min-width:64px;">IMPACT</span><span style="color:var(--text-2);">Persistance de la menace jihadiste résiduelle près des frontières Mali / Burkina Faso</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- METHODOLOGY -->
+  <div id="methodologie" style="position:relative; padding:8px 56px 108px;">
+    <div style="display:flex; flex-direction:column; gap:16px; max-width:680px; margin-bottom:48px;">
+      <div class="eyebrow">Méthodologie</div>
+      <h2 style="font-size:34px; font-weight:600; line-height:1.2;">Une échelle d'alerte unique, appliquée avec rigueur.</h2>
+      <p style="font-size:15px; line-height:1.6; color:var(--text-2);">Un événement, une fiche. Chaque fait est qualifié, sa source évaluée, et son niveau fixé selon sa portée réelle sur la stabilité du pays — jamais selon le sensationnalisme de la source.</p>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:16px;">
+      <div style="border-top:3px solid var(--faible); padding-top:18px; display:flex; flex-direction:column; gap:8px;">
+        <span class="mono" style="font-size:13px; color:var(--faible); font-weight:600;">FAIBLE</span>
+        <p style="font-size:13px; line-height:1.55; color:var(--text-2);">Signal isolé, sans effet mesurable sur la stabilité du pays.</p>
+      </div>
+      <div style="border-top:3px solid var(--modere); padding-top:18px; display:flex; flex-direction:column; gap:8px;">
+        <span class="mono" style="font-size:13px; color:var(--modere); font-weight:600;">MODÉRÉ</span>
+        <p style="font-size:13px; line-height:1.55; color:var(--text-2);">Facteur de vigilance identifié, à surveiller dans la durée.</p>
+      </div>
+      <div style="border-top:3px solid var(--eleve); padding-top:18px; display:flex; flex-direction:column; gap:8px;">
+        <span class="mono" style="font-size:13px; color:var(--eleve); font-weight:600;">ÉLEVÉ</span>
+        <p style="font-size:13px; line-height:1.55; color:var(--text-2);">Menace active, avec effet direct sur la sûreté des opérations.</p>
+      </div>
+      <div style="border-top:3px solid var(--critique); padding-top:18px; display:flex; flex-direction:column; gap:8px;">
+        <span class="mono" style="font-size:13px; color:var(--critique); font-weight:600;">CRITIQUE</span>
+        <p style="font-size:13px; line-height:1.55; color:var(--text-2);">Basculement vers l'instabilité, réponse immédiate requise.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA BAND -->
+  <div id="acces" style="position:relative; margin:0 56px 88px; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:64px 64px; display:flex; align-items:center; justify-content:space-between; gap:40px;">
+    <h2 style="font-size:30px; font-weight:600; line-height:1.25; max-width:560px;">Suivez chaque pays comme s'il n'y en avait qu'un seul.</h2>
+    <a href="mailto:acces@sentiqs.example" style="display:flex; align-items:center; gap:8px; padding:15px 26px; background:var(--accent); color:#08201C; border-radius:8px; font-size:15px; font-weight:600; white-space:nowrap; text-decoration:none;">
+      <span>Demander un accès</span>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#08201C" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="position:relative; padding:40px 56px 48px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between;">
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      <div style="display:flex; align-items:baseline; gap:8px;">
+        <span style="font-family:'Space Grotesk'; font-weight:700; font-size:15px;">SENTIQS</span>
+        <span class="mono" style="font-size:10.5px; color:var(--text-3);">OSINT CORE</span>
+      </div>
+      <p class="mono" style="font-size:11px; color:var(--text-3);">Dispositif de veille sûreté pays. Accès réservé aux professionnels habilités.</p>
+    </div>
+    <div style="display:flex; gap:28px; font-size:13px; color:var(--text-2);">
+      <a href="#plateforme" style="color:var(--text-2); text-decoration:none;">Plateforme</a>
+      <a href="#couverture" style="color:var(--text-2); text-decoration:none;">Couverture</a>
+      <a href="#methodologie" style="color:var(--text-2); text-decoration:none;">Méthodologie</a>
+      <a href="mailto:acces@sentiqs.example" style="color:var(--text-2); text-decoration:none;">Contact</a>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>
