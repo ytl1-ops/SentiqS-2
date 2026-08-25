@@ -2,13 +2,13 @@
 
 **Dispositif :** SENTIQS-OSINT CORE — Veille sûreté pays
 **Pays suivi :** Côte d'Ivoire (CIV)
-**Date de mise à jour :** 25/08/2026 (recoupement des fiches 4 et 5 — correction de la fiche 4, confirmation et renforcement du sourcing de la fiche 5)
+**Date de mise à jour :** 25/08/2026 (recoupement des fiches 4, 5 et 6 — correction des fiches 4 et 6, confirmation et renforcement du sourcing de la fiche 5, ajout de la fiche 10)
 **Sources configurées du projet :** [Présidence de la Côte d'Ivoire (Facebook)](https://facebook.com/Presidenceci), [Portail officiel du Gouvernement (gouv.ci)](https://www.gouv.ci)
-**Sources complémentaires mobilisées pour cette synthèse :** KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, FratMat, Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr, AIP (Agence Ivoirienne de Presse), Présidence de la Côte d'Ivoire (site officiel) (voir sourcing par fiche)
+**Sources complémentaires mobilisées pour cette synthèse :** KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, FratMat, Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr, AIP (Agence Ivoirienne de Presse), Présidence de la Côte d'Ivoire (site officiel), Africa Radio, Connectionivoirienne, Xinhua, Africa Check (voir sourcing par fiche)
 
 > Note méthodologique : le portail gouv.ci et la page Facebook de la Présidence n'exposent pas de flux d'actualités directement exploitable en lecture automatisée au moment de cette synthèse (page d'accueil de type vitrine pour gouv.ci ; contenu Facebook non accessible sans authentification). Les faits ci-dessous ont donc été recoupés via la presse ivoirienne et panafricaine, dont plusieurs relais directs des communiqués officiels de la Présidence et du Conseil National de Sécurité (CNS). Chaque fiche précise sa source et son niveau de fiabilité, conformément au protocole de veille.
 
-> **Recoupement du 25/08/2026 :** la fiche 4 (initialement sourcée sur un média secondaire unique, Africtelegraph) a été recoupée avec le texte intégral du discours présidentiel et 4 médias ivoiriens indépendants. Le fait rapporté était mal qualifié — voir le détail dans la fiche 4 ci-dessous et dans « Limites de cette synthèse ». La fiche 5, recoupée le même jour, ne présentait en revanche aucune erreur factuelle : le recoupement a permis de renforcer la qualification de sa source (voir la note dans la fiche 5).
+> **Recoupement du 25/08/2026 :** la fiche 4 (initialement sourcée sur un média secondaire unique, Africtelegraph) a été recoupée avec le texte intégral du discours présidentiel et 4 médias ivoiriens indépendants. Le fait rapporté était mal qualifié — voir le détail dans la fiche 4 ci-dessous et dans « Limites de cette synthèse ». La fiche 5, recoupée le même jour, ne présentait en revanche aucune erreur factuelle : le recoupement a permis de renforcer la qualification de sa source (voir la note dans la fiche 5). La fiche 6 a également été recoupée : son champ « Impact » affirmait à tort une absence de contestation violente ; un bilan officiel du Conseil National de Sécurité fait état de 11 morts, 71 blessés et 1 658 interpellations liés au scrutin — cet événement, distinct de l'élection elle-même, fait désormais l'objet d'une fiche à part entière (fiche 10), conformément au principe « un événement = une fiche ».
 
 ## Vue d'ensemble — Niveau de sûreté pays
 
@@ -20,12 +20,12 @@
 | Sécurité frontalière — nord (menace jihadiste et incursions armées) | Attaque armée du village de Difita | 25/08/2025 | Élevé | 2 |
 | Gouvernance urbaine — zones à risque (inondations, déguerpissements) | Déguerpissements à Koumassi : promesse de sanctions | 06/08/2026 | Modéré | 1 |
 | Frontières / réfugiés | Gestion de 115 000 demandeurs d'asile | 12/02/2026 | Modéré | 1 |
-| Stabilité politique / électorale | Réélection d'A. Ouattara pour un 4e mandat | 27/10/2025 – 04/11/2025 | Modéré | 1 |
+| Stabilité politique / électorale | Bilan officiel de l'opération « Espérance » : 11 morts, 1 658 interpellations | 13/11/2025 | Élevé | 2 |
 | Libertés publiques | Condamnation de 26 manifestants | 16/10/2025 | Modéré | 1 |
 
-**9 fiches actives — répartition : 1 Faible · 6 Modéré · 2 Élevé · 0 Critique**
+**10 fiches actives — répartition : 1 Faible · 6 Modéré · 3 Élevé · 0 Critique**
 
-**Lecture d'ensemble :** la criminalité de droit commun est en baisse tendancielle selon les autorités, et l'indice sécuritaire officiel s'est nettement amélioré depuis 2012. Le principal point de vigilance reste la sécurité de l'extrême nord frontalier (Tchologo, Bounkani, Poro) : à la menace jihadiste résiduelle s'ajoutent des incursions armées directes attribuées à des milices burkinabées (VDP), illustrées par l'attaque du village de Difita et l'enlèvement de fonctionnaires à Kalan 2 fin août 2025 — deux événements distincts qui restent le référentiel de gravité le plus élevé de ce dispositif. La déclaration présidentielle du 6 août 2026 sur la « libération des zones à risque », initialement mal rattachée à cette menace nord (voir fiche 4), concerne en réalité un enjeu distinct de gouvernance urbaine : l'encadrement légal des opérations de déguerpissement dans les zones inondables d'Abidjan. Le sujet des réfugiés et de la frontière nord (fiche 5) reste quant à lui bien confirmé et documenté : plus de 115 000 demandeurs d'asile sont recensés, dans une zone où la couverture réseau insuffisante freine encore le déploiement sécuritaire selon le CNS lui-même. Sur le plan politique, la réélection du président Ouattara pour un quatrième mandat (fin 2025) s'est déroulée sans large contestation violente rapportée, mais s'inscrit dans un contexte de tensions pré-électorales et de restrictions signalées sur les libertés de manifester, à surveiller pour la cohésion sociale à moyen terme.
+**Lecture d'ensemble :** la criminalité de droit commun est en baisse tendancielle selon les autorités, et l'indice sécuritaire officiel s'est nettement amélioré depuis 2012. Le principal point de vigilance reste la sécurité de l'extrême nord frontalier (Tchologo, Bounkani, Poro) : à la menace jihadiste résiduelle s'ajoutent des incursions armées directes attribuées à des milices burkinabées (VDP), illustrées par l'attaque du village de Difita et l'enlèvement de fonctionnaires à Kalan 2 fin août 2025. La déclaration présidentielle du 6 août 2026 sur la « libération des zones à risque », initialement mal rattachée à cette menace nord (voir fiche 4), concerne en réalité un enjeu distinct de gouvernance urbaine : l'encadrement légal des opérations de déguerpissement dans les zones inondables d'Abidjan. Le sujet des réfugiés et de la frontière nord (fiche 5) reste quant à lui bien confirmé et documenté : plus de 115 000 demandeurs d'asile sont recensés, dans une zone où la couverture réseau insuffisante freine encore le déploiement sécuritaire selon le CNS lui-même. Sur le plan politique, la réélection du président Ouattara pour un quatrième mandat (fin 2025, fiche 6) s'est accompagnée d'un épisode de violence électorale bien plus significatif qu'initialement rapporté dans ce dispositif : un bilan officiel du CNS fait état de 11 morts, 71 blessés et 1 658 interpellations liés au scrutin, dans un contexte d'exclusion judiciaire des deux principaux candidats d'opposition et de contestation de la légitimité du processus (fiche 10) — un point de vigilance de premier plan pour la cohésion sociale à moyen terme, à mettre en regard des élections législatives du 27 décembre 2025.
 
 ---
 
@@ -136,24 +136,29 @@ sécuritaire.
 
 **Note de recoupement (25/08/2026) :** contrairement à la fiche 4, ce recoupement n'a révélé aucune erreur factuelle. Les faits rapportés (plus de 115 000 demandeurs d'asile originaires du Mali, du Burkina Faso, du Ghana et de la Guinée ; poursuite de l'enregistrement biométrique et de l'assistance humanitaire ; retours volontaires sur le modèle du Ghana ; renforcement du dispositif sécuritaire à la frontière nord) sont intégralement confirmés par le communiqué officiel du CNS et par au moins six médias ivoiriens indépendants, dont l'agence de presse publique (AIP). La fiche initiale citait AllAfrica comme source unique ; le recoupement montre qu'AllAfrica ne fait que relayer sans modification l'article de FratMat lui-même adossé au communiqué officiel — la mention de source a donc été réécrite pour refléter la chaîne réelle de sourcing et la convergence multi-médias effective, ce qui relève le niveau de fiabilité de « correct » à « élevé ». Le recoupement a également permis d'intégrer un élément du communiqué absent de la version initiale de la fiche : le CNS a identifié une couverture réseau insuffisante en zone frontalière comme un obstacle au déploiement sécuritaire, et a chargé le Premier ministre d'accélérer le Programme National de Connectivité Rurale (PNCR) ainsi que l'exploration de solutions satellite — un point désormais repris en « À surveiller ».
 
-### Fiche 6 — Réélection d'Alassane Ouattara pour un quatrième mandat
+### Fiche 6 — Réélection d'Alassane Ouattara pour un quatrième mandat *(fiche corrigée après recoupement — voir note ci-dessous)*
 
 ```
 CIV — 27/10/2025 (résultats provisoires) puis 04/11/2025 (confirmation par le Conseil
 constitutionnel) — Niveau : Modéré
-Lieu de survenance : Ensemble du territoire national (scrutin présidentiel)
+Lieu de survenance : Ensemble du territoire national (scrutin présidentiel du 25/10/2025)
 Fait : Alassane Ouattara a été réélu président de la Côte d'Ivoire dès le premier tour avec
-89,77 % des voix selon les résultats provisoires, une élection validée par le Conseil
-constitutionnel le 4 novembre 2025 pour un quatrième mandat.
-Source : France 24, Jeune Afrique, AllAfrica (presse internationale et panafricaine de
-référence) — fiabilité correcte, résultats confirmés par une institution officielle.
+89,77 % des voix selon les résultats provisoires (participation nationale de 50,1 %), une
+élection validée par le Conseil constitutionnel le 4 novembre 2025 pour un quatrième mandat.
+Source : France 24, Jeune Afrique, AllAfrica, Africa Radio (presse internationale et
+panafricaine de référence) — fiabilité correcte, résultats confirmés par une institution
+officielle.
 Impact sur la sûreté pays : Continuité politique et institutionnelle assurée à court terme,
-mais un score aussi élevé dans un contexte de quatrième mandat contesté par une partie de
-l'opposition constitue un facteur de fragilité potentielle pour la cohésion sociale à moyen
-terme, dans un pays marqué par la crise post-électorale de 2010-2011.
-À surveiller / action : Positionnement de l'opposition et climat social dans les mois suivant
-l'investiture.
+dans un contexte de quatrième mandat, d'exclusion judiciaire des deux principaux opposants
+(Laurent Gbagbo, Tidjane Thiam) et de participation très contrastée selon les régions (jusqu'à
+99 % au nord, 31 % à Yopougon), qui alimentent la contestation de légitimité du scrutin par
+l'opposition. Cette contestation s'est accompagnée d'une violence électorale significative,
+distincte de l'élection elle-même — voir fiche 10.
+À surveiller / action : Positionnement de l'opposition, climat social dans les mois suivant
+l'investiture, et déroulement des élections législatives du 27 décembre 2025.
 ```
+
+**Note de recoupement (25/08/2026) :** la version initiale de cette fiche affirmait que la réélection s'était déroulée « sans large contestation violente rapportée ». Le recoupement montre que cette affirmation était inexacte : un bilan officiel du Conseil National de Sécurité (communiqué du 13/11/2025) fait état de 11 morts (dont un gendarme), 71 blessés et 1 658 interpellations liés aux violences entourant le scrutin — un épisode documenté indépendamment par Africa Check, qui a identifié individuellement au moins 8 décès distincts après un imbroglio médiatique sur les chiffres (voir la note méthodologique de la fiche 10). La phrase erronée a été retirée et remplacée par un renvoi vers une nouvelle fiche 10, dédiée à cet événement distinct, conformément au principe « un événement = une fiche ». Le taux de participation (50,1 %, avec de forts écarts géographiques) et l'exclusion judiciaire des deux principaux candidats d'opposition — des éléments de contexte absents de la version initiale — ont également été ajoutés.
 
 ### Fiche 7 — Condamnation de manifestants pour troubles à l'ordre public
 
@@ -211,6 +216,40 @@ risque pour le personnel officiel en zone frontalière.
 Côte d'Ivoire–Burkina Faso.
 ```
 
+### Fiche 10 — Violences électorales : bilan officiel de l'opération « Espérance » *(fiche ajoutée après recoupement de la fiche 6 — voir note ci-dessous)*
+
+```
+CIV — 13/11/2025 (date de publication du bilan officiel du CNS ; les incidents recensés se
+sont déroulés entre le 13 et le 25 octobre 2025, essentiellement en amont et au moment du
+scrutin présidentiel) — Niveau : Élevé
+Lieu de survenance : Plusieurs localités du sud et de l'ouest du pays, notamment Abidjan
+(quartier de Yopougon) et Nahio — liste complète des localités non détaillée dans le bilan
+officiel consulté
+Fait : Le Conseil National de Sécurité a dressé le bilan de l'opération de sécurisation
+« Espérance » (44 000 agents de défense et de sécurité mobilisés) déployée pour la
+présidentielle du 25 octobre 2025 : 11 morts (dont un gendarme), 71 blessés et 1 658
+interpellations, à la suite de rassemblements non autorisés, de barrages routiers, d'incendies
+de démembrements de la Commission Électorale Indépendante et de dégradations de bureaux de
+vote, que les autorités attribuent aux appels à mobilisation du « Front commun » (PPA-CI de
+Laurent Gbagbo et PDCI-RDA de Tidjane Thiam), qui contestaient l'exclusion judiciaire de leurs
+candidats et la légitimité du scrutin.
+Source : Communiqué officiel du Conseil National de Sécurité (Présidence de la Côte d'Ivoire,
+13/11/2025), relayé par Xinhua et Connectionivoirienne ; chiffres recoupés indépendamment par
+Africa Check (fact-checking), qui documente individuellement au moins 8 décès distincts sur la
+période — fiabilité élevée pour le bilan officiel ; le décompte exact des décès reste débattu
+entre sources (voir note méthodologique ci-dessous).
+Impact sur la sûreté pays : Premier épisode de violence politique d'ampleur nationale rapporté
+dans ce dispositif depuis la crise post-électorale de 2010-2011, survenu dans un contexte
+d'exclusion judiciaire des deux principaux candidats d'opposition et de contestation de la
+légitimité du scrutin (voir fiche 6) ; le Président Ouattara a instruit le Garde des Sceaux
+d'accélérer l'identification et la poursuite des responsables.
+À surveiller / action : Suites judiciaires annoncées par le Président ; prorogation d'un mois de
+l'interdiction des réunions et manifestations politiques (initialement décidée le 17/10/2025) ;
+climat sécuritaire à l'approche des élections législatives du 27 décembre 2025.
+```
+
+**Note méthodologique (25/08/2026) :** le nombre exact de décès liés à ces violences électorales a fait l'objet d'un imbroglio médiatique documenté par Africa Check : la Commission Électorale Indépendante n'en reconnaissait initialement qu'un seul (un gendarme), le Conseil National des Droits de l'Homme en recensait 6 sur la période du 11 au 21 octobre, et des vérifications indépendantes ont permis d'identifier individuellement au moins 8 décès distincts. Le bilan officiel du CNS du 13 novembre 2025 (11 morts) est retenu ici comme référence car c'est la source la plus récente et la plus complète disponible, mais le chiffre exact reste débattu faute de communication coordonnée entre institutions au moment des faits — cette incertitude est signalée plutôt que gommée, conformément au protocole de veille.
+
 ---
 
 ## Sources consultées pour cette synthèse
@@ -230,6 +269,12 @@ Côte d'Ivoire–Burkina Faso.
 - [Présidentielle en Côte d'Ivoire : Alassane Ouattara réélu, selon des résultats provisoires — France 24](https://www.france24.com/fr/afrique/20251027-pr%C3%A9sidentielle-c%C3%B4te-ivoire-alassane-ouattara-r%C3%A9%C3%A9lu-selon-r%C3%A9sultats-provisoires)
 - [Présidentielle 2025 — Le Conseil constitutionnel confirme l'élection d'Alassane Ouattara au premier tour — AllAfrica](https://fr.allafrica.com/stories/202511040549.html)
 - [Présidentielle en Côte d'Ivoire : Alassane Ouattara en tête avec 89,77 % des voix — Jeune Afrique](https://www.jeuneafrique.com/1734746/politique/presidentielle-en-cote-divoire-alassane-ouattara-en-tete-avec-8977-des-voix/)
+- [Présidentielle 2025 en Côte d'Ivoire : Alassane Ouattara réélu avec 89,77 % des voix, un 4e mandat sans rival — Africa Radio](https://www.africaradio.com/actualite-111708-presidentielle-2025-en-cote-d-ivoire-alassane-ouattara-reelu-avec-89-77-des-voix-un-4e-mandat-sans-rival) *(participation 50,1 %, contestation de l'opposition, incidents recensés par la CEI — recoupement de la fiche 6)*
+- [Cote d'Ivoire: Alassane Ouattara remporte un scrutin sans grand engouement — AllAfrica](https://fr.allafrica.com/stories/202510290032.html) *(participation contrastée par région, contestation de Tidjane Thiam — recoupement de la fiche 6)*
+- [Communiqué du Conseil National de Sécurité du 13 novembre 2025 — Présidence de la Côte d'Ivoire](https://www.presidence.ci/communiques-presidence/communique-du-conseil-national-de-securite-du-13-novembre-2025/) *(source officielle primaire de la fiche 10 — bilan de l'opération « Espérance »)*
+- [Présidentielle 2025 : 11 morts, 71 blessés et 1 658 interpellations, le CNS dresse un bilan contrasté de l'opération « Espérance » — Connectionivoirienne](https://connectionivoirienne.net/2025/11/14/presidentielle-2025-11-morts-71-blesses-et-1-658-interpellations-le-cns-dresse-un-bilan-contraste-de-loperation-esperance/) *(relais détaillé du communiqué du 13/11/2025)*
+- [Côte d'Ivoire : 11 morts et 1 658 interpellations lors des violences liées à l'élection présidentielle — Xinhua](http://french.xinhuanet.com/20251114/fa5496b8223b48a690299d1f827846cf/c.html)
+- [Imbroglio sur le nombre de décès enregistrés lors des manifestations en lien avec la présidentielle ivoirienne de 2025 — Africa Check](https://africacheck.org/fr/fact-checks/blog/imbroglio-deces-enregistres-manifestations-election-2025) *(fact-check indépendant du décompte des décès — fiche 10)*
 - [Côte d'Ivoire : 26 manifestants écopent de trois ans de prison ferme pour « troubles à l'ordre public » — Jeune Afrique](https://www.jeuneafrique.com/1732174/politique/cote-divoire-26-manifestants-ecopent-de-trois-ans-de-prison-ferme-pour-troubles-a-lordre-public/)
 - [Côte d'Ivoire: The authorities must stop stifling peaceful protests ahead of presidential election — Amnesty International](https://www.amnesty.org/en/latest/news/2025/10/cote-divoire-protests-election/)
 - [Côte d'Ivoire : quatre villageois tués dans une attaque armée près de la frontière du Burkina — France 24](https://www.france24.com/fr/afrique/20250826-c%C3%B4te-d-ivoire-quatre-villageois-tu%C3%A9s-dans-une-attaque-arm%C3%A9e-pr%C3%A8s-de-la-fronti%C3%A8re-du-burkina)
@@ -242,7 +287,8 @@ Côte d'Ivoire–Burkina Faso.
 - La page Facebook officielle de la Présidence (source configurée du projet) n'a pas pu être consultée directement : Facebook ne permet pas la lecture programmatique de son contenu public sans authentification. Les communiqués de la Présidence ont donc été recoupés via leurs relais de presse (KOACI, AllAfrica), qui les citent en source primaire.
 - **Fiche 4 — recoupée et corrigée le 25/08/2026.** La version initiale, fondée sur un média secondaire unique (Africtelegraph), qualifiait à tort une déclaration présidentielle sur des « zones à risque » urbaines (inondations, déguerpissements à Koumassi) comme portant aussi sur la sécurisation du nord frontalier. Ce cas illustre l'utilité du recoupement systématique des fiches à source unique : voir la note dans la fiche 4 pour le détail de la correction.
 - **Fiche 5 — recoupée le 25/08/2026, sans erreur factuelle identifiée.** Contrairement à la fiche 4, le recoupement confirme intégralement les faits rapportés (plus de 115 000 demandeurs d'asile, quatre pays d'origine, renforcement du dispositif à la frontière nord) via le communiqué officiel du CNS et au moins six médias ivoiriens indépendants, dont l'agence de presse publique (AIP). Seule la mention de la source a été renforcée : voir la note dans la fiche 5.
+- **Fiche 6 — recoupée et corrigée le 25/08/2026 ; fiche 10 ajoutée.** La version initiale affirmait à tort une absence de contestation violente autour de la réélection présidentielle. Un bilan officiel du CNS (13/11/2025) documente 11 morts, 71 blessés et 1 658 interpellations liés au scrutin. Cet événement, distinct de l'élection elle-même, a été isolé dans une nouvelle fiche 10 conformément au principe « un événement = une fiche » ; le décompte exact des décès reste débattu entre sources (voir la note méthodologique de la fiche 10).
 - Les fiches 8 et 9 (Difita, Kalan 2) datent d'août 2025 — un an avant la date de cette synthèse. Elles sont conservées comme antécédents directement pertinents pour la même zone frontalière, mais ne reflètent pas nécessairement l'état actuel du terrain ; une actualisation via une source récente est recommandée.
-- Aucune donnée n'a pu être intégrée depuis des connecteurs ACLED ou GDELT à ce stade (non activés dans ce dispositif) : les fiches 8 et 9 reposent sur du sourcing presse classique, pas sur un flux structuré d'événements.
-- Cette synthèse a été mise à jour le 25/08/2026 pour le recoupement des fiches 4 et 5 ; plusieurs autres faits couverts (CNS de février et juillet 2026) sont des points de situation périodiques qui appellent une mise à jour au prochain communiqué.
+- Aucune donnée n'a pu être intégrée depuis des connecteurs ACLED ou GDELT à ce stade (non activés dans ce dispositif) : les fiches 8, 9 et 10 reposent sur du sourcing presse et communiqués officiels classiques, pas sur un flux structuré d'événements.
+- Cette synthèse a été mise à jour le 25/08/2026 pour le recoupement des fiches 4, 5 et 6 (et l'ajout de la fiche 10) ; plusieurs autres faits couverts (CNS de février et juillet 2026) sont des points de situation périodiques qui appellent une mise à jour au prochain communiqué.
 - Le discours présidentiel du 6 août 2026 (source de la fiche 4 corrigée) contient d'autres annonces non couvertes par ce dispositif à ce stade — notamment la dissolution de la Commission Électorale Indépendante (réforme de la gouvernance électorale) et la grâce présidentielle de 4 661 détenus de droit commun — qui pourraient justifier des fiches distinctes si le périmètre de veille est étendu à ces thématiques.

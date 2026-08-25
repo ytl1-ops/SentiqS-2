@@ -9,23 +9,25 @@ Ce dossier documente le travail produit dans une session Claude Cowork : un prot
 
 ## Contenu
 
-- `sentiqs-app.html` — prototype HTML/JS autonome (SPA à page unique, aucune dépendance), navigation réelle par routes (`#dashboard`, `#fiches`, `#fiche/<id>`, `#actualites`, `#modules`, `#pays`, `#parametres`), thème clair/sombre persistant, 9 fiches et 9 articles réels intégrés en données JavaScript.
+- `sentiqs-app.html` — prototype HTML/JS autonome (SPA à page unique, aucune dépendance), navigation réelle par routes (`#dashboard`, `#fiches`, `#fiche/<id>`, `#actualites`, `#modules`, `#pays`, `#parametres`), thème clair/sombre persistant, 10 fiches et 10 articles réels intégrés en données JavaScript.
 - `design/dark/` et `design/light/` — sources des 5 écrans de maquette (`Main`, `Dashboard`, `FicheDetail`, `Actualites`, `Modules`) au format Design Components (`.dc.html`), un jeu par thème.
 - `design/canvas.json` — disposition du canvas de conception (positions, pages, annotations).
-- `synthese-cote-divoire-2026-08-24.md` — synthèse de veille : 9 fiches de synthèse sourcées (presse, ONG, officiel), format normalisé Pays / Date / Niveau / Lieu / Fait / Source / Impact / À surveiller.
+- `synthese-cote-divoire-2026-08-24.md` — synthèse de veille : 10 fiches de synthèse sourcées (presse, ONG, officiel), format normalisé Pays / Date / Niveau / Lieu / Fait / Source / Impact / À surveiller.
 
 ## Sources couvertes dans la synthèse
 
-KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, Afrik Soir, FratMat, Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr, AIP (Agence Ivoirienne de Presse), Présidence de la Côte d'Ivoire (site officiel), gouv.ci, page Facebook de la Présidence de Côte d'Ivoire.
+KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, Afrik Soir, FratMat, Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr, AIP (Agence Ivoirienne de Presse), Présidence de la Côte d'Ivoire (site officiel), Africa Radio, Connectionivoirienne, Xinhua, Africa Check, gouv.ci, page Facebook de la Présidence de Côte d'Ivoire.
 
 ## État des connecteurs (dans le prototype)
 
 Réseaux sociaux (Telegram), ACLED et GDELT ne sont pas encore connectés dans ce prototype — affichés honnêtement comme inactifs (0 donnée), sans données inventées.
 
-## Recoupement du 25/08/2026 — fiches 4 et 5
+## Recoupement du 25/08/2026 — fiches 4, 5 et 6
 
 **Fiche 4 — corrigée.** La fiche (initialement sourcée sur le seul média secondaire Africtelegraph) affirmait à tort qu'une déclaration présidentielle du 6 août 2026 portait sur la menace jihadiste dans le nord frontalier. Le recoupement avec le texte intégral du discours et 4 médias ivoiriens indépendants a montré qu'il s'agissait en réalité d'un enjeu de gouvernance urbaine (déguerpissements et risque d'inondation à Abidjan, quartier de Koumassi), sans rapport avec le nord du pays. La fiche a été réécrite, reclassée, et son niveau abaissé d'Élevé à Modéré.
 
 **Fiche 5 — sourcing renforcé, aucune erreur factuelle.** Contrairement à la fiche 4, le recoupement de la fiche 5 (115 000+ demandeurs d'asile originaires du Mali, Burkina Faso, Ghana et Guinée ; renforcement du dispositif à la frontière nord) n'a révélé aucune erreur : les faits sont confirmés par le communiqué officiel du Conseil National de Sécurité et par au moins six médias ivoiriens indépendants, dont l'agence de presse publique (AIP). Seule la citation de source a été réécrite pour refléter la chaîne réelle de sourcing (communiqué CNS → FratMat → AllAfrica, recoupé indépendamment par l'AIP et 5 autres médias), ce qui relève le niveau de fiabilité affiché de « correct » à « élevé ».
 
-Détail complet des deux recoupements dans `synthese-cote-divoire-2026-08-24.md`.
+**Fiche 6 — corrigée ; fiche 10 ajoutée.** La fiche affirmait à tort que la réélection présidentielle s'était déroulée « sans large contestation violente rapportée ». Le recoupement a mis au jour un bilan officiel du Conseil National de Sécurité (communiqué du 13/11/2025, opération « Espérance ») : 11 morts, 71 blessés et 1 658 interpellations liés au scrutin, corroboré indépendamment par Africa Check (au moins 8 décès identifiés individuellement). Conformément au principe « un événement = une fiche », cet épisode a été isolé dans une nouvelle fiche 10 (Élevé) plutôt que mélangé à la fiche 6, qui a par ailleurs été enrichie du taux de participation (50,1 %) et de l'exclusion judiciaire des deux principaux candidats d'opposition. La catégorie « Stabilité politique » passe de Modéré à Élevé dans le dispositif.
+
+Détail complet des trois recoupements dans `synthese-cote-divoire-2026-08-24.md`.
