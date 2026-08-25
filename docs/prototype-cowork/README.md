@@ -41,3 +41,9 @@ Détail complet des trois recoupements dans `synthese-cote-divoire-2026-08-24.md
 **Fiche 9 — complétée.** La fiche initiale, exacte mais peu détaillée, a été enrichie par le recoupement de 7 médias indépendants, dont l'agence de presse publique AIP : les six personnes enlevées à Kalan 2 sont des agents de la DAARA (Direction d'aide et d'assistance aux réfugiés et apatrides) en mission de recensement des demandeurs d'asile — un détail qui recoupe directement le dispositif décrit en fiche 5. Le sort des agents après remise à l'armée burkinabè régulière (transfert par hélicoptère) repose sur une seule source et reste signalé comme non confirmé.
 
 Détail complet des trois recoupements dans `synthese-cote-divoire-2026-08-24.md`.
+
+## Recoupement du 25/08/2026 — fiche 10 (second passage)
+
+**Fiche 10 — corrigée une seconde fois.** Ajoutée lors du recoupement de la fiche 6, la fiche 10 a été recoupée à son tour. La mention de Yopougon comme localité touchée reposait sur une allégation de bureaux de vote incendiés le 24/10/2025, depuis démontrée fausse par Africa Check (images sans rapport, originaires du Cameroun et d'Afrique du Sud) — retirée. En contrepartie, la fiche a été enrichie de huit décès individuellement documentés par Africa Check (Agboville, Daloa, Bonoua, Adzopé, Yamoussoukro, Nahio) et du bilan officiel du procureur de la République d'Issia sur Nahio (3 morts, 19 blessés, enquête ouverte) — dont les circonstances exactes restent disputées entre sources. Aucune source ne confirme de suites judiciaires concrètes pour ces 11 décès au-delà d'une instruction présidentielle générale.
+
+Détail complet dans `synthese-cote-divoire-2026-08-24.md`.

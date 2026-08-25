@@ -2,13 +2,13 @@
 
 **Dispositif :** SENTIQS-OSINT CORE — Veille sûreté pays
 **Pays suivi :** Côte d'Ivoire (CIV)
-**Date de mise à jour :** 25/08/2026 (recoupement des fiches 4 à 9 — corrections des fiches 4, 6 et 8, confirmation/renforcement du sourcing des fiches 5, 7 et 9, ajout de la fiche 10)
+**Date de mise à jour :** 25/08/2026 (recoupement des fiches 4 à 10 — corrections des fiches 4, 6, 8 et 10, confirmation/renforcement du sourcing des fiches 5, 7 et 9, ajout puis recoupement de la fiche 10)
 **Sources configurées du projet :** [Présidence de la Côte d'Ivoire (Facebook)](https://facebook.com/Presidenceci), [Portail officiel du Gouvernement (gouv.ci)](https://www.gouv.ci)
 **Sources complémentaires mobilisées pour cette synthèse :** KOACI, AllAfrica, Africtelegraph, Jeune Afrique, France 24, Amnesty International, FratMat, Abidjan.net, L'Intelligent d'Abidjan, linfodrome.com, afrique-sur7.fr, AIP (Agence Ivoirienne de Presse), Présidence de la Côte d'Ivoire (site officiel), Africa Radio, Connectionivoirienne, Xinhua, Africa Check, Informateur.ci, L'Orient-Le Jour/AFP, Mondafrique (voir sourcing par fiche)
 
 > Note méthodologique : le portail gouv.ci et la page Facebook de la Présidence n'exposent pas de flux d'actualités directement exploitable en lecture automatisée au moment de cette synthèse (page d'accueil de type vitrine pour gouv.ci ; contenu Facebook non accessible sans authentification). Les faits ci-dessous ont donc été recoupés via la presse ivoirienne et panafricaine, dont plusieurs relais directs des communiqués officiels de la Présidence et du Conseil National de Sécurité (CNS). Chaque fiche précise sa source et son niveau de fiabilité, conformément au protocole de veille.
 
-> **Recoupement du 25/08/2026 :** la fiche 4 (source unique, Africtelegraph) a été recoupée et corrigée — le fait rapporté était mal qualifié. La fiche 5 ne présentait aucune erreur factuelle : seul son sourcing a été renforcé. La fiche 6 a été corrigée : son champ « Impact » affirmait à tort une absence de contestation violente ; l'événement omis fait désormais l'objet d'une fiche à part entière (fiche 10). Les fiches 7, 8 et 9 ont ensuite été recoupées à leur tour : la fiche 7 était incomplète (une seconde vague de condamnations n'était pas mentionnée), la fiche 8 attribuait la responsabilité de l'attaque de Difita à un acteur (VDP) de façon plus affirmative que ne le permettent les sources disponibles, et la fiche 9 a été considérablement enrichie et confirmée par de nombreuses sources indépendantes. Le détail de chaque recoupement figure sous chaque fiche concernée et dans « Limites de cette synthèse ».
+> **Recoupement du 25/08/2026 :** la fiche 4 (source unique, Africtelegraph) a été recoupée et corrigée — le fait rapporté était mal qualifié. La fiche 5 ne présentait aucune erreur factuelle : seul son sourcing a été renforcé. La fiche 6 a été corrigée : son champ « Impact » affirmait à tort une absence de contestation violente ; l'événement omis fait désormais l'objet d'une fiche à part entière (fiche 10). Les fiches 7, 8 et 9 ont ensuite été recoupées à leur tour : la fiche 7 était incomplète (une seconde vague de condamnations n'était pas mentionnée), la fiche 8 attribuait la responsabilité de l'attaque de Difita à un acteur (VDP) de façon plus affirmative que ne le permettent les sources disponibles, et la fiche 9 a été considérablement enrichie et confirmée par de nombreuses sources indépendantes. Enfin, la fiche 10 a elle-même été recoupée une seconde fois : la mention d'une localité (Yopougon) reposait sur une allégation de bureaux de vote incendiés depuis démontrée fausse par Africa Check et a été retirée, tandis que le bilan a été enrichi de cas individuellement documentés — dont l'épisode de Nahio, confirmé par le parquet d'Issia (3 morts, 19 blessés) mais dont les circonstances exactes restent disputées entre sources. Le détail de chaque recoupement figure sous chaque fiche concernée et dans « Limites de cette synthèse ».
 
 ## Vue d'ensemble — Niveau de sûreté pays
 
@@ -25,7 +25,7 @@
 
 **10 fiches actives — répartition : 1 Faible · 6 Modéré · 3 Élevé · 0 Critique**
 
-**Lecture d'ensemble :** la criminalité de droit commun est en baisse tendancielle selon les autorités, et l'indice sécuritaire officiel s'est nettement amélioré depuis 2012. Le principal point de vigilance reste la sécurité de l'extrême nord-est frontalier (Tchologo, Bounkani, Poro) : l'attaque du village de Difita (4 morts) et l'enlèvement de six agents ivoiriens de la DAARA à Kalan 2, fin août 2025, y restent les événements de référence — mais le recoupement a montré que l'attribution de l'attaque de Difita à la milice burkinabée VDP, présentée jusqu'ici comme l'hypothèse la plus probable, n'est en réalité confirmée par aucune source officielle et fait l'objet d'hypothèses concurrentes (voir fiche 8). La déclaration présidentielle du 6 août 2026 sur la « libération des zones à risque », initialement mal rattachée à cette menace nord (voir fiche 4), concerne en réalité un enjeu distinct de gouvernance urbaine à Abidjan. Le sujet des réfugiés et de la frontière nord (fiche 5) reste bien confirmé et documenté. Sur le plan politique, la réélection du président Ouattara pour un quatrième mandat (fin 2025, fiche 6) s'est accompagnée d'un épisode de violence électorale bien plus significatif qu'initialement rapporté (11 morts, fiche 10), ainsi que d'une répression judiciaire de grande ampleur des manifestants de la marche du 11 octobre 2025 — au moins 58 condamnations à trois ans de prison ferme en deux vagues, sur environ 700 interpellations rapportées (fiche 7) — un point de vigilance de premier plan pour la cohésion sociale à moyen terme, à mettre en regard des élections législatives du 27 décembre 2025.
+**Lecture d'ensemble :** la criminalité de droit commun est en baisse tendancielle selon les autorités, et l'indice sécuritaire officiel s'est nettement amélioré depuis 2012. Le principal point de vigilance reste la sécurité de l'extrême nord-est frontalier (Tchologo, Bounkani, Poro) : l'attaque du village de Difita (4 morts) et l'enlèvement de six agents ivoiriens de la DAARA à Kalan 2, fin août 2025, y restent les événements de référence — mais le recoupement a montré que l'attribution de l'attaque de Difita à la milice burkinabée VDP, présentée jusqu'ici comme l'hypothèse la plus probable, n'est en réalité confirmée par aucune source officielle et fait l'objet d'hypothèses concurrentes (voir fiche 8). La déclaration présidentielle du 6 août 2026 sur la « libération des zones à risque », initialement mal rattachée à cette menace nord (voir fiche 4), concerne en réalité un enjeu distinct de gouvernance urbaine à Abidjan. Le sujet des réfugiés et de la frontière nord (fiche 5) reste bien confirmé et documenté. Sur le plan politique, la réélection du président Ouattara pour un quatrième mandat (fin 2025, fiche 6) s'est accompagnée d'un épisode de violence électorale bien plus significatif qu'initialement rapporté (11 morts répartis sur au moins six localités, dont l'épisode disputé de Nahio, fiche 10), ainsi que d'une répression judiciaire de grande ampleur des manifestants de la marche du 11 octobre 2025 — au moins 58 condamnations à trois ans de prison ferme en deux vagues, sur environ 700 interpellations rapportées (fiche 7) — un point de vigilance de premier plan pour la cohésion sociale à moyen terme, à mettre en regard des élections législatives du 27 décembre 2025.
 
 ---
 
@@ -254,15 +254,16 @@ relâchés), ce qui pourrait indiquer un schéma de résolution possible.
 
 **Note de recoupement (25/08/2026) :** contrairement à la version initiale (« détails opérationnels limités, à recouper »), le recoupement confirme largement les faits : au moins sept médias ivoiriens et panafricains indépendants rapportent l'enlèvement des six agents, dont l'agence de presse publique (AIP), qui les identifie précisément comme des agents de la DAARA en mission de recensement des demandeurs d'asile — une précision absente de la version initiale et qui recoupe directement le dispositif d'accueil documenté en fiche 5. Le devenir des agents après leur remise à l'armée burkinabè et leur transfert par hélicoptère repose en revanche sur la seule source AllAfrica et reste à confirmer indépendamment — cette incertitude est signalée plutôt que gommée. Un précédent (juin 2025, cinq gendarmes relâchés après capture par des VDP) a été ajouté au titre du « À surveiller », comme élément de comparaison utile sans présager de l'issue du cas présent.
 
-### Fiche 10 — Violences électorales : bilan officiel de l'opération « Espérance » *(fiche ajoutée après recoupement de la fiche 6 — voir note ci-dessous)*
+### Fiche 10 — Violences électorales : bilan officiel de l'opération « Espérance » *(fiche corrigée après recoupement — voir note ci-dessous)*
 
 ```
-CIV — 13/11/2025 (date de publication du bilan officiel du CNS ; les incidents recensés se
-sont déroulés entre le 13 et le 25 octobre 2025, essentiellement en amont et au moment du
-scrutin présidentiel) — Niveau : Élevé
-Lieu de survenance : Plusieurs localités du sud et de l'ouest du pays, notamment Abidjan
-(quartier de Yopougon) et Nahio — liste complète des localités non détaillée dans le bilan
-officiel consulté
+CIV — 13/11/2025 (date de publication du bilan officiel du CNS) ; les incidents recensés se
+sont déroulés entre le 13 et le 25 octobre 2025, autour de la campagne et du scrutin
+présidentiel du 25 octobre — Niveau : Élevé
+Lieu de survenance : Localités dispersées, majoritairement dans le centre-ouest et le sud du
+pays — cas individuellement documentés à Agboville (Agnéby-Tiassa), Daloa, Bonoua, Adzopé,
+Yamoussoukro et Nahio (département d'Issia, Haut-Sassandra) ; le bilan officiel du CNS ne
+détaille pas les localités et évoque des « incidents localisés » de façon générale.
 Fait : Le Conseil National de Sécurité a dressé le bilan de l'opération de sécurisation
 « Espérance » (44 000 agents de défense et de sécurité mobilisés) déployée pour la
 présidentielle du 25 octobre 2025 : 11 morts (dont un gendarme), 71 blessés et 1 658
@@ -270,23 +271,46 @@ interpellations, à la suite de rassemblements non autorisés, de barrages routi
 de démembrements de la Commission Électorale Indépendante et de dégradations de bureaux de
 vote, que les autorités attribuent aux appels à mobilisation du « Front commun » (PPA-CI de
 Laurent Gbagbo et PDCI-RDA de Tidjane Thiam), qui contestaient l'exclusion judiciaire de leurs
-candidats et la légitimité du scrutin.
+candidats et la légitimité du scrutin. Africa Check a documenté individuellement au moins huit
+décès distincts : un sous-lieutenant de gendarmerie tué en mission à Agboville (20/10) ; un
+homme décédé lors de son évacuation après interpellation à Daloa (19/10) ; un manifestant de 22
+ans atteint par balle à Bonoua (13/10) ; un nourrisson de trois mois décédé après inhalation de
+gaz lacrymogène à Adzopé (14/10) ; un homme mort d'un traumatisme crânien à Yamoussoukro
+(21/10) ; et trois personnes tuées dans la nuit du 25 au 26 octobre à Nahio, où le procureur de
+la République d'Issia a également recensé 19 blessés et d'importantes destructions de biens.
+Les circonstances exactes des affrontements de Nahio restent disputées entre deux versions :
+selon un média (afrique-sur7.fr), des hommes armés identifiés comme des Dozos et des
+partisans du parti au pouvoir auraient attaqué des habitants ayant détruit des urnes pour
+protester contre un scrutin jugé biaisé ; selon le parquet d'Issia, relayé par l'AIP et KOACI,
+des affrontements ont éclaté après qu'un groupe eut érigé des barrages pour empêcher le vote et
+la livraison du matériel électoral, provoquant une confrontation avec des habitants venus voter
+— une divergence non tranchée ici (voir note ci-dessous).
 Source : Communiqué officiel du Conseil National de Sécurité (Présidence de la Côte d'Ivoire,
 13/11/2025), relayé par Xinhua et Connectionivoirienne ; chiffres recoupés indépendamment par
-Africa Check (fact-checking), qui documente individuellement au moins 8 décès distincts sur la
-période — fiabilité élevée pour le bilan officiel ; le décompte exact des décès reste débattu
-entre sources (voir note méthodologique ci-dessous).
+Africa Check (fact-checking, décompte individuel d'au moins 8 décès) ; AIP et KOACI pour le
+bilan officiel du procureur de la République d'Issia sur Nahio — fiabilité élevée pour le bilan
+global et les cas individuels documentés ; le décompte exact des décès reste débattu entre
+institutions (voir note méthodologique ci-dessous) et l'attribution des violences de Nahio
+reste disputée entre sources.
 Impact sur la sûreté pays : Premier épisode de violence politique d'ampleur nationale rapporté
 dans ce dispositif depuis la crise post-électorale de 2010-2011, survenu dans un contexte
 d'exclusion judiciaire des deux principaux candidats d'opposition et de contestation de la
-légitimité du scrutin (voir fiche 6) ; le Président Ouattara a instruit le Garde des Sceaux
-d'accélérer l'identification et la poursuite des responsables.
-À surveiller / action : Suites judiciaires annoncées par le Président ; prorogation d'un mois de
-l'interdiction des réunions et manifestations politiques (initialement décidée le 17/10/2025) ;
-climat sécuritaire à l'approche des élections législatives du 27 décembre 2025.
+légitimité du scrutin (voir fiche 6) ; la dispersion géographique des incidents (au moins six
+localités distinctes documentées) et la divergence d'attribution à Nahio illustrent la
+difficulté à établir une image unique et incontestée des violences électorales de 2025. Le
+Président Ouattara a instruit le Garde des Sceaux d'accélérer l'identification et la poursuite
+des responsables.
+À surveiller / action : Suites judiciaires concrètes (arrestations, poursuites, condamnations)
+liées spécifiquement à ces 11 décès — aucune n'était rapportée dans les sources consultées
+au-delà de l'instruction présidentielle du 13/11/2025 ; issue de l'enquête ouverte par le
+procureur d'Issia sur Nahio ; prorogation d'un mois de l'interdiction des réunions et
+manifestations politiques (initialement décidée le 17/10/2025) ; climat sécuritaire à
+l'approche des élections législatives du 27 décembre 2025.
 ```
 
-**Note méthodologique (25/08/2026) :** le nombre exact de décès liés à ces violences électorales a fait l'objet d'un imbroglio médiatique documenté par Africa Check : la Commission Électorale Indépendante n'en reconnaissait initialement qu'un seul (un gendarme), le Conseil National des Droits de l'Homme en recensait 6 sur la période du 11 au 21 octobre, et des vérifications indépendantes ont permis d'identifier individuellement au moins 8 décès distincts. Le bilan officiel du CNS du 13 novembre 2025 (11 morts) est retenu ici comme référence car c'est la source la plus récente et la plus complète disponible, mais le chiffre exact reste débattu faute de communication coordonnée entre institutions au moment des faits — cette incertitude est signalée plutôt que gommée, conformément au protocole de veille. Voir aussi la fiche 7 (condamnations judiciaires) et la fiche 9 (enlèvement à Kalan 2) pour des divergences comparables sur les chiffres d'interpellations et l'attribution des faits, propres à cette période de fortes tensions.
+**Note de recoupement (25/08/2026) :** cette fiche, créée lors du recoupement de la fiche 6, a fait l'objet d'un second recoupement à son tour. Une correction : la version initiale citait le quartier de Yopougon (Abidjan) comme l'une des localités touchées ; or Africa Check a démontré que la principale allégation de violences à Yopougon — des bureaux de vote incendiés le 24/10/2025 — est fausse : les trois images ayant circulé provenaient en réalité du Cameroun et d'Afrique du Sud, sans rapport avec la Côte d'Ivoire, et des visites de terrain le 25/10/2025 n'ont trouvé aucun bureau de vote incendié à Yopougon. Cette mention a donc été retirée. À l'inverse, le recoupement a permis d'ajouter un niveau de détail absent de la version initiale : Africa Check documente individuellement au moins huit décès nommés, répartis dans six localités (Agboville, Daloa, Bonoua, Adzopé, Yamoussoukro, Nahio), et le procureur de la République d'Issia a confirmé officiellement trois morts et 19 blessés à Nahio, où une enquête a été ouverte. Les circonstances de Nahio elles-mêmes restent disputées entre deux versions contradictoires des événements (voir « Fait » ci-dessus) — signalé plutôt que tranché, conformément au protocole de veille, sur le même principe que pour l'attribution de l'attaque de Difita (fiche 8). Enfin, concernant le champ « À surveiller » de la version initiale (suites judiciaires annoncées par le Président), le recoupement confirme que seule une instruction présidentielle d'accélérer les poursuites a été rapportée à ce stade (communiqué du 13/11/2025) ; aucune source consultée ne fait état d'arrestations ou de condamnations effectivement prononcées pour ces 11 décès à la date de cette synthèse — à distinguer des condamnations de manifestants de la fiche 7, qui relèvent d'un autre volet judiciaire (troubles à l'ordre public lors de la marche du 11 octobre, non des décès de la période électorale).
+
+**Note méthodologique (25/08/2026) :** le nombre exact de décès liés à ces violences électorales a fait l'objet d'un imbroglio médiatique documenté par Africa Check : la Commission Électorale Indépendante n'en reconnaissait initialement qu'un seul cas (« le cas malheureux dans la zone de l'Agnéby-Tiassa », soit le gendarme d'Agboville), le Conseil National des Droits de l'Homme en recensait 6 sur la période du 11 au 21 octobre, une coalition d'opposition en revendiquait « une dizaine », et des vérifications indépendantes ont permis d'identifier individuellement au moins 8 décès distincts. Le bilan officiel du CNS du 13 novembre 2025 (11 morts) est retenu ici comme référence car c'est la source la plus récente et la plus complète disponible, mais le chiffre exact reste débattu faute de communication coordonnée entre institutions au moment des faits — cette incertitude est signalée plutôt que gommée, conformément au protocole de veille. Voir aussi la fiche 7 (condamnations judiciaires) et la fiche 9 (enlèvement à Kalan 2) pour des divergences comparables sur les chiffres d'interpellations et l'attribution des faits, propres à cette période de fortes tensions.
 
 ---
 
@@ -312,7 +336,12 @@ climat sécuritaire à l'approche des élections législatives du 27 décembre 2
 - [Communiqué du Conseil National de Sécurité du 13 novembre 2025 — Présidence de la Côte d'Ivoire](https://www.presidence.ci/communiques-presidence/communique-du-conseil-national-de-securite-du-13-novembre-2025/) *(source officielle primaire de la fiche 10 — bilan de l'opération « Espérance »)*
 - [Présidentielle 2025 : 11 morts, 71 blessés et 1 658 interpellations, le CNS dresse un bilan contrasté de l'opération « Espérance » — Connectionivoirienne](https://connectionivoirienne.net/2025/11/14/presidentielle-2025-11-morts-71-blesses-et-1-658-interpellations-le-cns-dresse-un-bilan-contraste-de-loperation-esperance/) *(relais détaillé du communiqué du 13/11/2025)*
 - [Côte d'Ivoire : 11 morts et 1 658 interpellations lors des violences liées à l'élection présidentielle — Xinhua](http://french.xinhuanet.com/20251114/fa5496b8223b48a690299d1f827846cf/c.html)
-- [Imbroglio sur le nombre de décès enregistrés lors des manifestations en lien avec la présidentielle ivoirienne de 2025 — Africa Check](https://africacheck.org/fr/fact-checks/blog/imbroglio-deces-enregistres-manifestations-election-2025) *(fact-check indépendant du décompte des décès — fiche 10)*
+- [Imbroglio sur le nombre de décès enregistrés lors des manifestations en lien avec la présidentielle ivoirienne de 2025 — Africa Check](https://africacheck.org/fr/fact-checks/blog/imbroglio-deces-enregistres-manifestations-election-2025) *(fact-check indépendant du décompte des décès, décompte individuel des huit victimes — recoupement de la fiche 10)*
+- [Côte d'Ivoire-AIP / Violences électorales à Nahio : trois morts et 19 blessés enregistrés (Procureur d'Issia) — AIP](https://www.aip.ci/273092/cote-divoire-aip-violences-electorales-a-nahio-trois-morts-et-19-blesses-enregistres-procureur-dissia/) *(bilan officiel du parquet d'Issia — recoupement de la fiche 10)*
+- [Côte d'Ivoire : Violents affrontements à Nahio, trois morts et dix-neuf blessés lors du scrutin à Issia, ouverture d'une enquête par le Procureur de la République — KOACI](https://www.koaci.com/index.php/article/2025/10/28/cote-divoire/politique/cote-divoire-violents-affrontements-a-nahio-trois-morts-et-dix-neuf-blesses-lors-du-scrutin-a-issia-ouverture-dune-enquete-par-le-procureur-de-la-republique_191566.html) *(corroboration du bilan officiel — recoupement de la fiche 10)*
+- [Nahio, symbole du drame électoral en Côte d'Ivoire — afrique-sur7.fr](https://www.afrique-sur7.fr/nahio-symbole-du-drame-electoral-en-cote-divoire) *(version alternative des circonstances de Nahio, attribuée à des Dozos et partisans du pouvoir — recoupement de la fiche 10, attribution disputée)*
+- [Présidentielle ivoirienne de 2025 : faux, ces images ne montrent pas des bureaux de vote en feu à Yopougon — Africa Check](https://africacheck.org/fr/fact-checks/meta-programme-fact-checks/presidentielle-ivoirienne-2025-yopougon-incendie-bureaux-vote) *(désinformation démontrée fausse — correction de la fiche 10, retrait de la mention Yopougon)*
+- [Cote d'Ivoire: Présidentielle d'octobre 2025 - Les responsables des violences dans le viseur de la justice — AllAfrica](https://fr.allafrica.com/stories/202511140293.html) *(état des suites judiciaires à la date du 13/11/2025 — recoupement de la fiche 10)*
 - [Côte d'Ivoire : 26 manifestants écopent de trois ans de prison ferme pour « troubles à l'ordre public » — Jeune Afrique](https://www.jeuneafrique.com/1732174/politique/cote-divoire-26-manifestants-ecopent-de-trois-ans-de-prison-ferme-pour-troubles-a-lordre-public/) *(première vague de jugements — fiche 7)*
 - [En Côte d'Ivoire, 32 manifestants condamnés à trois ans de prison ferme — Jeune Afrique](https://www.jeuneafrique.com/1733155/politique/en-cote-divoire-32-manifestants-condamnes-a-trois-ans-de-prison-ferme/) *(seconde vague de jugements — recoupement de la fiche 7)*
 - [Tensions en Côte d'Ivoire : prison ferme pour 26 manifestants — afrique-sur7.fr](https://www.afrique-sur7.fr/tensions-en-cote-divoire-prison-ferme-pour-26-manifestants) *(700 interpellations rapportées par le parquet — recoupement de la fiche 7)*
@@ -340,7 +369,8 @@ climat sécuritaire à l'approche des élections législatives du 27 décembre 2
 - **Fiche 7 — recoupée et complétée le 25/08/2026.** La version initiale (26 condamnations, 16/10/2025) était exacte mais incomplète : une seconde vague de jugements (32 condamnations, 21/10/2025) portant le total à au moins 58 n'était pas mentionnée. Voir la note dans la fiche 7.
 - **Fiche 8 — recoupée et corrigée le 25/08/2026.** L'attribution de l'attaque de Difita à la milice VDP, présentée comme l'hypothèse la plus probable, s'avère non confirmée par les sources officielles et concurrencée par au moins une autre hypothèse gouvernementale. Voir la note dans la fiche 8.
 - **Fiche 9 — recoupée et largement complétée le 25/08/2026.** Les faits étaient corrects mais peu détaillés (« à recouper ») ; le recoupement identifie précisément les victimes (agents de la DAARA) et confirme l'enlèvement par au moins sept sources indépendantes. Voir la note dans la fiche 9.
+- **Fiche 10 — recoupée et corrigée une seconde fois le 25/08/2026.** La mention d'une localité (Yopougon) reposait sur une allégation de bureaux de vote incendiés depuis démontrée fausse par Africa Check et a été retirée ; le bilan a en contrepartie été enrichi de huit décès individuellement documentés et du bilan officiel du parquet d'Issia sur Nahio (3 morts, 19 blessés), dont les circonstances exactes restent toutefois disputées entre sources. Voir la note dans la fiche 10.
 - Les fiches 8 et 9 (Difita, Kalan 2) datent d'août 2025 — un an avant la date de cette synthèse. Elles sont conservées comme antécédents directement pertinents pour la même zone frontalière, mais ne reflètent pas nécessairement l'état actuel du terrain ; une actualisation via une source récente est recommandée, notamment pour confirmer le sort final des six agents de la DAARA.
 - Aucune donnée n'a pu être intégrée depuis des connecteurs ACLED ou GDELT à ce stade (non activés dans ce dispositif) : les fiches 7, 8, 9 et 10 reposent sur du sourcing presse et communiqués officiels classiques, pas sur un flux structuré d'événements.
-- Cette synthèse a été mise à jour le 25/08/2026 pour le recoupement complet des fiches 4 à 9 (et l'ajout de la fiche 10) ; plusieurs autres faits couverts (CNS de février et juillet 2026) sont des points de situation périodiques qui appellent une mise à jour au prochain communiqué.
+- Cette synthèse a été mise à jour le 25/08/2026 pour le recoupement complet des fiches 4 à 10 ; plusieurs autres faits couverts (CNS de février et juillet 2026) sont des points de situation périodiques qui appellent une mise à jour au prochain communiqué.
 - Le discours présidentiel du 6 août 2026 (source de la fiche 4 corrigée) contient d'autres annonces non couvertes par ce dispositif à ce stade — notamment la dissolution de la Commission Électorale Indépendante (réforme de la gouvernance électorale) et la grâce présidentielle de 4 661 détenus de droit commun — qui pourraient justifier des fiches distinctes si le périmètre de veille est étendu à ces thématiques.
