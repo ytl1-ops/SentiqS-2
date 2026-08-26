@@ -5,7 +5,7 @@
   :root{
     --bg:#0A0D12; --surface:#11151D; --surface-2:#171C26; --surface-3:#1D2330;
     --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.16);
-    --text:#EEF1F5; --text-2:#98A2B3; --text-3:#5B6472;
+    --text:#EEF1F5; --text-2:#98A2B3; --text-3:#758091;
     --accent:#4FD8C4; --accent-strong:#2FB9A6; --accent-wash: rgba(79,216,196,0.10); --accent-ink:#08201C;
     --faible:#52C77E; --modere:#E3A94A; --eleve:#DB7C46; --critique:#D9524A;
     --faible-wash: rgba(82,199,126,0.10); --modere-wash: rgba(227,169,74,0.10); --eleve-wash: rgba(219,124,70,0.10); --critique-wash: rgba(217,82,74,0.10);
@@ -15,9 +15,9 @@
     :root:not([data-theme="dark"]){
       --bg:#F7F8FA; --surface:#FFFFFF; --surface-2:#F1F3F6; --surface-3:#E7EAEF;
       --border: rgba(15,23,42,0.08); --border-strong: rgba(15,23,42,0.16);
-      --text:#12161D; --text-2:#57606F; --text-3:#8A93A3;
-      --accent:#0E9488; --accent-strong:#0B7A70; --accent-wash: rgba(14,148,136,0.08); --accent-ink:#FFFFFF;
-      --faible:#1F9D57; --modere:#B9791A; --eleve:#C15A1E; --critique:#C23B32;
+      --text:#12161D; --text-2:#57606F; --text-3:#687385;
+      --accent:#0C7F75; --accent-strong:#0B7A70; --accent-wash: rgba(14,148,136,0.08); --accent-ink:#FFFFFF;
+      --faible:#1A8148; --modere:#9C6616; --eleve:#B8561D; --critique:#C23B32;
       --faible-wash: rgba(31,157,87,0.08); --modere-wash: rgba(185,121,26,0.08); --eleve-wash: rgba(193,90,30,0.08); --critique-wash: rgba(194,59,50,0.08);
       --shadow: 0 30px 60px -20px rgba(15,23,42,0.14);
     }
@@ -25,16 +25,16 @@
   :root[data-theme="light"]{
     --bg:#F7F8FA; --surface:#FFFFFF; --surface-2:#F1F3F6; --surface-3:#E7EAEF;
     --border: rgba(15,23,42,0.08); --border-strong: rgba(15,23,42,0.16);
-    --text:#12161D; --text-2:#57606F; --text-3:#8A93A3;
-    --accent:#0E9488; --accent-strong:#0B7A70; --accent-wash: rgba(14,148,136,0.08); --accent-ink:#FFFFFF;
-    --faible:#1F9D57; --modere:#B9791A; --eleve:#C15A1E; --critique:#C23B32;
+    --text:#12161D; --text-2:#57606F; --text-3:#687385;
+    --accent:#0C7F75; --accent-strong:#0B7A70; --accent-wash: rgba(14,148,136,0.08); --accent-ink:#FFFFFF;
+    --faible:#1A8148; --modere:#9C6616; --eleve:#B8561D; --critique:#C23B32;
     --faible-wash: rgba(31,157,87,0.08); --modere-wash: rgba(185,121,26,0.08); --eleve-wash: rgba(193,90,30,0.08); --critique-wash: rgba(194,59,50,0.08);
     --shadow: 0 30px 60px -20px rgba(15,23,42,0.14);
   }
   :root[data-theme="dark"]{
     --bg:#0A0D12; --surface:#11151D; --surface-2:#171C26; --surface-3:#1D2330;
     --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.16);
-    --text:#EEF1F5; --text-2:#98A2B3; --text-3:#5B6472;
+    --text:#EEF1F5; --text-2:#98A2B3; --text-3:#758091;
     --accent:#4FD8C4; --accent-strong:#2FB9A6; --accent-wash: rgba(79,216,196,0.10); --accent-ink:#08201C;
     --faible:#52C77E; --modere:#E3A94A; --eleve:#DB7C46; --critique:#D9524A;
     --faible-wash: rgba(82,199,126,0.10); --modere-wash: rgba(227,169,74,0.10); --eleve-wash: rgba(219,124,70,0.10); --critique-wash: rgba(217,82,74,0.10);
@@ -107,6 +107,9 @@
   .row-link:last-child{border-bottom:none;}
   .row-link:hover{color:var(--accent);}
   .row-link:hover .row-title{color:var(--accent);}
+  .row-link > *{min-width:0;}
+  .row-title{overflow-wrap:break-word;}
+  .dash-lower{display:grid; grid-template-columns:1.7fr 1fr; gap:20px;}
 
   /* ---- landing ---- */
   .landing{background:var(--bg);}
@@ -134,6 +137,8 @@
     .footer{padding:28px 24px;}
     .content{padding:20px;}
     .topbar{padding:0 16px;}
+    .dash-lower{grid-template-columns:1fr;}
+    .row-link{flex-wrap:wrap; row-gap:6px;}
   }
 </style>
 
@@ -142,7 +147,7 @@
 <script>
 /* ---------------- data ---------------- */
 const FICHES = [
-  {id:1, cat:'Criminalité générale', level:'faible', date:'2026-07-23', dateLabel:'23/07/2026',
+  {id:1, country:'CIV',cat:'Criminalité générale', level:'faible', date:'2026-07-23', dateLabel:'23/07/2026',
    title:'Baisse de la criminalité générale constatée par le CNS',
    lieu:'Abidjan (Présidence de la République)',
    fait:"Le Conseil National de Sécurité, présidé par Alassane Ouattara, a constaté une baisse notable des attaques de domiciles, des attaques de commerces et des vols de route à l'échelle nationale, tout en relevant que les assassinats, vols de véhicules et accidents restent préoccupants.",
@@ -150,7 +155,7 @@ const FICHES = [
    sourceUrl:"https://www.koaci.com/article/2026/07/23/cote-divoire/politique/cote-divoire-communique-du-conseil-national-de-securite-du-23-juillet-2026_198861.html",
    impact:"Tendance positive sur la criminalité de droit commun, cohérente avec l'amélioration de l'indice sécuritaire officiel ; les points résiduels restent un facteur de vigilance localisé plutôt qu'une menace systémique.",
    watch:"Prochain communiqué du CNS pour confirmer la tendance dans la durée."},
-  {id:2, cat:'Orpaillage illégal', level:'modere', date:'2026-07-23', dateLabel:'23/07/2026',
+  {id:2, country:'CIV',cat:'Orpaillage illégal', level:'modere', date:'2026-07-23', dateLabel:'23/07/2026',
    title:"Bilan de la lutte contre l'orpaillage illégal (GS-LOI)",
    lieu:'Territoire national, zones aurifères',
    fait:"Le Groupement Spécial de Lutte contre l'Orpaillage Illégal (GS-LOI) a fait état, depuis 2021, du déguerpissement de plus de 8 500 sites d'orpaillage illégal et de la saisie de 960 millions de FCFA et 136 kg d'or.",
@@ -158,7 +163,7 @@ const FICHES = [
    sourceUrl:"https://www.koaci.com/article/2026/07/23/cote-divoire/politique/cote-divoire-communique-du-conseil-national-de-securite-du-23-juillet-2026_198861.html",
    impact:"L'orpaillage illégal reste un facteur de déstabilisation économique, environnementale et sécuritaire malgré l'ampleur de la répression menée depuis 2021.",
    watch:"Évolution du phénomène dans les zones frontalières, souvent associées aux mêmes régions que la menace jihadiste."},
-  {id:3, cat:'Sécurité routière', level:'modere', date:'2026-08-15', dateLabel:'15/08/2026',
+  {id:3, country:'CIV',cat:'Sécurité routière', level:'modere', date:'2026-08-15', dateLabel:'15/08/2026',
    title:'81 motocyclistes tués durant le premier semestre 2026',
    lieu:'Territoire national — axes Niakara–Katiola et Touba–Biankouma',
    fait:"81 motocyclistes sont morts sur les routes ivoiriennes durant le premier semestre 2026 ; le ministère des Transports a annoncé un renforcement des contrôles techniques et de la sensibilisation à la sécurité routière.",
@@ -166,7 +171,7 @@ const FICHES = [
    sourceUrl:"https://fr.allafrica.com/stories/202608150162.html",
    impact:"Risque récurrent et quantifié pour la sécurité des déplacements, pertinent pour la sûreté des déplacements du personnel sur le terrain.",
    watch:"Mise en œuvre effective du renforcement des contrôles techniques annoncé par le ministre Oumar Sacko."},
-  {id:4, cat:'Gouvernance urbaine — zones à risque', level:'modere', date:'2026-08-06', dateLabel:'06/08/2026',
+  {id:4, country:'CIV',cat:'Gouvernance urbaine — zones à risque', level:'modere', date:'2026-08-06', dateLabel:'06/08/2026',
    title:'Déguerpissements à Koumassi : le Président promet des sanctions',
    lieu:'Abidjan — quartier de Koumassi (Koumassi Campement)',
    fait:"Dans son message à la nation, le Président Ouattara a annoncé la poursuite des opérations de libération des « zones à risque » — des quartiers d'Abidjan exposés aux inondations — dans le respect de l'État de droit, et a promis des sanctions contre les auteurs de déguerpissements menés hors cadre légal à Koumassi Campement.",
@@ -176,7 +181,7 @@ const FICHES = [
    watch:"Résultats de l'enquête annoncée sur les déguerpissements de Koumassi Campement ; mise en œuvre des investissements annoncés en drainage et assainissement.",
    recoupement:"Correction du 25/08/2026 (recoupement) : la fiche initiale (source unique Africtelegraph) associait à tort cette déclaration à la menace jihadiste et aux opérations de sécurisation du nord frontalier (Tchologo, Bounkani, Poro). Le texte intégral du discours et 4 médias ivoiriens indépendants montrent que les « zones à risque » citées par le Président concernent exclusivement des zones urbaines inondables à Abidjan, sans aucune référence au nord du pays.",
    recoupementLabel:"FICHE CORRIGÉE APRÈS RECOUPEMENT"},
-  {id:5, cat:'Frontières / réfugiés', level:'modere', date:'2026-02-12', dateLabel:'12/02/2026',
+  {id:5, country:'CIV',cat:'Frontières / réfugiés', level:'modere', date:'2026-02-12', dateLabel:'12/02/2026',
    title:'Gestion des réfugiés et sécurisation de la frontière nord',
    lieu:'Frontière nord (limitrophe Mali / Burkina Faso)',
    fait:"Le CNS a acté la poursuite de l'enregistrement biométrique et de l'assistance aux plus de 115 000 demandeurs d'asile originaires du Mali, du Burkina Faso, du Ghana et de la Guinée, ainsi que le renforcement du dispositif sécuritaire à la frontière nord.",
@@ -186,7 +191,7 @@ const FICHES = [
    watch:"Rythme des retours volontaires (modèle Ghana) ; adéquation du dispositif sécuritaire frontalier face aux flux ; mise en œuvre du Programme National de Connectivité Rurale (PNCR) et des solutions satellite en zone frontalière, la couverture réseau insuffisante y étant identifiée par le CNS comme un frein actuel au dispositif sécuritaire.",
    recoupement:"Recoupement du 25/08/2026 : aucune erreur factuelle identifiée, contrairement à la fiche 4. Les faits (115 000+ demandeurs d'asile, 4 pays d'origine, renforcement de la frontière nord) sont confirmés par le communiqué officiel du CNS et au moins 6 médias ivoiriens indépendants dont l'AIP (agence de presse publique). La source, initialement présentée comme un relais unique (AllAfrica), a été réécrite pour refléter la chaîne réelle de sourcing — le niveau de fiabilité passe de « correct » à « élevé ». Le recoupement a aussi permis d'ajouter un point du communiqué absent de la version initiale : le déficit de couverture réseau en zone frontalière, désormais repris en « À surveiller ».",
    recoupementLabel:"SOURCING RENFORCÉ APRÈS RECOUPEMENT"},
-  {id:6, cat:'Stabilité politique', level:'modere', date:'2025-11-04', dateLabel:"27/10/2025 – 04/11/2025",
+  {id:6, country:'CIV',cat:'Stabilité politique', level:'modere', date:'2025-11-04', dateLabel:"27/10/2025 – 04/11/2025",
    title:"Réélection d'Alassane Ouattara pour un quatrième mandat",
    lieu:"Ensemble du territoire national (scrutin présidentiel du 25/10/2025)",
    fait:"Alassane Ouattara a été réélu président de la Côte d'Ivoire dès le premier tour avec 89,77 % des voix selon les résultats provisoires (participation nationale de 50,1 %), une élection validée par le Conseil constitutionnel le 4 novembre 2025 pour un quatrième mandat.",
@@ -196,7 +201,7 @@ const FICHES = [
    watch:"Positionnement de l'opposition, climat social dans les mois suivant l'investiture, et déroulement des élections législatives du 27 décembre 2025.",
    recoupement:"Recoupement du 25/08/2026 : la version initiale affirmait que la réélection s'était déroulée « sans large contestation violente rapportée ». C'est inexact : un bilan officiel du CNS (communiqué du 13/11/2025) fait état de 11 morts, 71 blessés et 1 658 interpellations liés au scrutin — un épisode documenté indépendamment par Africa Check. La phrase erronée a été retirée et remplacée par un renvoi vers une nouvelle fiche 10, dédiée à cet événement distinct (un événement = une fiche). Le taux de participation et l'exclusion judiciaire des deux principaux opposants, absents de la version initiale, ont aussi été ajoutés.",
    recoupementLabel:"FICHE CORRIGÉE APRÈS RECOUPEMENT"},
-  {id:7, cat:'Libertés publiques', level:'modere', date:'2025-10-21', dateLabel:'11/10/2025 — jugements 16 et 21/10/2025',
+  {id:7, country:'CIV',cat:'Libertés publiques', level:'modere', date:'2025-10-21', dateLabel:'11/10/2025 — jugements 16 et 21/10/2025',
    title:"Condamnations en série des manifestants du 11 octobre 2025",
    lieu:"Abidjan — marche à Cocody ; jugements au tribunal d'Abidjan-Plateau ; détentions à la Maca",
    fait:"Après une marche interdite du « Front commun » (PPA-CI, PDCI-RDA) le 11 octobre 2025 contre l'exclusion des candidatures de Gbagbo et Thiam et la candidature contestée d'Ouattara à un 4e mandat, la police a procédé à environ 700 interpellations. Deux vagues de jugements ont suivi : 26 condamnés à trois ans de prison ferme le 16 octobre (sur 32 jugés), puis 32 autres à la même peine assortie de 5 ans de privation de droits civiques le 21 octobre (sur 40 jugés) — au moins 58 condamnations au total.",
@@ -206,7 +211,7 @@ const FICHES = [
    watch:"Issue des appels (20 jours après le 21/10) ; éventuelles vagues de jugements supplémentaires ; conditions de détention à la Maca.",
    recoupement:"Recoupement du 25/08/2026 : le fait initial (26 condamnations, 16/10/2025) était exact mais incomplet. Une seconde vague de jugements le 21/10/2025 a condamné 32 personnes de plus à la même peine, portant le total à au moins 58 condamnations pour ce seul épisode. La localisation (Cocody, tribunal d'Abidjan-Plateau), initialement déduite, a été confirmée. Le total des interpellations varie selon les sources (≈700 selon le parquet d'Abidjan, 237 selon un article ultérieur de KOACI) — divergence signalée plutôt que résolue arbitrairement.",
    recoupementLabel:"FICHE COMPLÉTÉE APRÈS RECOUPEMENT"},
-  {id:8, cat:'Sécurité frontalière — nord', level:'eleve', date:'2025-08-25', dateLabel:'25/08/2025',
+  {id:8, country:'CIV',cat:'Sécurité frontalière — nord', level:'eleve', date:'2025-08-25', dateLabel:'25/08/2025',
    title:'Attaque armée du village de Difita (extrême nord-est)',
    lieu:'Village de Difita, département de Téhini, région du Bounkani — 2 km de la frontière burkinabée',
    fait:"Une attaque armée par des individus non identifiés a fait 4 morts (des paysans) et 1 disparu, avec une femme grièvement brûlée, des habitations incendiées, du bétail volé et des véhicules détruits ou emportés. L'État-major des Forces armées de Côte d'Ivoire (FACI) a qualifié l'attaque d'« acte terroriste » sans désigner d'auteurs, précisant que les assaillants avaient fui avant l'arrivée des troupes.",
@@ -216,7 +221,7 @@ const FICHES = [
    watch:"Résultats de l'enquête ivoirienne sur l'identité des assaillants ; suites diplomatiques avec le Burkina Faso ; coïncide avec l'enlèvement à Kalan 2 (fiche 9).",
    recoupement:"Recoupement du 25/08/2026 : la version initiale attribuait l'attaque « à des membres présumés des VDP », reprenant une hypothèse d'AllAfrica elle-même présentée comme une suspicion (« on soupçonne plutôt que... »), pas un fait établi. Le communiqué officiel de l'État-major ne désigne aucun auteur et ne mentionne pas les VDP ; une dépêche AFP (L'Orient-Le Jour) cite une source gouvernementale avançant au contraire un « règlement de compte » visant des soutiens présumés des VDP — les VDP comme cibles, pas comme auteurs ; un site d'analyse (Mondafrique, sourcing à traiter avec prudence : « documents confidentiels » non vérifiables) avance une troisième hypothèse non confirmée d'un mouvement anti-Ouattara. Les champs Fait et Source ont été révisés pour ne plus présenter l'attribution aux VDP comme acquise.",
    recoupementLabel:"FICHE CORRIGÉE APRÈS RECOUPEMENT"},
-  {id:9, cat:'Sécurité frontalière — nord', level:'eleve', date:'2025-08-24', dateLabel:'24/08/2025',
+  {id:9, country:'CIV',cat:'Sécurité frontalière — nord', level:'eleve', date:'2025-08-24', dateLabel:'24/08/2025',
    title:'Enlèvement de six agents ivoiriens de la DAARA à Kalan 2',
    lieu:'Kalan 2, localité frontalière du nord-est de la Côte d\'Ivoire, à proximité de Téhini/Difita',
    fait:"Six agents ivoiriens de la Direction d'aide et d'assistance aux réfugiés et apatrides (DAARA), en mission de recensement des populations déplacées, ont été interceptés dans leur véhicule de service et enlevés par des éléments se réclamant des VDP, qui les ont conduits en territoire burkinabè jusqu'à Moussokantou avant de les remettre à des hommes de l'armée régulière burkinabè, lesquels les auraient ensuite transférés par hélicoptère vers un lieu non identifié.",
@@ -226,7 +231,7 @@ const FICHES = [
    watch:"Sort exact des six agents et confirmation officielle de leur localisation ; évolution des relations Côte d'Ivoire–Burkina Faso ; un précédent existe (5 gendarmes capturés fin juin 2025, ensuite relâchés).",
    recoupement:"Recoupement du 25/08/2026 : contrairement à la version initiale (« à recouper »), le recoupement confirme largement les faits — au moins 7 médias indépendants, dont l'AIP (agence de presse publique), qui identifie précisément les victimes comme des agents de la DAARA en mission de recensement des demandeurs d'asile, un détail recoupant directement la fiche 5. Le devenir des agents après remise à l'armée burkinabè repose sur la seule source AllAfrica et reste à confirmer.",
    recoupementLabel:"FICHE COMPLÉTÉE APRÈS RECOUPEMENT"},
-  {id:10, cat:'Stabilité politique', level:'eleve', date:'2025-11-13', dateLabel:'13/11/2025',
+  {id:10, country:'CIV',cat:'Stabilité politique', level:'eleve', date:'2025-11-13', dateLabel:'13/11/2025',
    title:'Violences électorales : bilan officiel de l\'opération « Espérance »',
    lieu:"Localités dispersées, centre-ouest et sud du pays — cas documentés à Agboville, Daloa, Bonoua, Adzopé, Yamoussoukro et Nahio (Issia) ; le CNS ne détaille pas les localités",
    fait:"Le CNS a dressé le bilan de l'opération de sécurisation « Espérance » (44 000 agents mobilisés) pour la présidentielle du 25 octobre 2025 : 11 morts (dont un gendarme), 71 blessés et 1 658 interpellations, attribués aux appels à mobilisation du « Front commun » (PPA-CI, PDCI-RDA), qui contestaient l'exclusion judiciaire de leurs candidats et la légitimité du scrutin. Africa Check documente individuellement au moins huit décès : gendarme tué en mission à Agboville (20/10), homme décédé après interpellation à Daloa (19/10), manifestant de 22 ans abattu à Bonoua (13/10), nourrisson mort après inhalation de gaz lacrymogène à Adzopé (14/10), traumatisme crânien mortel à Yamoussoukro (21/10), et trois morts dans la nuit du 25 au 26/10 à Nahio (19 blessés, selon le procureur d'Issia). Les circonstances de Nahio restent disputées : Dozos et partisans du pouvoir accusés d'avoir attaqué des habitants ayant détruit des urnes (afrique-sur7.fr) contre un affrontement déclenché par des barrages empêchant le vote (version du parquet, AIP/KOACI) — non tranché ici.",
@@ -235,7 +240,512 @@ const FICHES = [
    impact:"Premier épisode de violence politique d'ampleur nationale rapporté dans ce dispositif depuis la crise post-électorale de 2010-2011, dans un contexte d'exclusion judiciaire des deux principaux candidats d'opposition et de contestation de la légitimité du scrutin (voir fiche 6) ; la dispersion géographique (au moins six localités) et la divergence d'attribution à Nahio illustrent la difficulté à établir une image incontestée des faits. Le Président a instruit le Garde des Sceaux d'accélérer les poursuites contre les responsables.",
    watch:"Suites judiciaires concrètes liées à ces 11 décès — aucune rapportée au-delà de l'instruction présidentielle du 13/11/2025 ; issue de l'enquête du procureur d'Issia sur Nahio ; prorogation d'un mois de l'interdiction des réunions politiques ; climat sécuritaire avant les législatives du 27 décembre 2025.",
    recoupement:"Recoupement du 25/08/2026 : la mention de Yopougon comme localité touchée reposait sur une allégation de bureaux de vote incendiés (24/10/2025) démontrée fausse par Africa Check — les images provenaient en réalité du Cameroun et d'Afrique du Sud, et des visites de terrain n'ont trouvé aucun bureau incendié. Cette mention a été retirée. En contrepartie, la fiche a été enrichie de huit décès individuellement documentés par Africa Check et du bilan officiel du procureur d'Issia sur Nahio (3 morts, 19 blessés, enquête ouverte) — dont les circonstances exactes restent disputées entre sources, signalé plutôt que tranché, comme pour l'attribution de la fiche 8. Le suivi judiciaire reste par ailleurs non confirmé au-delà d'une instruction présidentielle générale.",
-   recoupementLabel:"FICHE CORRIGÉE APRÈS RECOUPEMENT"}
+   recoupementLabel:"FICHE CORRIGÉE APRÈS RECOUPEMENT"},
+  {id:11, country:'MLI', cat:'Sécurité intérieure — insurrection jihadiste', level:'eleve', date:'2025-09-01', dateLabel:'Depuis début 09/2025, étendu à Bamako 10/2025 (en cours)',
+   title:'Blocus économique du JNIM sur Bamako',
+   lieu:'Axes routiers reliant Bamako au reste du pays (Ségou, San, Mopti, Koutiala), puis la capitale elle-même',
+   fait:"Depuis début septembre 2025, le JNIM a intensifié ses actions sur les axes routiers maliens (camions-citernes incendiés, entreprises de transport attaquées) avant d'étendre cette pression à Bamako à partir d'octobre 2025 sous forme d'un blocus routier visant l'approvisionnement en carburant de la capitale, toujours en cours à ce jour, avec un ravitaillement partiellement maintenu sous escorte militaire.",
+   source:"Jeune Afrique, France 24, The Conversation, AllAfrica, La Nouvelle Tribune — presse panafricaine et internationale de référence, forte convergence multi-sources sur la réalité et la durée du blocus ; les chiffres précis d'approvisionnement proviennent de communiqués officiels maliens et ne sont pas vérifiables de façon indépendante.",
+   sourceUrl:"https://www.france24.com/fr/afrique/20251110-mali-jnim-tente-asphyxier-%C3%A9conomie-pour-d%C3%A9clencher-m%C3%A9contentement-populaire-bamako-blocus",
+   impact:"Pénuries de carburant chroniques, inflation la plus élevée de la zone UEMOA depuis début 2025, fermetures temporaires d'écoles, usines fonctionnant par endroits à 15 % de leur capacité ; les analystes y voient une tentative du JNIM d'asphyxier l'économie pour délégitimer la junte et la présence militaire russe, sans recherche d'avancée territoriale directe.",
+   watch:"Capacité de l'armée malienne et des forces russes à sécuriser durablement les axes routiers ; risque de contagion du mécontentement économique vers une contestation politique plus large.",
+   recoupementLabel:""},
+  {id:12, country:'MLI', cat:'Stabilité politique', level:'eleve', date:'2025-05-13', dateLabel:'13/05/2025 (décret ; recommandation le 30/04/2025)',
+   title:'Dissolution des partis politiques',
+   lieu:'Bamako (siège du gouvernement de transition)',
+   fait:"Le président de la transition, le général d'armée Assimi Goïta, a signé un décret abrogeant la loi de 2005 sur les partis politiques, entraînant leur dissolution de facto, à la suite d'une recommandation adoptée en conseil des ministres le 30 avril 2025. Plusieurs figures de l'opposition ont été arrêtées dans les jours suivants (Alhassane Abba, Abdoul Karim Traoré, El Bachir Thiam, Abdrahamane Diarra).",
+   source:"AllAfrica, Agence Anadolu, ISS Africa (institut de recherche indépendant) — fiabilité correcte à élevée ; décret et arrestations largement recoupés, nombre exact de partis et de personnes arrêtées au-delà des cas cités non précisé de façon exhaustive.",
+   sourceUrl:"https://fr.allafrica.com/stories/202505190507.html",
+   impact:"Fermeture complète de l'espace politique légal au Mali, s'ajoutant à la suspension des activités partisanes en vigueur depuis 2024 ; risque de radicalisation de l'opposition désormais privée de cadre légal, dans un contexte déjà marqué par l'insurrection jihadiste et le blocus de Bamako (voir fiche 11).",
+   watch:"Suites judiciaires pour les responsables politiques arrêtés ; réponse de la CEDEAO et de la communauté internationale.",
+   recoupementLabel:""},
+  {id:13, country:'MLI', cat:'Stabilité politique', level:'eleve', date:'2025-07-03', dateLabel:'03/07/2025',
+   title:'Mandat présidentiel de 5 ans renouvelable pour Assimi Goïta',
+   lieu:'Bamako (Conseil national de transition)',
+   fait:"Le Conseil national de transition a adopté une loi accordant au général d'armée Assimi Goïta un mandat présidentiel de cinq ans, renouvelable « autant de fois que nécessaire » selon la presse, sans échéance électorale fixée — mettant fin de façon durable au retour à l'ordre constitutionnel prévu par la charte de transition d'octobre 2022.",
+   source:"France 24, Jeune Afrique, Le Devoir — presse internationale et panafricaine de référence, forte convergence pour l'adoption du texte ; le qualificatif « mandat illimité » employé par une partie de la presse reflète une interprétation journalistique plutôt qu'une citation littérale du décret.",
+   sourceUrl:"https://www.france24.com/en/live-news/20250703-mali-junta-chief-granted-renewable-presidential-mandate",
+   impact:"Consolidation durable d'un pouvoir militaire sans horizon électoral déterminé, faisant suite à la dissolution des partis politiques (fiche 12) ; retrait accru de tout mécanisme de contestation institutionnelle, dans un pays confronté à une insurrection jihadiste active et à un isolement diplomatique croissant depuis la sortie de la CEDEAO (janvier 2025).",
+   watch:"Réactions internes et internationales (CEDEAO, partenaires occidentaux et russes) ; calendrier électoral éventuel à moyen terme.",
+   recoupementLabel:""},
+  {id:14, country:'MLI', cat:'Intégrité territoriale — nord', level:'critique', date:'2026-04-26', dateLabel:'26-28/04/2026',
+   title:'Offensive coordonnée FLA-JNIM : perte de Kidal, ministre de la Défense tué',
+   lieu:'Bamako (résidence du ministre de la Défense, secteur de Kati) ; Kidal et région de Kidal (nord)',
+   fait:"Le général Sadio Camara, ministre de la Défense du Mali, a été tué le 26 avril 2026 lors d'une attaque contre sa résidence à Bamako (véhicule piégé puis assaut armé). Cette attaque s'inscrit dans une offensive coordonnée menée conjointement par le Front de Libération de l'Azawad (FLA, séparatiste touareg, dirigé par Alghabass Ag Intalla) et le JNIM — une alliance tactique inédite entre les deux groupes — contre des positions militaires maliennes dans plusieurs villes du nord et du centre le week-end du 26 au 28 avril 2026. Le FLA a revendiqué la prise de Kidal ; l'armée malienne et les forces russes (Africa Corps) se sont repositionnées à Anefis, à environ 100 km au sud.",
+   source:"France 24, Jeune Afrique, Euronews, Al Jazeera — presse internationale de référence, forte convergence sur les faits centraux (mort du ministre, abandon de Kidal, alliance FLA-JNIM) ; les bilans chiffrés des pertes (Africa Corps : 2 500+ ; Russie : 305+ ; FLA : 200+ capturés) proviennent de sources partisanes au conflit, non recoupées indépendamment et non retenus comme faits établis.",
+   sourceUrl:"https://www.france24.com/fr/vid%C3%A9o/20260426-mali-le-ministre-de-la-d%C3%A9fense-sadio-camara-tu%C3%A9-dans-une-attaque-%C3%A0-kati",
+   impact:"Coup le plus sévère porté à la junte malienne depuis sa prise de pouvoir en 2020-2021 : assassinat d'un ministre clé, perte de contrôle d'une ville stratégique du nord, et apparition d'une coordination tactique entre un mouvement séparatiste touareg et un groupe jihadiste affilié à al-Qaïda — deux acteurs historiquement distincts — constituant une escalade qualitative majeure de la menace pesant sur l'État malien.",
+   watch:"Capacité de l'armée malienne et de ses partenaires russes à reprendre l'initiative militaire ; solidité de l'alliance tactique FLA-JNIM dans la durée ; risque d'extension à d'autres zones du pays.",
+   recoupementLabel:""},
+  {id:15, country:'BFA', cat:'Sécurité intérieure — siège et blocus jihadistes', level:'eleve', date:'2025-05-11', dateLabel:'Blocus en cours depuis 16-17/02/2022 — attaque majeure le 11/05/2025',
+   title:'Siège de Djibo par le JNIM',
+   lieu:'Djibo, région du Sahel (nord du Burkina Faso)',
+   fait:"La ville de Djibo, chef-lieu de la province du Soum, est assiégée depuis février 2022 par le JNIM via sa Katiba Macina, qui impose un blocus sur les axes d'approvisionnement (vivres, carburant, médicaments) — l'un des sièges les plus longs et documentés du Sahel. Le 11 mai 2025, une attaque jihadiste majeure a visé la garnison et la ville ; le bilan humain est disputé selon les sources. L'émir local Boubakari Dicko, ayant œuvré pour l'apaisement, est mort le 19/11/2025 ; son rôle exact dans d'éventuelles médiations avec les groupes armés n'est pas établi par les sources consultées.",
+   source:"International Crisis Group (ONG, analyse reconnue sur le Sahel) et France 24 — désaccord de bilan sur l'attaque du 11/05/2025 : l'ICG évoque « plus d'une centaine » de victimes, France 24 « plusieurs dizaines » ; aucun bilan officiel chiffré publié. AllAfrica et MSF corroborent la réalité et la gravité du blocus humanitaire sur la durée.",
+   sourceUrl:"https://www.crisisgroup.org",
+   impact:"Illustre la capacité du JNIM à isoler durablement une ville moyenne de l'appareil d'État sur plusieurs années, avec des conséquences humanitaires majeures (accès alimentaire et sanitaire) et un risque de bascule en cas d'affaiblissement supplémentaire de la garnison.",
+   watch:"Évolution du blocus, capacité de ravitaillement par convois militaires ou aériens, tout signe de négociation locale ou de bascule du contrôle territorial.",
+   recoupement:"Recoupement du 25/08/2026 : une source secondaire (Wikipédia) suggérait que la mort de Boubakari Dicko aurait affaibli des perspectives de médiation avec les jihadistes. Vérification auprès de la source primaire (AllAfrica) : celle-ci ne mentionne aucun rôle de médiation avec les jihadistes, seulement un travail général « pour la paix et la cohésion » en tant que figure coutumière et religieuse. Cette déduction non étayée a été écartée de la fiche.",
+   recoupementLabel:"FICHE AJOUTÉE APRÈS RECOUPEMENT"},
+  {id:16, country:'BFA', cat:'Sécurité intérieure — violences armées', level:'eleve', date:'2026-02-12', dateLabel:'12-14/02/2026',
+   title:'Attaques coordonnées à Titao, Tandjari et Bilanga',
+   lieu:'Titao (région du Nord), Tandjari et Bilanga (région de l\'Est)',
+   fait:"Attaques armées coordonnées ayant visé plusieurs localités du nord et de l'est du pays sur une fenêtre de trois jours, faisant au moins 10 morts au total selon les décomptes agrégés de la presse. Le ou les groupes responsables ne sont pas identifiés avec certitude ; le contexte régional (présence établie du JNIM et de l'État islamique au Sahel dans ces zones) rend plausible l'implication de l'un ou l'autre groupe, sans attribution précise confirmée.",
+   source:"Presse panafricaine (agrégation de dépêches, fiabilité moyenne à confirmer par recoupement supplémentaire) — événement rapporté de façon convergente sur l'existence et la simultanéité des attaques, précision insuffisante sur l'attribution et le détail du bilan par site.",
+   sourceUrl:"https://www.jeuneafrique.com",
+   impact:"Confirme la persistance et la dispersion géographique de la menace armée sur au moins deux régions distinctes (Nord et Est) en dehors des zones de blocus déjà connues (Djibo), traduisant une pression sécuritaire multi-foyers.",
+   watch:"Recoupement complémentaire pour établir une attribution fiable et un bilan détaillé par localité ; suivi de la réponse des Forces armées burkinabè (FAB) et des VDP dans ces zones.",
+   recoupementLabel:""},
+  {id:17, country:'BFA', cat:'Stabilité politique — transition militaire', level:'eleve', date:'2024-05-25', dateLabel:'25/05/2024',
+   title:'Prolongation de la transition militaire de 5 ans pour Ibrahim Traoré',
+   lieu:'Ouagadougou (Assises nationales)',
+   fait:"Des assises nationales tenues à Ouagadougou ont acté la prolongation de la transition militaire dirigée par le capitaine Ibrahim Traoré pour une durée de cinq ans, reportant les élections initialement prévues à une échéance désormais fixée à 2029. Ces assises n'ont pas constitué un processus indépendant ou pluraliste — elles ont été organisées sous l'égide de la transition militaire elle-même.",
+   source:"Jeune Afrique et France 24 — presse de référence, tenue des assises et décision rapportées de façon convergente et confirmée.",
+   sourceUrl:"https://www.jeuneafrique.com",
+   impact:"Consolide durablement le pouvoir militaire en place et écarte toute échéance électorale à court ou moyen terme, avec un risque de contestation politique et de tensions avec les partis d'opposition et la société civile sur la durée.",
+   watch:"Réactions de l'opposition politique et de la société civile burkinabè ; tenue effective — ou nouveau report — de l'échéance électorale annoncée pour 2029.",
+   recoupementLabel:""},
+  {id:18, country:'BEN', cat:'Sécurité frontalière — nord (insurrection jihadiste)', level:'critique', date:'2025-01-08', dateLabel:'8 janvier 2025',
+   title:'Attaque jihadiste au "Point Triple" — au moins 28 soldats tués',
+   lieu:'Zone frontalière tripoint Bénin-Niger-Burkina Faso, secteur de Kandi (déduit — Kandi identifiée comme point de rapatriement des corps, à environ 1h du site attaqué)',
+   fait:"Un poste militaire béninois proche du point de convergence des frontières Bénin-Niger-Burkina Faso a été attaqué par des combattants jihadistes non formellement identifiés. Au moins 28 militaires ont été tués, ce qui en fait l'attaque la plus meurtrière subie par l'armée béninoise depuis 2021 selon la presse. L'armée revendique une riposte ayant neutralisé une quarantaine d'assaillants, information non vérifiée de manière indépendante.",
+   source:"AllAfrica, HumAngle Media, Africa Defense Forum — presse spécialisée Afrique de l'Ouest/sécurité, forte convergence sur le bilan de 28 morts; le groupe responsable n'est identifié par aucune des sources consultées.",
+   sourceUrl:'https://fr.allafrica.com/stories/202501100005.html',
+   impact:"Confirme l'expansion vers le sud de la menace jihadiste sahélienne (JNIM/EIGS) le long de la frontière nord, avec un coût humain élevé pour les forces de défense béninoises.",
+   watch:'Fréquence et bilan des attaques suivantes dans le même corridor frontalier au cours de 2025-2026.',
+   recoupementLabel:""},
+  {id:19, country:'BEN', cat:"Stabilité politique — tentative de coup d'État", level:'critique', date:'2025-12-07', dateLabel:'7 décembre 2025 (matin)',
+   title:"Tentative de coup d'État militaire à Cotonou contre Patrice Talon",
+   lieu:'Cotonou (résidence présidentielle)',
+   fait:"Des militaires ont attaqué la résidence présidentielle à l'aube et annoncé sur les médias nationaux la destitution du président Patrice Talon. L'armée loyaliste, appuyée par une intervention nigériane (frappes aériennes et troupes au sol) et un soutien de la CEDEAO, a repris le contrôle dans la journée; Talon est réapparu à la télévision le soir même affirmant la situation « totalement sous contrôle ». Des hauts gradés brièvement retenus en otage ont été libérés et une traque des suspects se poursuivait encore en juillet 2026.",
+   source:"Euronews/Africanews, PBS NewsHour, AllAfrica (citant ONU/CEDEAO), diplomatie.gouv.fr — forte convergence de sources internationales et gouvernementales indépendantes sur la date, le lieu et l'issue; bilan humain précis et identité complète des putschistes non publiés dans les sources consultées.",
+   sourceUrl:'https://www.diplomatie.gouv.fr/en/country-files/benin/news/article/benin-attempted-coup-d-etat-7-december-2025',
+   impact:"Démontre une vulnérabilité réelle des institutions béninoises à une action de force interne, dans un contexte régional de coups d'État successifs (Mali, Burkina Faso, Niger); l'intervention militaire étrangère (Nigeria) souligne la fragilité de la réponse nationale seule.",
+   watch:'Issue des procédures judiciaires contre les suspects du putsch et risque de récidive dans le contexte de la transition présidentielle.',
+   recoupementLabel:""},
+  {id:20, country:'BEN', cat:'Sécurité frontalière — nord (insurrection jihadiste)', level:'critique', date:'2026-03-05', dateLabel:'5 mars 2026',
+   title:'Attaque JNIM contre un camp militaire à Kofouno — bilan disputé (15 à 22 morts)',
+   lieu:'Village de Kofouno, nord du Bénin, à environ 15 km de la frontière avec le Niger',
+   fait:"Le Groupe de soutien à l'islam et aux musulmans (JNIM, affilié à Al-Qaïda) a revendiqué l'attaque d'un camp militaire près de Kofouno. L'armée béninoise a annoncé un bilan de 15 soldats tués et 5 blessés, affirmant avoir neutralisé au moins 4 assaillants; le réseau de journalistes ouest-africains Wamaps a rapporté un bilan divergent d'au moins 22 soldats tués. Cette attaque s'inscrit dans une escalade après une précédente attaque JNIM d'avril 2025 ayant coûté 54 vies à l'armée béninoise, faisant de la période la plus meurtrière pour les forces béninoises.",
+   source:"AllAfrica, Africa Radio, La Presse (Canada) — convergence sur la date, le lieu et la revendication JNIM; le bilan humain exact reste disputé entre la version officielle (15 morts) et celle d'un média indépendant (22 morts), signalé explicitement comme non consensuel.",
+   sourceUrl:'https://fr.allafrica.com/stories/202603060730.html',
+   impact:"Confirme la poursuite et l'intensification de l'expansion du JNIM vers les pays côtiers du golfe de Guinée, avec un bilan humain élevé et récurrent pour l'armée béninoise malgré l'opération « Mirador ».",
+   watch:'Nouvelles attaques JNIM dans le corridor Kofouno-Point Triple et évolution du bilan humain réel (versions officielle vs. indépendante).',
+   recoupementLabel:""},
+  {id:21, country:'BEN', cat:'Stabilité politique — élection présidentielle et pluralisme', level:'modere', date:'2026-04-12', dateLabel:'12 avril 2026 (scrutin), résultats définitifs le 23-24 avril 2026',
+   title:'Romuald Wadagni élu président avec environ 94% des voix, principale opposition exclue du scrutin',
+   lieu:'Ensemble du territoire national',
+   fait:"Romuald Wadagni, ministre des Finances et candidat désigné de la majorité présidentielle, a été proclamé vainqueur de la présidentielle avec un score compris entre 94,05% et 94,27% des voix selon les sources (écart entre résultats provisoires et définitifs de la Cour constitutionnelle). Le parti d'opposition Les Démocrates avait été écarté de la course par la Cour constitutionnelle fin octobre 2025 après l'invalidation de son parrainage; le seul autre candidat en lice, Paul Hounkpè, a reconnu sa défaite. Ce scrutin fait suite à des législatives de janvier 2026 où l'opposition avait perdu tous ses sièges parlementaires.",
+   source:"Jeune Afrique, France 24, Le Matinal, AllAfrica — forte convergence de presse panafricaine et internationale de référence sur le résultat et le contexte d'exclusion de l'opposition; le taux de participation exact n'a pas été confirmé avec précision dans les sources consultées.",
+   sourceUrl:'https://www.france24.com/fr/afrique/20260414-candidat-majorite-romuald-wadagni-elu-president-benin-score-ecrasant-patrice-talon-afrique-election-participation',
+   impact:"Consolide une transition contrôlée du pouvoir en faveur du camp Talon mais dans un contexte de rétrécissement marqué du pluralisme politique (exclusion de l'opposition principale des deux derniers scrutins), facteur de risque de contestation et de délégitimation à moyen terme.",
+   watch:"Réactions des Démocrates et de la société civile à la nouvelle présidence Wadagni, et respect des engagements pris envers l'opposition évincée.",
+   recoupementLabel:""},
+  {id:22, country:'CPV', cat:'Catastrophe naturelle / Gestion de crise', level:'modere', date:'2025-08-11', dateLabel:"10-11 août 2025 (état d'urgence déclaré le 13 août 2025)",
+   title:"Inondations meurtrières et état d'urgence à São Vicente et Santo Antão",
+   lieu:'Îles de São Vicente (notamment Mindelo) et Santo Antão, Cap-Vert',
+   fait:"Les 10 et 11 août 2025, la tempête tropicale Erin a déversé environ 193 mm de pluie en cinq heures sur São Vicente, provoquant des crues soudaines dévastatrices sur deux îles. Le bilan humain diverge selon la source et la date de publication : au moins 9 morts selon les premiers bilans (BBC, 13 août), puis au moins 12 morts et 5 disparus selon la Fédération internationale des sociétés de la Croix-Rouge (IFRC, 29 août) — le bilan doit être considéré comme évolutif, non définitif. Plus de 119 000 personnes ont été affectées, environ 1 500 déplacées, et les infrastructures critiques gravement endommagées (5 ponts détruits, plus de 60 km de routes touchées, réseau d'eau de Mindelo hors service, pertes de stocks vaccinaux). Le gouvernement a déclaré l'état d'urgence sur les deux îles.",
+   source:"Confirmé par au moins deux sources indépendantes : BBC News Afrique (13 août 2025, relayé par Maghrebi.org) et la Fédération internationale des sociétés de la Croix-Rouge / IFRC (appel d'urgence officiel, 29 août 2025). Le bilan humain exact varie selon la source et n'a pas de chiffre officiel final identifié à ce jour.",
+   sourceUrl:'https://www.ifrc.org/press-release/ifrc-launches-emergency-appeal-respond-devastating-floods-cape-verde',
+   impact:"Dégâts matériels majeurs sur les infrastructures critiques (ponts, routes, eau, santé) de deux îles, avec risque de perturbation prolongée de l'activité économique et touristique locale ; recours à l'aide internationale (appel IFRC de 3 millions CHF).",
+   watch:'Suivre la reconstruction des infrastructures avant la prochaine saison des pluies et la révision finale éventuelle du bilan humain.',
+   recoupementLabel:""},
+  {id:23, country:'CPV', cat:'Stabilité politique / Gouvernance', level:'faible', date:'2026-05-17', dateLabel:'17 mai 2026 (élections) — résultats officiels le 30 mai 2026 ; investiture du gouvernement le 19 juin 2026',
+   title:'Alternance politique : le PAICV remporte les législatives et forme un nouveau gouvernement',
+   lieu:'Praia et ensemble du territoire national, Cap-Vert',
+   fait:"Le 17 mai 2026, le parti d'opposition PAICV a remporté les élections législatives avec 48,04% des voix et une majorité absolue de 37 sièges sur 72, mettant fin à dix ans de pouvoir du MpD (Mouvement pour la démocratie) du Premier ministre sortant Ulisses Correia e Silva. La marge de victoire était étroite (environ 5 000 voix sur ~190 000 votants) et l'abstention (46,5% à 53,5% selon les sources) a été qualifiée de record historique par la commission électorale. Francisco Carvalho (PAICV) a été investi Premier ministre le 19 juin 2026 à Praia, dans un contexte de cohabitation avec le président José Maria Neves, déjà du PAICV. Aucune violence ni incident électoral majeur n'a été rapporté.",
+   source:"Confirmé par au moins deux sources indépendantes : RFI/AFP (relayé par Yahoo Actualités France, 30 mai 2026) et Africanews (29 mai 2026) pour les résultats ; agence Xinhua et médias cap-verdiens (Expresso das Ilhas, A Nação, RTP) pour l'investiture du 19 juin 2026.",
+   sourceUrl:'https://www.africanews.com/2026/05/29/ruling-bloc-ousted-as-opposition-paicv-secures-clear-parliamentary-win/',
+   impact:'Changement de majorité gouvernementale après une décennie de continuité MpD, dans un contexte de cohabitation avec un président PAICV déjà en fonction ; transition qualifiée de pacifique et conforme à la tradition démocratique du pays (aucune violence électorale depuis 1991).',
+   watch:"Surveiller la mise en œuvre du programme du nouveau gouvernement (coût de la vie, chômage des jeunes) et le déroulement de l'élection présidentielle prévue le 15 novembre 2026, qui n'a pas encore eu lieu à ce jour (25/08/2026).",
+   recoupementLabel:""},
+  {id:24, country:'GMB', cat:'Intégrité territoriale / Relations frontalières', level:'eleve', date:'2026-07-16', dateLabel:'16 juillet 2026 (incident) ; accord de démarcation signé le 29 juillet 2026',
+   title:"Incident frontalier de Bulock : des militaires sénégalais démolissent la clôture d'un poste militaire gambien",
+   lieu:'Bulock, district de Foni Bintang Karanai, Région de la côte ouest (Gambie) — zone frontalière avec le Sénégal',
+   fait:"Le 16 juillet 2026, des militaires sénégalais sont entrés à proximité d'un poste militaire gambien à Bulock et ont démoli une partie de sa clôture périmétrique, Dakar revendiquant la zone comme territoire sénégalais. Le gouvernement gambien a qualifié l'acte de « profondément provocateur et totalement inacceptable », tandis que les soldats gambiens sur place ont fait preuve de retenue, évitant toute confrontation armée. Le 29 juillet 2026, le Secrétariat permanent sénégalo-gambien a annoncé un accord définitif de démarcation, avec reprise des travaux de bornage prévue à partir du 15 août 2026.",
+   source:'Fait confirmé par des sources gambiennes multiples (déclaration officielle du gouvernement gambien relayée par The Point, JollofNews, The Gambia Journal, Standard.gm) et par une source sénégalaise (Seneweb) qui corrobore la version des faits ; fiabilité élevée.',
+   sourceUrl:'https://thepoint.gm/africa/gambia/headlines/gambia-govt-issues-statement-on-bulock-military-camp-border-incident',
+   impact:"L'incident illustre la fragilité persistante de la démarcation frontalière coloniale héritée de 1889 et le risque de friction militaire directe entre deux États normalement alliés ; il a mobilisé le ministre des Affaires étrangères gambien au niveau présidentiel sénégalais.",
+   watch:"Suivre la mise en œuvre effective du bornage prévu à partir du 15 août 2026 et les différends fonciers connexes qui pourraient raviver les tensions locales malgré l'accord interétatique.",
+   recoupementLabel:""},
+  {id:25, country:'GMB', cat:"Sécurité intérieure / Débordement transfrontalier d'un conflit armé", level:'eleve', date:'2026-03-12', dateLabel:"à partir du 12 mars 2026, affrontements se poursuivant jusqu'à fin mars 2026",
+   title:'Débordement des combats Sénégal–MFDC sur des villages frontaliers gambiens de Foni',
+   lieu:'Villages du Foni Bintang Karani — Jakine/Jakin, Kayengha, Kamosorr, Batendeng, Ajapineh, Giffangha (Région de la côte ouest, Gambie), frontaliers de la Casamance sénégalaise',
+   fait:"À partir du 12 mars 2026, des affrontements entre les forces armées sénégalaises et les séparatistes du Mouvement des forces démocratiques de Casamance (MFDC) se sont intensifiés côté sénégalais et ont débordé sur des villages frontaliers gambiens. Des tirs isolés ont touché des habitations et enclos civils, notamment à Sibanor, provoquant la fuite de plusieurs familles vers Sibanor, Tampoto et Kabaocorr ainsi que la fermeture d'écoles. Des allégations de prise d'otages de civils par des hommes armés n'ont pas été confirmées de façon indépendante.",
+   source:"Recoupé par plusieurs médias gambiens indépendants (Alkamba Times, The Gambia Journal, Standard.gm, Voice Out Digital, Askanwi) ainsi que par les déclarations de plusieurs députés du Foni à l'Assemblée nationale. Aucune source internationale ni confirmation militaire officielle gambienne trouvée à ce stade — à traiter comme solidement documenté par la presse locale mais non confirmé par une agence internationale.",
+   sourceUrl:'https://gambiaj.com/news/politics/national-assembly/foni-lawmakers-raise-alarm-as-casamance-violence-displaces-gambian-border-communities/',
+   impact:"Menace directement la sécurité et les moyens de subsistance des populations frontalières gambiennes, expose la porosité de la frontière avec un conflit séparatiste sénégalais actif, et a suscité une motion parlementaire demandant l'intervention du président Barrow.",
+   watch:'Surveiller toute reprise des combats MFDC–Sénégal, de nouvelles intrusions de tirs ou de combattants en territoire gambien, ainsi que la réponse humanitaire et sécuritaire effective des autorités gambiennes.',
+   recoupementLabel:""},
+  {id:26, country:'GMB', cat:'Stabilité politique / Justice transitionnelle', level:'modere', date:'2026-04-09', dateLabel:'annonce le 9 avril 2026 ; prestation de serment le 9 mai 2026',
+   title:"Nomination controversée d'un procureur spécial étranger pour juger les crimes de l'ère Jammeh",
+   lieu:'Banjul, Gambie',
+   fait:"Le barrister britannique Martin Hackett a été nommé procureur spécial de la Gambie, chargé de poursuivre environ 70 personnes visées par les recommandations de la Commission Vérité, Réconciliation et Réparations (TRRC) pour des crimes commis sous le régime de Yahya Jammeh (1994-2017) ; il a prêté serment le 9 mai 2026 pour un mandat de quatre ans renouvelable. Cette nomination, intervenue près de deux ans après la création du poste, a été critiquée pour sa lenteur et pour le choix d'un non-Gambien, en contradiction apparente avec la loi de 2024 sur le Bureau du procureur spécial.",
+   source:'Confirmé par plusieurs sources indépendantes convergentes : Africanews, ISS Africa (analyse détaillée de la controverse), Polity.org, ainsi que le site officiel du ministère de la Justice gambien ; fiabilité élevée.',
+   sourceUrl:'https://issafrica.org/iss-today/the-gambia-s-first-special-prosecutor-a-non-gambian',
+   impact:"La nomination fait avancer concrètement le mécanisme judiciaire hybride ECOWAS/Gambie pour les crimes de l'ère Jammeh, mais le choix d'un procureur étranger et la lenteur du processus risquent d'affaiblir la légitimité perçue du processus de justice transitionnelle.",
+   watch:"Suivre le financement effectif du tribunal spécial, l'ouverture des premières inculpations, et les réactions des associations de victimes.",
+   recoupementLabel:""},
+  {id:27, country:'GMB', cat:'Stabilité politique / Sécurité intérieure — libertés civiles', level:'modere', date:'2025-05-08', dateLabel:'8 mai 2025',
+   title:'Manifestation anti-corruption de masse à Banjul et arrestations de manifestants et journalistes',
+   lieu:'Banjul, Gambie',
+   fait:"Le 8 mai 2025, le collectif civique Gambians Against Looted Assets (GALA) a organisé à Banjul ce qui a été présenté comme la plus grande manifestation de jeunesse de l'histoire du pays, dénonçant la vente jugée opaque et sous-évaluée des biens de l'ex-président Yahya Jammeh. Au moins 27 manifestants et 2 journalistes ont été interpellés par la police ; les personnes détenues ont été relâchées dans les jours suivants. Le gouvernement a défendu la légalité des ventes d'actifs, tandis que les organisateurs réclamaient une gestion publique et transparente du patrimoine (environ 362 millions USD détournés selon la Commission Janneh de 2019, un montant que des enquêtes indépendantes jugent nettement sous-estimé).",
+   source:"Fait bien établi par de multiples sources indépendantes : dépêche d'agence (AP, reprise par kdhnews.com et standard-journal.com), Peoples Dispatch, The Alkamba Times, Foroyaa Newspaper et Standard.gm ; fiabilité élevée.",
+   sourceUrl:'https://peoplesdispatch.org/2025/05/14/the-beginning-of-a-new-revolution-gambian-youth-protest-state-corruption-face-mass-arrests/',
+   impact:"Révèle une tension sociale croissante autour de la gestion de l'héritage de l'ère Jammeh et de la perception d'impunité/copinage politique ; a suscité des condamnations d'ONG de défense des droits humains et de syndicats de presse pour atteinte aux libertés civiles.",
+   watch:"Surveiller la récurrence de mobilisations similaires (une nouvelle vague d'arrestations liées à des manifestations anti-corruption s'est reproduite en septembre 2025) et la réponse des autorités aux appels à la transparence sur les avoirs de Jammeh.",
+   recoupementLabel:""},
+  {id:28, country:'GHA', cat:'Conflit communautaire / violence armée', level:'eleve', date:'2026-04-28', dateLabel:'28 avril 2026',
+   title:'Embuscade meurtrière contre un convoi militaire près de Binduri',
+   lieu:'Binduri, région du Haut-Est (axe Bawku–Bolgatanga)',
+   fait:"Un convoi civil de 140 personnes escorté par l'armée a été pris en embuscade par des hommes armés non identifiés. Trois civils ont été tués et un blessé ; les forces armées ripostant ont tué sept assaillants et récupéré des armes. Vingt et une personnes ont depuis été arrêtées dans le cadre de l'enquête. L'incident s'inscrit dans le conflit de longue durée entre Kusasi et Mamprusi autour de la chefferie de Bawku, qui a fait plus de 300 morts depuis 2021.",
+   source:'Confirmé par les Forces armées ghanéennes (GAF) et repris de façon convergente par au moins 6 médias indépendants (Ghanaian Times, NewsGhana, The Defense Post, GBC Ghana Online, AllAfrica, Graphic Online) — fiabilité élevée, faits établis.',
+   sourceUrl:'https://ghanaiantimes.com.gh/gaf-confirms-bazua-attack-3-civilians-7-assailants-killed/',
+   impact:"Interruption et sécurisation renforcée d'un axe commercial stratégique reliant Bawku à Bolgatanga ; restriction des motos et maintien du couvre-feu dans la zone ; risque de nouvelle escalade intercommunautaire.",
+   watch:"Surveiller la reprise d'attaques similaires sur les axes escortés et l'évolution des poursuites judiciaires contre les 21 personnes arrêtées.",
+   recoupementLabel:""},
+  {id:29, country:'GHA', cat:'Terrorisme transfrontalier (spillover sahélien)', level:'eleve', date:'2026-02-14', dateLabel:'14 février 2026 (bilan final de 8 morts confirmé dans les jours suivants)',
+   title:'Attaque jihadiste contre des commerçants ghanéens de tomates au Burkina Faso',
+   lieu:'Titao, Burkina Faso (hors du territoire ghanéen, sur un axe commercial fréquenté par des ressortissants du Ghana)',
+   fait:"Un camion transportant des commerçants et chauffeurs ghanéens de tomates a été attaqué par des hommes armés à Titao. Les hommes ont été abattus, les femmes épargnées selon un témoin cité par la presse ; le bilan a atteint 8 morts ghanéens après le décès d'un blessé hospitalisé. L'armée de l'air ghanéenne a rapatrié des survivants.",
+   source:"Confirmé par un communiqué officiel du ministère de l'Intérieur ghanéen et recoupé par de multiples médias (NewsGhana, GBC Ghana Online, GhanaWeb, Anadolu) — fiabilité élevée. Le groupe responsable n'est pas nommé officiellement ; un article d'analyse (African Arguments) situe l'incident dans le contexte de la présence opérationnelle de JNIM le long de la frontière, mais cette attribution reste une déduction analytique, non une confirmation officielle.",
+   sourceUrl:'https://www.mint.gov.gh/ghanaian-tomato-traders-attacked-in-burkina-faso-terrorist-incident/',
+   impact:"Met en évidence l'exposition de la chaîne d'approvisionnement alimentaire ghanéenne et des ressortissants ghanéens à la violence jihadiste sahélienne ; a motivé une escorte militaire des convois commerciaux sur les axes à risque et une réactivation de la coopération bilatérale sécuritaire avec le Burkina Faso.",
+   watch:'Surveiller les incidents similaires touchant des ressortissants ghanéens au Burkina Faso et toute pénétration confirmée de groupes armés sur le territoire ghanéen (602 km de frontière commune).',
+   recoupementLabel:""},
+  {id:30, country:'GHA', cat:'Gouvernance sécuritaire / criminalité organisée (orpaillage illégal)', level:'modere', date:'2025-09-29', dateLabel:'fin septembre 2025',
+   title:"Le gouvernement déclare forêts et cours d'eau « zones de sécurité » contre le galamsey",
+   lieu:'Ensemble du territoire national, zones forestières et bassins fluviaux prioritaires (notamment régions Ashanti et Ouest)',
+   fait:"Le ministre des Terres et Ressources naturelles, Emmanuel Armah-Kofi Buah, a annoncé la désignation des réserves forestières et cours d'eau comme « zones de sécurité », conférant aux forces de sécurité (task force NAIMOS) des pouvoirs élargis pour agir contre les mineurs illégaux, qualifiés d'« ennemis de l'État ». Cette mesure a été présentée comme une alternative à un état d'urgence complet.",
+   source:"Annonce officielle relayée par le ministère des Terres et Ressources naturelles et confirmée par au moins 5 médias ghanéens indépendants (Graphic Online, Adomonline, GhanaWeb, Ghanamma, NewsGhana) — fiabilité élevée pour l'annonce elle-même.",
+   sourceUrl:'https://mlnr.gov.gh/government-declares-forests-and-rivers-security-zones-lands-minister-charges-naimos-to-be-ruthless-against-illegal-miners/',
+   impact:"Le galamsey est documenté par l'Africa Center for Strategic Studies comme ayant fait plus de 50 morts parmi les forces de sécurité et 120 morts civils ces dernières années, avec environ 1 500 armes illégales saisies par an dans les seules régions Ashanti et Ouest ; l'extension des pouvoirs de sécurité accroît le risque de confrontations armées.",
+   watch:"Surveiller les affrontements entre forces de sécurité et réseaux miniers armés et l'application effective de cette désignation sur le terrain.",
+   recoupementLabel:""},
+  {id:31, country:'GHA', cat:'Conflit communautaire / ordre public', level:'modere', date:'2026-06-19', dateLabel:'19 juin 2026',
+   title:"Couvre-feu imposé dans plusieurs localités de Nkwanta South (région de l'Oti)",
+   lieu:"Nkwanta South Municipality, région de l'Oti — 11 communautés nommées",
+   fait:"Sur avis du Conseil national de sécurité, le gouvernement a imposé un couvre-feu quotidien (17h–6h) et une interdiction totale du port d'armes dans 11 localités de Nkwanta South, en réponse à des « tensions sécuritaires renouvelées » et à des troubles communautaires récurrents liés à des différends fonciers, de chefferie et d'influence politique locale. Un précédent connu (non confirmé comme lié directement) est un affrontement mortel survenu le 26 juin 2025 lors d'une cérémonie coutumière.",
+   source:"Avis officiel du ministère de l'Intérieur confirmé par au moins 6 médias ghanéens (Pulse Ghana, Modernghana, YEN.com.gh, The Ghanaian Chronicle, Adomonline, Citinewsroom) — fiabilité élevée pour la mesure elle-même ; le lien exact avec l'incident déclencheur de 2026 reste à confirmer.",
+   sourceUrl:'https://www.mint.gov.gh/imposition-of-curfew-in-nkwanta-south-municipality-in-the-oti-region/',
+   impact:"Restriction de la circulation et de l'activité économique locale dans les communautés visées ; signale un foyer de tension distinct de Bawku, dans un contexte où plusieurs zones du Ghana connaissent des différends locaux (foncier, chefferie) à répétition.",
+   watch:'Surveiller la levée ou la prolongation du couvre-feu et toute reprise de violence intercommunautaire à Nkwanta South.',
+   recoupementLabel:""},
+  {id:32, country:'GIN', cat:'Transition politique / Réforme constitutionnelle', level:'modere', date:'2025-09-21', dateLabel:'21 septembre 2025 (vote) — validation Cour suprême le 26 septembre 2025',
+   title:"Adoption par référendum d'une nouvelle Constitution mettant fin à la transition",
+   lieu:'Guinée (ensemble du territoire national)',
+   fait:"Le 21 septembre 2025, les Guinéens ont voté lors d'un référendum constitutionnel organisé par le régime militaire du général Mamadi Doumbouya. Selon les résultats validés par la Cour suprême le 26 septembre 2025, le « Oui » l'a emporté à 89,38 % avec une participation revendiquée supérieure à 91 %. Le texte, promulgué fin septembre 2025, ouvre la voie à une présidentielle et permet à Doumbouya de se présenter, malgré des critiques de l'opposition sur la sincérité du scrutin.",
+   source:'Fait largement corroboré : France24, Jeune Afrique, Africa Guinée, Guinée360, MediaGuinée convergent sur le score de 89,38 % et la date de validation. Les chiffres de participation proviennent de sources officielles (MATD/Cour suprême guinéenne), non vérifiables de façon indépendante.',
+   sourceUrl:'https://www.france24.com/fr/afrique/20250924-r%C3%A9f%C3%A9rendum-guin%C3%A9ens-approuvent-nouvelle-constitution-visant-fin-transition-junte-referendum-guinee',
+   impact:"Ce référendum consolide juridiquement la mainmise du CNRD sur le pouvoir et lève l'obstacle constitutionnel à une candidature de Doumbouya, achevant la « transition » sur ses propres termes plutôt que sur ceux fixés initialement avec la CEDEAO.",
+   watch:"Suivre la mise en œuvre effective des nouvelles institutions prévues par la Constitution et la réaction de l'opposition/société civile exclue du processus.",
+   recoupementLabel:""},
+  {id:33, country:'GIN', cat:'Élection présidentielle / Consolidation du pouvoir militaire', level:'eleve', date:'2025-12-28', dateLabel:'28 décembre 2025 (scrutin) — victoire proclamée le 30 décembre 2025, validée le 4 janvier 2026',
+   title:'Mamadi Doumbouya élu président avec 86,72 % des voix, principale opposition exclue du scrutin',
+   lieu:'Guinée (ensemble du territoire national)',
+   fait:"Le 28 décembre 2025 s'est tenue la première élection présidentielle depuis le coup d'État de 2021. Le général Mamadi Doumbouya, candidat de la junte, a été proclamé vainqueur dès le premier tour avec 86,72 % des voix, résultat validé par la Cour suprême le 4 janvier 2026. Le principal opposant, Cellou Dalein Diallo (UFDG), a été exclu du fichier électoral et son parti a boycotté le scrutin qu'il a qualifié de « mascarade », saisissant en vain la Cour de justice de la CEDEAO.",
+   source:'Fait solidement établi par au moins 5 sources indépendantes convergentes : Al Jazeera, France24, CNBC Africa, APAnews et Jeune Afrique. Le score exact (86,72 %) est repris de façon identique par la Direction Générale des Élections (DGE) guinéenne et relayé sans contradiction par la presse régionale et internationale.',
+   sourceUrl:'https://www.aljazeera.com/news/2025/12/30/guinea-coup-leader-mamdi-doumbouya-wins-presidential-election',
+   impact:"L'élection entérine la transformation du régime militaire en pouvoir civil de façade dirigé par le même homme, dans un contexte d'exclusion de l'opposition historique, ce qui fragilise la légitimité perçue du scrutin auprès d'une partie de la population et des partenaires internationaux.",
+   watch:"Surveiller la recomposition du gouvernement et de l'appareil sécuritaire post-élection, ainsi que d'éventuelles mobilisations de l'opposition exclue (UFDG) et la suite donnée à sa plainte devant la CEDEAO.",
+   recoupementLabel:""},
+  {id:34, country:'GIN', cat:'Intégrité territoriale / Tensions frontalières', level:'modere', date:'2026-03-10', dateLabel:'vers le 9-10 mars 2026 (incident), désamorcé lors du sommet tripartite du 16-17 mars 2026',
+   title:'Incident frontalier Guinée-Liberia à Kiéssènèye/Foya et déploiement militaire',
+   lieu:'Zone frontalière Guinée-Liberia, secteur de Kiéssènèye/Foya, proche du fleuve Makona',
+   fait:"Début mars 2026, une tension est apparue à la frontière Guinée-Liberia après le déplacement, par des individus ayant traversé depuis la Guinée, d'un drapeau libérien dans le comté de Lofa. Des habitants de villages frontaliers ont fui face à la présence de militaires guinéens signalée près du fleuve Makona, et la Guinée a déployé des troupes supplémentaires. Aucun décès ni blessé n'a été rapporté par les sources consultées. Un sommet tripartite Guinée-Liberia-Sierra Leone s'est tenu à Conakry les 16-17 mars 2026, à l'issue duquel les trois chefs d'État ont réaffirmé leur engagement pour une coexistence pacifique.",
+   source:"Corroboré par au moins 4 sources indépendantes : KOACI, Guinée360, France24 (Journal de l'Afrique) et le centre de recherche indépendant ACCORD pour l'incident ; la résolution est confirmée par un communiqué officiel (présidence sierra-léonaise) et l'Union africaine. Le bilan « aucune victime confirmée » repose sur l'absence de mention dans ces sources, non sur une vérification indépendante active.",
+   sourceUrl:'https://statehouse.gov.sl/2026/03/17/heads-of-state-of-guinea-liberia-and-sierra-leone-reaffirm-commitment-to-peaceful-coexistence-and-border-cooperation-at-tripartite-summit-in-conakry/',
+   impact:"L'épisode illustre la fragilité persistante des tracés frontaliers hérités de la période coloniale dans le bassin du fleuve Mano et le risque d'escalade rapide d'incidents mineurs entre États voisins fragiles ; la réponse diplomatique rapide a toutefois limité l'impact à court terme.",
+   watch:'Surveiller la mise en œuvre concrète du pacte sécuritaire tripartite et les appels répétés du président Doumbouya à renforcer la vigilance et les patrouilles aux frontières, signe que la question reste sensible pour Conakry.',
+   recoupementLabel:""},
+  {id:35, country:'GIN', cat:"Droits humains / Répression de l'opposition", level:'modere', date:'2025-01-07', dateLabel:"Condamnation initiale le 7 janvier 2025 ; détention prolongée jusqu'en août 2026 malgré un arrêt de la CEDEAO du 25 juin 2026",
+   title:"Détention prolongée de l'opposant Aliou Bah (MoDeL) malgré un arrêt de la Cour de justice de la CEDEAO",
+   lieu:'Conakry',
+   fait:"L'opposant Aliou Bah, président du parti MoDeL, a été condamné à deux ans de prison ferme début janvier 2025 puis a fait l'objet d'une nouvelle arrestation en février 2025, sa condamnation ayant été confirmée en appel en mai 2025. Il est resté détenu tout au long de 2025 et jusqu'en août 2026. Le 25 juin 2026, la Cour de justice de la CEDEAO a condamné l'État guinéen et exigé sa libération immédiate ; au 19 août 2026, cette décision n'était toujours pas exécutée par Conakry selon ses avocats.",
+   source:"Fait bien établi par de nombreuses sources indépendantes convergentes sur la durée : Jeune Afrique, ACAT France, Amnesty International, AfricTivistes, APAnews, ainsi que la presse guinéenne (Guinée360, Guinée7, Guinée114). Le non-respect de l'arrêt CEDEAO est rapporté de façon cohérente par plusieurs médias guinéens indépendants.",
+   sourceUrl:'https://www.guinee360.com/25/06/2026/affaire-aliou-bah-la-cour-de-justice-de-la-cedeao-condamne-letat-guineen-et-exige-sa-liberation/',
+   impact:"Ce dossier symbolise un climat plus large de rétrécissement de l'espace politique et médiatique en Guinée et le refus des autorités guinéennes de se conformer aux décisions des juridictions régionales, ce qui affecte la crédibilité internationale du régime post-électoral.",
+   watch:"Surveiller si l'État guinéen exécute l'arrêt de la CEDEAO et libère Aliou Bah, ainsi que le traitement réservé à d'autres opposants et activistes détenus ou portés disparus.",
+   recoupementLabel:""},
+  {id:36, country:'GNB', cat:"Rupture institutionnelle / Coup d'État", level:'critique', date:'2025-11-26', dateLabel:'26 novembre 2025',
+   title:"Coup d'État militaire et arrestation du président Embaló",
+   lieu:'Bissau, Guinée-Bissau (aux abords du palais présidentiel)',
+   fait:"Des militaires ont annoncé la prise du pouvoir le 26 novembre 2025, la veille de la proclamation des résultats provisoires de l'élection présidentielle du 23 novembre, disputée entre le président sortant Umaro Sissoco Embaló et le candidat d'opposition Fernando Dias, qui revendiquaient chacun la victoire. Le président Embaló a été arrêté par des soldats au milieu de tirs signalés près du palais présidentiel. Le général Horta Inta-A Na Man (Horta N'Tam), ancien chef d'état-major et allié d'Embaló, a été investi président de transition le 27 novembre pour une période annoncée d'un an. Embaló a ensuite été exfiltré vers le Sénégal puis a poursuivi un exil itinérant.",
+   source:"Fait établi et recoupé par au moins quatre sources indépendantes : Al Jazeera, Africanews, France 24, Wikipédia (citant des dépêches AFP/Reuters) et Jeune Afrique. Un doute documenté subsiste uniquement sur l'interprétation politique : l'opposant Fernando Dias a allégué que le coup aurait été orchestré pour empêcher sa victoire électorale, allégation non vérifiable indépendamment et donc non traitée comme un fait.",
+   sourceUrl:'https://www.aljazeera.com/news/2025/11/27/guinea-bissau-military-appoints-general-as-transition-president-after-coup',
+   impact:"Interruption du processus électoral, suspension de la Guinée-Bissau par la CEDEAO qui a exigé une transition civile courte sous peine de sanctions ciblées, et mise en place d'une gouvernance militaire de transition dont la légitimité est contestée.",
+   watch:"Suivre le respect (ou non) du calendrier de transition d'un an et la tenue effective d'élections annoncées pour début décembre 2026.",
+   recoupementLabel:""},
+  {id:37, country:'GNB', cat:'Répression / Violence politique', level:'eleve', date:'2026-03-31', dateLabel:'31 mars 2026 (mort constatée ; couverture médiatique élargie fin août 2026)',
+   title:"Mort suspecte de l'activiste et rappeur d'opposition Vigário Luís Balanta",
+   lieu:'Zone de Ndam, à environ 30 km de Bissau, Guinée-Bissau',
+   fait:"Vigário Luís Balanta, 32 ans, rappeur et fondateur du mouvement d'opposition Po' di Terra, critique public de la junte militaire depuis le coup de novembre 2025, a été retrouvé mort le 31 mars 2026, son corps abandonné dans un champ en périphérie de Bissau. Le bureau des droits de l'homme de l'ONU indique qu'il pourrait avoir été battu à mort, sans que la responsabilité pénale soit établie à ce stade. Des manifestations ont éclaté à Bissau après sa mort.",
+   source:"Événement recoupé par au moins deux sources indépendantes : African Arguments (avril 2026, citant le bureau des droits de l'homme de l'ONU) et une dépêche d'agence republiée en août 2026 par Daily Maverick, U.S. News et The Citizen. La cause exacte de la mort n'est PAS confirmée judiciairement — le gouvernement dit enquêter sans conclusion communiquée ; ceci doit être présenté comme non confirmé/disputé.",
+   sourceUrl:'https://africanarguments.org/2026/04/a-death-in-bissau-vigario-luis-balanta-and-the-risks-of-civic-life-in-guinea-bissau/',
+   impact:"Le climat de peur a poussé une partie de l'opposition et de la société civile dans la clandestinité, dans un contexte documenté par l'ONU de détentions arbitraires, intimidations et suspension de radios depuis l'interdiction des manifestations et grèves le 1er décembre 2025.",
+   watch:"Surveiller l'issue de l'enquête officielle annoncée et tout nouvel incident visant des figures de la société civile ou des médias à l'approche du référendum du 30 août 2026.",
+   recoupementLabel:""},
+  {id:38, country:'GNB', cat:'Instabilité politique / Réforme constitutionnelle contestée', level:'eleve', date:'2026-08-30', dateLabel:'30 août 2026',
+   title:'Référendum constitutionnel contesté organisé par la junte militaire',
+   lieu:'Guinée-Bissau (scrutin national)',
+   fait:"Le président de transition Horta N'Tam a convoqué par décret du 6 juillet 2026 un référendum constitutionnel prévu le 30 août 2026, portant sur un texte préparé par le Conseil national de Transition (CNT), organe institué par les militaires en remplacement de l'Assemblée nationale populaire suspendue depuis le coup. Les réformes proposées renforcent significativement les pouvoirs présidentiels (fusion des fonctions de chef d'État et de gouvernement, pouvoir de dissolution du Parlement, réduction du nombre de députés de 102 à 61). Des élections destinées à restaurer un pouvoir civil sont annoncées début décembre 2026.",
+   source:"Fait établi et recoupé par plusieurs sources indépendantes : Agence Ecofin, Africanews, ConstitutionNet, TRT Afrika et Wikipédia (citant le décret officiel et l'avis de la Cour suprême). Les réactions précises de l'opposition sur ce texte n'ont pas toutes été vérifiées par consultation de sources primaires.",
+   sourceUrl:'https://www.agenceecofin.com/actualites/0807-139996-guinee-bissau-un-referendum-constitutionnel-convoque-pour-le-30-aout-2026',
+   impact:"L'opposition (notamment le PAIGC) et une partie de la société civile dénoncent un processus mené sans consultation publique suffisante et une dérive vers un pouvoir présidentiel renforcé sans contre-pouvoirs, dans un contexte où la CEDEAO a rejeté le calendrier de transition militaire.",
+   watch:'Surveiller le déroulement du scrutin du 30 août (participation, incidents, contestation des résultats) et son impact sur la crédibilité des élections de décembre 2026 annoncées pour clore la transition.',
+   recoupementLabel:""},
+  {id:39, country:'LBR', cat:'Intégrité territoriale / Tensions frontalières', level:'eleve', date:'2026-02-09', dateLabel:'Depuis le 9 février 2026 (pic de tension autour du 23 février-11 mars 2026, désescalade négociée à partir du 16 mars 2026)',
+   title:'Incursions de militaires guinéens dans le comté de Lofa (zone frontalière)',
+   lieu:'Clan de Sorlumba, district de Foya, comté de Lofa (frontière Liberia-Guinée)',
+   fait:"Des soldats guinéens ont franchi la frontière dans la zone contestée de Sorlumba (Foya), retiré le drapeau libérien et hissé le drapeau guinéen, invoquant une opération contre une extraction illégale de sable/or. La situation s'est envenimée lorsque des jeunes libériens ont tenté de bloquer l'entrée de civils guinéens escortés par des troupes : des tirs ont blessé un résident libérien à la cuisse, avant que les forces guinéennes n'occupent le site disputé. Le président Boakai a consulté le Parlement sur d'éventuels pouvoirs d'urgence sans les activer formellement, et un sommet régional (Union du fleuve Mano) s'est tenu à Conakry le 16 mars 2026 pour désamorcer la crise.",
+   source:"Fait bien corroboré par plusieurs médias libériens indépendants (FrontPageAfrica, Liberian Observer, allAfrica, Liberian Investigator) sur la chronologie des faits. Le chiffre de 3 380 personnes déplacées dans 59 communautés provient d'une seule source (ONG ImpACT International) et n'est pas confirmé ailleurs — seul un déplacement de « plusieurs centaines de résidents » est corroboré par un second média.",
+   sourceUrl:'https://frontpageafricaonline.com/breaking-news/liberia-border-shooting-reportedly-leaves-liberian-injured-as-guinean-troops-occupy-disputed-area-in-lofa/',
+   impact:"Perturbation du commerce transfrontalier, de l'agriculture et de la scolarisation dans les communautés riveraines ; risque d'escalade militaire bilatérale et de fragilisation de la coopération régionale (Union du fleuve Mano).",
+   watch:'Suivre le respect des engagements pris lors du sommet de Conakry (retrait des troupes, démarcation) et toute nouvelle incursion ou incident armé dans le secteur Foya-Sorlumba.',
+   recoupementLabel:""},
+  {id:40, country:'LBR', cat:'Criminalité organisée / Corruption institutionnelle', level:'eleve', date:'2026-07-30', dateLabel:'30 juillet 2026 (incinération publique), faisant suite à une saisie initiale le 8 juin 2026',
+   title:'Le Liberia détruit 336 millions de dollars de cocaïne, des policiers gradés inculpés',
+   lieu:'Aéroport international Roberts et Duazon, comté de Montserrado (près de Monrovia)',
+   fait:"Le 8 juin 2026, les autorités ont saisi 237,6 kg de cocaïne à l'aéroport international Roberts. L'enquête a conduit à la découverte d'un stock bien plus important à Duazon, portant le total incinéré publiquement le 30 juillet 2026 à environ 4,2 tonnes, valorisées à 336 millions de dollars — la plus grosse saisie de l'histoire du pays. Un ressortissant serbe et un national colombo-espagnol ont été arrêtés, et des officiers de police de haut rang ont été inculpés ou identifiés comme suspects pour avoir facilité le transit de la drogue.",
+   source:'Événement solidement établi par des médias internationaux indépendants et concordants (Washington Post, ABC News, Africanews, Euronews, OCCRP) ainsi que par la presse libérienne (allAfrica, Liberian Observer). Les détails sur les protecteurs/financiers de haut niveau restent flous et contestés.',
+   sourceUrl:'https://www.africanews.com/2026/07/31/liberian-authorities-burn-336-million-in-cocaine-implicating-senior-police-officials/',
+   impact:"Met en évidence des failles de sécurité aux points d'entrée et une possible complicité au sein des forces de l'ordre, avec un risque de réputation pour le pays comme plaque tournante régionale du narcotrafic transatlantique ; teste la crédibilité anti-corruption du gouvernement Boakai.",
+   watch:"Issue des procédures judiciaires en cours, résultats de l'audition sénatoriale de la police, et identification (ou non) des commanditaires/financiers de haut niveau.",
+   recoupementLabel:""},
+  {id:41, country:'LBR', cat:'Stabilité politique / Mobilisation sociale', level:'modere', date:'2026-07-17', dateLabel:'17 juillet 2026',
+   title:'Manifestation de masse « Boakai Must Lead or Leave » à Monrovia',
+   lieu:'Abords du Capitole, Monrovia',
+   fait:"La coalition STAND, dirigée par l'ex-président du CDC Mulbah Morlu, a organisé avec le « We the People Movement » et la Ligue de jeunesse du CDC une manifestation rassemblant plusieurs milliers de personnes pour réclamer des comptes au président Boakai sur le scandale de la cocaïne. Le rassemblement s'est déroulé sans incident majeur, avec l'aval conditionnel de la police. À l'issue de la marche, la police a affirmé qu'un fusil de service avait été volé lors d'une agression contre un policier avant l'événement, et a publiquement mis en cause l'organisateur Mulbah Morlu, sans toutefois porter de charges formelles à ce stade.",
+   source:"Déroulement de la marche confirmé par plusieurs médias locaux concordants (FrontPageAfrica, Liberian Observer, Smart News Liberia, allAfrica, New Dawn). L'accusation policière visant Morlu repose à ce jour sur les seules déclarations de la police libérienne et n'est pas corroborée de façon indépendante — à traiter comme non confirmé/disputé.",
+   sourceUrl:'https://smartnewsliberia.com/liberia-stands-july-17-boakai-must-lead-or-leave-protest-ends-as-police-link-mulbah-morlu-to-alleged-stolen-police-firearm/',
+   impact:'Traduit une contestation sociale croissante liée aux difficultés économiques et au scandale de corruption en cours, avec un risque de débordement limité, mais une controverse post-manifestation qui pourrait durcir les rapports gouvernement-opposition.',
+   watch:"Suite judiciaire de l'affaire de l'arme volée impliquant Morlu, et mise à exécution de l'ultimatum de 14 jours des organisateurs annonçant de nouvelles mobilisations.",
+   recoupementLabel:""},
+  {id:42, country:'LBR', cat:'Stabilité institutionnelle / Crise politique', level:'modere', date:'2025-05-12', dateLabel:'Crise du 17 octobre 2024 au 12-13 mai 2025 (résolution)',
+   title:'Résolution de la crise de leadership à la Chambre des représentants',
+   lieu:'Capitole, Monrovia',
+   fait:"Amorcée le 17 octobre 2024 par un vote de destitution du speaker Fonati Koffa (accusations de conflit d'intérêts et de condamnation antérieure pour détournement de fonds aux États-Unis), la crise a paralysé pendant six mois les travaux législatifs, avec des manifestations et un incendie ayant endommagé le bâtiment du Capitole. Après des médiations répétées de la CEDEAO restées infructueuses, Koffa a officiellement démissionné le 12 mai 2025, et Richard Koon a été élu speaker le lendemain.",
+   source:"Chronologie confirmée par des sources multiples et indépendantes (Dubawa, FrontPageAfrica, allAfrica, Liberian Observer, Xinhua, Guardian Nigeria), convergentes sur les dates de démission et d'élection du nouveau speaker.",
+   sourceUrl:'https://frontpageafricaonline.com/breaking-news/liberia-koffa-to-resign-as-house-speaker-ex-president-sirleaf-tapped-to-deliver-letter/',
+   impact:"A démontré une fragilité institutionnelle du pouvoir législatif et un blocage prolongé de l'agenda parlementaire pendant six mois ; la crise a nécessité une médiation régionale (CEDEAO), signe de tensions plus larges dans la gouvernance post-2024.",
+   watch:'Persistance de frictions résiduelles au sein de la Chambre sous la présidence de Koon pouvant rouvrir des tensions institutionnelles.',
+   recoupementLabel:""},
+  {id:43, country:'MRT', cat:'Sécurité frontalière / Tensions avec le Mali', level:'eleve', date:'2026-03-20', dateLabel:'20 mars 2026 (incident), largement rapporté fin mars 2026',
+   title:'Mort de ressortissants mauritaniens près de la frontière malienne (affaire de Yakna)',
+   lieu:'Yakna, région de Kayes, Mali, à environ 12 km de la frontière mauritanienne',
+   fait:"Trois civils (deux ressortissants mauritaniens et un Malien) sont morts dans des circonstances contestées à Yakna, dans le cadre d'une opération de ratissage antidjihadiste menée par l'armée malienne dans le secteur de Yélimané (14-21 mars 2026). Les sources mauritaniennes évoquent des hommes « arrêtés puis retrouvés morts », des sources locales parlant d'exécutions suivies de crémation des corps ; la version exacte reste disputée. Cet incident s'inscrit dans une série d'incidents similaires (au moins cinq victimes mauritaniennes recensées entre fin février et fin mars 2026), avec des patrouilles maliennes signalées à l'intérieur de villages mauritaniens.",
+   source:"Recoupé sur au moins trois sources indépendantes : Afrik.com, AllAfrica/RFI (reprenant le communiqué du ministère mauritanien des Affaires étrangères et l'agence Al-Akhbar), et l'analyse African Security Analysis ; le bilan précis sur l'ensemble de la période varie selon les sources et n'est pas totalement stabilisé.",
+   sourceUrl:'https://www.jeuneafrique.com/1803984/politique/a-la-frontiere-avec-le-mali-nous-avons-perdu-trop-de-vies-innocentes-deplore-le-chef-de-la-diplomatie-mauritanienne/',
+   impact:"Risque accru pour les déplacements et activités professionnelles dans la bande frontalière sud-est : confusion possible entre civils, groupes armés et forces engagées dans les opérations antidjihadistes maliennes. Tension diplomatique bilatérale susceptible d'affecter la coopération sécuritaire.",
+   watch:"Surveiller toute nouvelle victime civile mauritanienne près de la frontière et l'évolution du ton officiel de Nouakchott.",
+   recoupementLabel:""},
+  {id:44, country:'MRT', cat:'Sécurité migratoire / Catastrophe humanitaire en mer', level:'eleve', date:'2026-07-21', dateLabel:'Bilan communiqué le 21-23 juillet 2026',
+   title:'Naufrage meurtrier au large de la Mauritanie sur la route migratoire vers les Canaries',
+   lieu:'Nouadhibou, Mauritanie (lieu de débarquement des survivants) ; naufrage en mer, au large des côtes mauritaniennes (déduit)',
+   fait:'Une pirogue partie de Gambie avec environ 190 personnes à bord, après 25 jours en mer, a fait naufrage : environ 150 personnes sont mortes ou portées disparues, pour 38 survivants recueillis par des pêcheurs puis pris en charge par les garde-côtes mauritaniens, le Croissant-Rouge mauritanien et Médecins Sans Frontières à Nouadhibou. Les bilans ont évolué entre les premiers rapports (143 morts/disparus) et un bilan supérieur à 150.',
+   source:'Solidement corroboré par au moins quatre sources indépendantes : France 24, Médecins Sans Frontières, InfoMigrants et AllAfrica ; les chiffres exacts de bilan varient légèrement selon la source et le moment de publication et doivent être considérés comme des estimations, non un bilan définitif.',
+   sourceUrl:'https://www.msf.fr/communiques-presse/mauritanie-plus-de-150-morts-presumes-dans-un-naufrage-vers-les-canaries-msf-porte-assistance-aux-survivants',
+   impact:"Illustre la pression croissante et la dangerosité de la route atlantique migratoire transitant par la Mauritanie, avec des implications pour la sécurité maritime, la capacité des garde-côtes et l'image du pays comme point de transit ; risque de tension sociale et sanitaire locale à Nouadhibou.",
+   watch:"Surveiller la fréquence des naufrages sur cette route et une éventuelle réponse renforcée des autorités mauritaniennes ou de l'UE en matière de contrôle migratoire.",
+   recoupementLabel:""},
+  {id:45, country:'MRT', cat:'Stabilité politique intérieure / Droits humains', level:'modere', date:'2026-05-04', dateLabel:'4 mai 2026 (condamnation) ; grâce présidentielle le 9 juillet 2026',
+   title:"Deux députées de l'opposition condamnées à quatre ans de prison pour critiques du président, puis graciées",
+   lieu:'Tribunal criminel de Nouakchott, Mauritanie',
+   fait:"Les députées Mariem Cheikh Dieng et Ghamou Achour Salem (IRA-Mauritanie) ont été condamnées le 4 mai 2026 à quatre ans de prison pour « atteinte aux symboles de l'État » et propos jugés racistes, après des publications sur les réseaux sociaux qualifiant la présidence de Ghazouani de promoteur d'un « apartheid ». Le président Ghazouani leur a accordé une grâce présidentielle le 9 juillet 2026.",
+   source:'Très largement corroboré : Washington Post, Africanews, AllAfrica, ainsi que plusieurs médias régionaux (Tchadinfos, Burkina24, Africtelegraph) pour la condamnation comme pour la grâce ultérieure.',
+   sourceUrl:'https://www.washingtonpost.com/world/2026/05/04/mauritania-lawmakers-sentenced/b7e9ab36-4805-11f1-a119-857cd2bf4fd4_story.html',
+   impact:"Signale une sensibilité persistante des autorités aux discours sur les discriminations raciales/esclavagistes (question haratine) et un usage du droit pénal contre l'opposition ; la grâce rapide suggère une volonté d'apaisement plutôt qu'un durcissement structurel.",
+   watch:"Surveiller si d'autres figures de l'opposition ou de la mouvance abolitionniste font l'objet de poursuites similaires, signe d'un climat politique plus tendu autour des questions raciales.",
+   recoupementLabel:""},
+  {id:46, country:'MRT', cat:'Relations diplomatiques régionales', level:'modere', date:'2026-03-16', dateLabel:'16 mars 2026',
+   title:"Le Mali accuse la Mauritanie d'héberger des soldats maliens séquestrés au camp de M'Bera ; Nouakchott dément fermement",
+   lieu:"Camp de réfugiés de M'Bera, région du Hodh Chargui, Mauritanie",
+   fait:"L'état-major malien a affirmé que deux soldats maliens auraient été retenus par des « groupes terroristes » à l'intérieur du camp de réfugiés de M'Bera, en territoire mauritanien, avant de s'en échapper. Le ministère mauritanien des Affaires étrangères a rejeté ces accusations comme « sans fondement » et « diffamatoires », rappelant que le camp — actif depuis près de 30 ans — est sous supervision constante du HCR et ouvert aux ONG et médias.",
+   source:"Confirmé par deux sources indépendantes distinctes : le communiqué officiel mauritanien relayé par l'agence de presse d'État AMI et la reprise de l'accusation malienne par AllAfrica. L'allégation malienne elle-même n'est corroborée par aucune source indépendante et est explicitement contestée par Nouakchott.",
+   sourceUrl:'https://ami.mr/en/archives/30664',
+   impact:"Ce type d'accusation, si elle se répète, pourrait fragiliser le statut protégé du camp de M'Bera et compliquer l'accès humanitaire pour les organisations internationales opérant dans la zone.",
+   watch:'Suivre si Bamako maintient ou retire ses accusations, et si la posture malienne évolue vers une pression accrue sur la gestion mauritanienne des réfugiés maliens.',
+   recoupementLabel:""},
+  {id:47, country:'NER', cat:'Terrorisme / attaque contre infrastructure critique', level:'critique', date:'2026-01-29', dateLabel:'29 janvier 2026 (attaque) — revendication le 30 janvier 2026',
+   title:"Attaque jihadiste contre l'aéroport international et la base aérienne 101 de Niamey",
+   lieu:'Niamey — aéroport international Diori Hamani et base aérienne 101 (à environ 10 km du palais présidentiel)',
+   fait:"Dans la nuit du 28 au 29 janvier 2026, un groupe d'une trentaine d'assaillants (motos, drones, mortiers) a attaqué simultanément l'aéroport civil et la base militaire adjacente à Niamey, siège de forces nigériennes et de l'Africa Corps russe. Les combats ont duré environ 20 à 30 minutes ; au moins 5 aéronefs militaires ont été détruits et un avion civil d'Air Côte d'Ivoire endommagé. L'État islamique (branche Sahel) a revendiqué l'attaque via l'agence Amaq le lendemain.",
+   source:"Confirmé par au moins 3 sources indépendantes convergentes (Al Jazeera, Wikipédia sourcé sur presse internationale, FDD's Long War Journal). Le bilan officiel (20 assaillants tués, 4 militaires blessés, 11 arrestations) diverge de bilans non officiels évoquant 24 soldats nigériens et 3 mercenaires russes tués — ces derniers chiffres restent NON CONFIRMÉS et doivent être traités comme disputés.",
+   sourceUrl:'https://www.aljazeera.com/news/2026/1/29/niger-military-govt-says-france-benin-ivory-coast-behind-airport-attack',
+   impact:"Démonstration d'une capacité jihadiste à frapper au cœur de la capitale, à proximité du palais présidentiel et d'un site abritant environ 1000 tonnes d'uranium stocké ; le général Tiani a accusé sans preuve la France, le Bénin et la Côte d'Ivoire, dégradant davantage les relations régionales.",
+   watch:"Surveiller toute nouvelle revendication précisant un bilan révisé côté militaire/russe, ainsi que d'éventuelles représailles diplomatiques ou militaires contre les pays accusés.",
+   recoupementLabel:""},
+  {id:48, country:'NER', cat:'Terrorisme / attaque contre infrastructure critique', level:'eleve', date:'2026-06-18', dateLabel:'18 juin 2026',
+   title:"Deuxième attaque en six mois contre l'aéroport de Niamey, revendiquée par le JNIM",
+   lieu:'Niamey — aéroport international Diori Hamani',
+   fait:"Le 18 juin 2026 vers 6h-8h, des assaillants utilisant deux taxis et une camionnette, dont certains porteurs de ceintures explosives, ont attaqué un point de contrôle près du terminal de l'aéroport de Niamey. L'assaut a duré environ deux heures. Le Groupe de soutien à l'islam et aux musulmans (JNIM, affilié à Al-Qaïda) a revendiqué l'attaque le jour même via sa fondation médiatique Az-Zallaqa.",
+   source:'Confirmé par au moins 3 sources indépendantes (Al Jazeera, US News/AP, PBS, Jerusalem Post). Bilan officiel : 13 morts (11 militaires, 2 civils), 4 blessés, 22 assaillants tués, 20 suspects arrêtés — chiffres non contestés dans les sources consultées.',
+   sourceUrl:'https://www.aljazeera.com/news/2026/6/18/niger-says-soldiers-civilians-killed-in-armed-attack-on-niamey-airport',
+   impact:"Deuxième attaque en six mois contre le même site stratégique, cette fois par un groupe rival de l'État islamique, confirmant une vulnérabilité structurelle de la sécurisation de la capitale face à une double menace jihadiste (JNIM à l'ouest, EI-Sahel).",
+   watch:'Suivre le renforcement (ou non) de la sécurité aéroportuaire et la fréquence des tentatives similaires contre des infrastructures aériennes/critiques à Niamey.',
+   recoupementLabel:""},
+  {id:49, country:'NER', cat:'Sécurité intérieure / attaque contre les forces armées', level:'eleve', date:'2026-07-17', dateLabel:'17 juillet 2026 (attaque) — bilan officiel communiqué le 19-20 juillet 2026',
+   title:'Attaque meurtrière contre un détachement militaire dans la zone des « trois frontières » (Tillabéri)',
+   lieu:'Axe Bankilaré-Téra, près du village de Doungourou, région de Tillabéri',
+   fait:"Le 17 juillet 2026, un détachement de l'armée nigérienne a été attaqué sur l'axe Bankilaré-Téra dans la région de Tillabéri, zone frontalière très instable. Le ministère de la Défense a annoncé un bilan officiel de 16 soldats tués, 23 blessés et 15 assaillants tués. Aucune revendication formelle n'a été identifiée, la zone étant historiquement disputée entre JNIM et l'État islamique au Sahel (ISSP).",
+   source:"Le bilan officiel est rapporté par plusieurs médias reprenant une dépêche commune (AllAfrica, PressAfrik, Yahoo Actualités). ATTENTION — DIVERGENCE MAJEURE NON RÉSOLUE : RFI rapporte un bilan nettement plus lourd, « au moins 47 militaires tués, dont le chef du détachement, et plus de 50 blessés ». Cet écart entre le bilan officiel du gouvernement et celui de RFI n'est pas confirmé de façon indépendante et doit être traité comme disputé.",
+   sourceUrl:'https://fr.allafrica.com/stories/202607200134.html',
+   impact:"Illustre la pression croissante exercée par les groupes armés sur les forces nigériennes dans l'ouest du pays, malgré l'appui de l'Africa Corps russe ; l'écart de bilan (16 vs 47 tués) alimente les doutes sur la transparence des communications officielles de la junte.",
+   watch:'Surveiller une éventuelle revendication a posteriori (JNIM ou ISSP) et toute réévaluation officielle ou indépendante (ONG, ACLED) du bilan humain.',
+   recoupementLabel:""},
+  {id:50, country:'NER', cat:'Droits humains / usage de la force par les forces de sécurité', level:'modere', date:'2026-01-06', dateLabel:"6 janvier 2026 (frappe) — publication de l'enquête le 9 février 2026",
+   title:'Frappe de drone militaire nigérien sur un marché civil à Kokoloko (17 morts)',
+   lieu:"Village de Kokoloko, région de Tillabéri, à environ 120 km à l'ouest de Niamey",
+   fait:"Le 6 janvier 2026, un drone militaire a survolé deux fois le marché du village de Kokoloko avant d'y larguer une munition, alors que le lieu était bondé. Le bilan rapporté est de 17 civils tués (11 femmes, 2 hommes, 4 enfants de 5 à 10 ans) et 13 blessés ; l'armée nigérienne évoque de son côté l'élimination de 3 combattants de l'État islamique au Sahel présents sur zone.",
+   source:"PRUDENCE REQUISE — cette information repose essentiellement sur UNE SEULE source d'enquête primaire, Human Rights Watch (15 entretiens téléphoniques, vidéos géolocalisées, imagerie satellite), largement reprise ensuite par de nombreux médias qui citent tous HRW sans enquête indépendante propre. La junte nigérienne n'a fourni aucun commentaire officiel ni contesté les faits à ce jour.",
+   sourceUrl:'https://www.hrw.org/news/2026/02/09/niger-military-drone-strike-kills-17-civilians',
+   impact:"Frappe qualifiée de possible crime de guerre par des juristes ; risque réputationnel et juridique pour les autorités nigériennes, et facteur potentiel d'aliénation des populations locales exploitable par les groupes jihadistes.",
+   watch:"Suivre une éventuelle réaction officielle du gouvernement nigérien, l'ouverture d'une enquête indépendante, et toute confirmation ou contestation du bilan par une seconde organisation (ONU, CICR, ACLED).",
+   recoupementLabel:""},
+  {id:51, country:'NGA', cat:'Violence intercommunautaire / éleveurs-agriculteurs', level:'critique', date:'2026-08-18', dateLabel:'Nuit du 17 au 18 août 2026',
+   title:'Massacre nocturne à Binper (Mangu, Plateau)',
+   lieu:'Village de Binper, zone de gouvernement local (LGA) de Mangu, État du Plateau (Middle Belt)',
+   fait:"Des hommes armés non identifiés ont attaqué le village de Binper entre minuit et l'aube, allant de maison en maison pour tuer les habitants endormis. Le bilan varie selon les sources : plus de 20 morts selon Vanguard, 26 morts selon The Guardian Nigeria, avec plusieurs blessés et des disparus. Aucune revendication ni identification formelle des assaillants n'a été communiquée par les autorités.",
+   source:'Recoupé entre deux médias nigérians indépendants (Vanguard et The Guardian Nigeria), tous deux citant des témoins locaux ; aucune déclaration officielle des forces de sécurité obtenue au moment de la publication. Le bilan précis (20+ vs 26) reste à confirmer.',
+   sourceUrl:'https://guardian.ng/news/nigeria/metro/26-killed-several-injured-in-fresh-plateau-attack/',
+   impact:"Nouvelle escalade dans une série d'attaques répétées à Mangu/Bokkos ces derniers mois, alimentant les déplacements de population et les tensions communautaires (un groupe local attribue l'attaque à des « bandits peuls », accusation non confirmée officiellement).",
+   watch:"Surveiller les représailles éventuelles, la réaction des autorités de l'État du Plateau et le déploiement annoncé des forces de sécurité dans la zone de Mangu-Bokkos.",
+   recoupementLabel:""},
+  {id:52, country:'NGA', cat:'Insurrection djihadiste / enlèvement de masse', level:'critique', date:'2026-05-15', dateLabel:'Enlèvement survenu le 15 mai 2026 — otages toujours détenus au 22 août 2026 (environ 98-100 jours)',
+   title:"Enlèvement de masse d'élèves à Mussa, toujours non résolu",
+   lieu:'Communauté de Mussa, près de la forêt de Sambisa, État de Borno (Nord-Est)',
+   fait:"Des hommes armés attribués à Boko Haram/ISWAP ont fait irruption dans des salles de classe à Mussa le 15 mai 2026 et enlevé des dizaines d'enfants. Selon le gouverneur de l'État de Borno (Babagana Zulum) et plusieurs médias, 44 enfants restent détenus près de 100 jours plus tard, sans confirmation de libération. Des familles ont manifesté le 21 août 2026 pour dénoncer la lenteur de la réponse gouvernementale.",
+   source:"Confirmé par plusieurs sources indépendantes (Leadership.ng et ThisDay citant le gouverneur Zulum, Daily Trust, Sahara Reporters, Times Live/AP) ; le chiffre de 44 otages est celui donné par les autorités de l'État de Borno, des articles antérieurs évoquaient « environ 45 » — écart mineur non résolu.",
+   sourceUrl:'https://leadership.ng/fg-borno-working-to-rescue-44-abducted-mussa-school-children-zulum/',
+   impact:"Illustre la persistance de la capacité d'enlèvement de masse de Boko Haram/ISWAP malgré des années d'opérations militaires, et la vulnérabilité continue des écoles proches de la forêt de Sambisa ; forte pression sociale sur le gouvernement fédéral et l'État de Borno.",
+   watch:"Surveiller une éventuelle opération de libération, ainsi qu'un enlèvement distinct et concomitant à Lassa (36 élèves et un enseignant, 29 juin 2026) qui aggrave le tableau régional.",
+   recoupementLabel:""},
+  {id:53, country:'NGA', cat:'Tension politique séparatiste', level:'modere', date:'2026-08-18', dateLabel:'18 août 2026',
+   title:"Nnamdi Kanu réclame en urgence l'audience de son appel",
+   lieu:'Abuja / prison de Kuje (siège judiciaire) — dossier lié au Sud-Est',
+   fait:"Le leader emprisonné de l'IPOB, Nnamdi Kanu, condamné à la perpétuité pour terrorisme en novembre 2025, a écrit au Chief Justice du Nigeria et au président de la Cour d'appel pour exiger l'audiencement immédiat de ses recours (une requête devant la Cour suprême déposée en novembre 2025 et un appel déposé en juin 2026, tous deux sans date d'audience fixée). Sa famille menace de saisir des instances internationales.",
+   source:"Rapporté par Sahara Reporters et corroboré par The Whistler (Nigeria), les deux citant la lettre et la famille de Kanu ; aucune réaction officielle du gouvernement nigérian ou de la direction de l'IPOB rapportée à ce stade — à traiter comme la version de la défense, non contredite mais non confirmée de manière indépendante.",
+   sourceUrl:'https://saharareporters.com/2026/08/18/nnamdi-kanu-writes-cjn-appeal-court-president-demands-immediate-hearing-appeals-against',
+   impact:"Le dossier Kanu reste un point de cristallisation majeur des tensions séparatistes dans le Sud-Est ; un blocage judiciaire prolongé pourrait raviver la mobilisation IPOB, alors que le gouverneur d'Anambra affirmait début août que le mouvement de « sit-at-home » du lundi avait cessé (affirmation non vérifiée indépendamment).",
+   watch:"Surveiller la fixation d'une date d'audience d'appel et toute reprise de violences ou de journées de grève forcée dans le Sud-Est en lien avec ce dossier.",
+   recoupementLabel:""},
+  {id:54, country:'NGA', cat:'Banditisme armé / enlèvement contre rançon', level:'eleve', date:'2026-07-10', dateLabel:'Enlèvement le 15 mai 2026 ; libération annoncée le 10 juillet 2026 (56 jours de captivité)',
+   title:'Élèves et enseignants enlevés en pays yoruba (Oyo) puis libérés après 56 jours',
+   lieu:"Communauté d'Ahoro Esinele, district d'Oriire, État d'Oyo (Sud-Ouest, hors des foyers habituels de banditisme)",
+   fait:"Le 15 mai 2026, un groupe criminel armé a mené une attaque coordonnée contre trois écoles, enlevant 39 élèves (2-16 ans) et 7 enseignants ; un enseignant a été tué en captivité. Après une opération conjointe armée-police-vigiles, la présidence a annoncé le 10 juillet 2026 la libération de l'ensemble des otages survivants (44 personnes selon plusieurs médias).",
+   source:'Enlèvement confirmé par Al Jazeera (avec déclaration du président Tinubu et du gouverneur Makinde) ; libération confirmée par plusieurs médias nigérians indépendants (Channels TV, Premium Times, ThisDay, BellaNaija) citant la présidence.',
+   sourceUrl:'https://www.aljazeera.com/news/2026/5/19/gunmen-abduct-39-students-7-teachers-in-attacks-on-nigeria-schools',
+   impact:"Confirme l'extension du modus operandi des enlèvements scolaires de masse — jusque-là surtout Nord-Ouest/Centre — à des zones jusqu'ici épargnées du Sud-Ouest, avec six suspects arrêtés (complices logistiques présumés).",
+   watch:"Surveiller si ce type d'attaque se reproduit dans d'autres États du Sud-Ouest et l'issue des poursuites contre les six suspects arrêtés.",
+   recoupementLabel:""},
+  {id:55, country:'SEN', cat:'Stabilité politique / Gouvernance', level:'eleve', date:'2026-05-23', dateLabel:'23 mai 2026',
+   title:'Le président Faye limoge le Premier ministre Sonko et dissout le gouvernement',
+   lieu:'Dakar, Sénégal',
+   fait:"Le 23 mai 2026, le président Bassirou Diomaye Faye a démis de ses fonctions le Premier ministre Ousmane Sonko et dissous l'ensemble du gouvernement, par communiqué présidentiel. La rupture intervient après des mois de tensions croissantes entre les deux anciens alliés, notamment autour de la gestion de la crise de la dette publique (environ 132% du PIB) et de menaces antérieures de Sonko de retirer son parti Pastef du gouvernement.",
+   source:'Confirmé par au moins deux sources indépendantes de référence internationale (Al Jazeera et Semafor), citant toutes deux la déclaration présidentielle officielle ; largement repris ensuite par la presse ouest-africaine.',
+   sourceUrl:'https://www.aljazeera.com/news/2026/5/23/senegals-president-faye-sacks-pm-sonko-and-dissolves-government',
+   impact:"Cette rupture ouvre une période d'incertitude institutionnelle au sommet de l'État sénégalais, pays jusqu'ici perçu comme un modèle de stabilité démocratique en Afrique de l'Ouest, et complique les négociations en cours avec le FMI sur un programme de 1,8 milliard de dollars gelé après la découverte de dettes dissimulées.",
+   watch:"Surveiller la composition du nouveau gouvernement, la réaction de Pastef (majoritaire à l'Assemblée nationale) et l'évolution des négociations FMI.",
+   recoupementLabel:""},
+  {id:56, country:'SEN', cat:'Recomposition politique / Rivalité institutionnelle', level:'modere', date:'2026-07-26', dateLabel:'26 juillet 2026',
+   title:'Le président Faye lance son propre parti, Kiiraay, actant la rupture avec Sonko',
+   lieu:'Dakar, Sénégal',
+   fait:"Le 26 juillet 2026, le président Bassirou Diomaye Faye a officiellement lancé son propre parti politique, baptisé Kiiraay, deux mois après avoir limogé Ousmane Sonko de la primature. Ce nouveau parti vise à constituer une base électorale propre au président en vue des élections locales et législatives à venir. Sonko, désormais président de l'Assemblée nationale où son parti Pastef reste majoritaire, n'a pas assisté au lancement.",
+   source:"Confirmé par plusieurs sources indépendantes convergentes (France 24, Semafor, Africanews, Washington Post), datant toutes l'événement du 26-27 juillet 2026.",
+   sourceUrl:'https://www.france24.com/fr/afrique/20260726-au-s%C3%A9n%C3%A9gal-le-pr%C3%A9sident-faye-lance-son-nouveau-parti-et-confirme-la-rupture-avec-ousmane-sonko',
+   impact:"La création de Kiiraay institutionnalise la fracture au sommet de l'exécutif entre un président désormais doté d'un parti propre et un Premier ministre déchu qui contrôle l'Assemblée nationale via Pastef, créant un risque de blocage institutionnel à l'approche des scrutins locaux et législatifs.",
+   watch:"Surveiller le calendrier électoral, l'attitude de Pastef face à ce parti concurrent, et tout signe de recomposition de la majorité parlementaire.",
+   recoupementLabel:""},
+  {id:57, country:'SEN', cat:'Sécurité intérieure / Conflit en Casamance', level:'modere', date:'2026-03-12', dateLabel:'12 mars 2026 (bilan communiqué le 13 mars 2026)',
+   title:"Affrontement meurtrier entre l'armée et un groupe armé près de la frontière gambienne en Casamance",
+   lieu:'Kadialock, région de Casamance (sud du Sénégal), à proximité de la frontière avec la Gambie',
+   fait:"Le 12 mars 2026, un détachement de l'armée sénégalaise a été engagé dans un accrochage avec un groupe armé près du village de Kadialock, en Casamance, lors d'une opération de destruction de champs de chanvre indien. Selon la Direction des relations publiques des armées (Dirpa), un soldat a été tué et six autres blessés, plusieurs assaillants ayant par ailleurs été neutralisés selon l'armée. Le bilan exact est disputé : un média (Koaci) évoque deux soldats tués, contre un seul selon la version majoritairement reprise.",
+   source:"Le bilan '1 mort, 6 blessés' est confirmé par au moins deux sources indépendantes reprenant la dépêche AFP citant la Dirpa (La Libre, DH Les Sports+, Africa Radio, Seneweb) ; une source distincte (Koaci) avance un bilan différent non recoupé ailleurs — à traiter comme non confirmé/disputé.",
+   sourceUrl:'https://www.lalibre.be/dernieres-depeches/2026/03/13/senegal-un-soldat-tue-et-six-blesses-lors-dune-operation-dans-le-sud-en-casamance-C6OWEOIZX5CDFPGY3SFC5CVREU/',
+   impact:"Cet accrochage rappelle que malgré l'accord de paix de février 2025, des poches de violence résiduelle liées à des groupes armés (trafic de cannabis, factions dissidentes du MFDC) persistent en Casamance, notamment près des zones frontalières poreuses avec la Gambie.",
+   watch:"Surveiller la fréquence des opérations militaires anti-trafic dans le sud, la mise en œuvre du processus de démobilisation issu de l'accord de Bissau, et d'éventuels nouveaux accrochages.",
+   recoupementLabel:""},
+  {id:58, country:'SEN', cat:'Processus de paix / Casamance', level:'faible', date:'2025-02-23', dateLabel:'23 février 2025',
+   title:"Signature d'un accord de paix entre l'État sénégalais et la faction MFDC-Front Sud à Bissau",
+   lieu:'Bissau, Guinée-Bissau (accord concernant la Casamance, sud du Sénégal)',
+   fait:"Le 23 février 2025, une délégation gouvernementale sénégalaise conduite par le Premier ministre Ousmane Sonko a signé à Bissau un accord de paix avec la délégation combattante unifiée du MFDC-Front Sud, dirigée par César Atoute Badiate. L'accord, qui consolide un précédent texte d'août 2022 et a été négocié sous l'égide du président bissau-guinéen Umaro Sissoco Embaló, prévoit un cessez-le-feu dans le sud de la Casamance ainsi que la démobilisation et la réinsertion des combattants du Front Sud.",
+   source:'Confirmé par de multiples sources indépendantes sénégalaises et régionales convergentes (Le Soleil, Dakaractu, Senego, Africa Guinée, AllAfrica), datant toutes la signature du 23 février 2025.',
+   sourceUrl:'https://lesoleil.sn/actualites/politique/letat-et-le-mfdc-front-sud-signent-un-accord-de-paix-a-bissau/',
+   impact:"Cet accord marque une étape significative vers l'apaisement du conflit casamançais actif depuis 1982, réduisant potentiellement le risque sécuritaire pour les activités économiques et humanitaires dans le sud du pays, sans toutefois mettre fin à toutes les violences résiduelles.",
+   watch:"Surveiller la mise en œuvre effective de la démobilisation, l'adhésion des factions MFDC non signataires au processus, et la pérennité du cessez-le-feu.",
+   recoupementLabel:""},
+  {id:59, country:'SLE', cat:'Intégrité territoriale et différend frontalier', level:'modere', date:'2026-02-24', dateLabel:'24-27 février 2026 (détention puis libération)',
+   title:"Seize militaires et policiers sierra-léonais détenus par l'armée guinéenne à la frontière",
+   lieu:'Frontière Guinée-Sierra Leone, district de Kaliyereh/Falaba (Sierra Leone) / Koudaya, région de Faranah (Guinée)',
+   fait:"Le 24 février 2026, l'armée guinéenne a arrêté 16 militaires et policiers sierra-léonais qu'elle accuse d'être entrés sans autorisation en territoire guinéen près de Koudaya (Faranah), une zone frontalière disputée depuis la guerre civile sierra-léonaise. Freetown affirme que ses agents construisaient une infrastructure frontalière à Kaliyereh (district de Falaba) et non en territoire guinéen. Après des négociations diplomatiques à Conakry, les 16 personnes ont été libérées le 27 février 2026.",
+   source:"Fait confirmé par plusieurs dépêches d'agences internationales convergentes et indépendantes : Reuters, Associated Press, Africanews, TRT Afrika. Fiabilité élevée.",
+   sourceUrl:'https://www.investing.com/news/world-news/guinea-frees-sierra-leone-forces-held-in-border-dispute-sources-say-4532496',
+   impact:"L'incident illustre la fragilité persistante de la démarcation frontalière héritée de la guerre civile et un risque réel, quoique ponctuel, de friction militaire avec la Guinée voisine ; sa résolution rapide par la voie diplomatique traduit toutefois une volonté partagée d'apaisement.",
+   watch:"Surveiller toute reprise de travaux d'infrastructure frontalière sierra-léonais à Kaliyereh et l'avancée d'un accord bilatéral formel de démarcation avec la Guinée.",
+   recoupementLabel:""},
+  {id:60, country:'SLE', cat:"Justice militaire et suites du complot de coup d'État de 2023", level:'modere', date:'2025-03-27', dateLabel:'27 mars 2025',
+   title:'Deux militaires condamnés à 120 ans de prison pour trahison',
+   lieu:'Freetown, Sierra Leone',
+   fait:"Le 27 mars 2025, la juge Momoh-Jah Stevens a condamné les militaires Alie Badara Kanu et Thaimu Bangura à 120 ans de prison chacun pour trahison et non-dénonciation de complot, dans le cadre des procès liés à la tentative de coup d'État planifiée entre 2023 et 2024 à Freetown (attaque de casernes et de la prison centrale en novembre 2023). Cette condamnation s'inscrit dans une série de procès pour trahison encore en cours visant plusieurs dizaines de militaires inculpés depuis 2023.",
+   source:'Recoupé par au moins cinq médias sierra-léonais indépendants (The Calabash Newspaper, AYV Media Empire, Premier News SL, Apex News SL, SierraLoaded) rapportant la même audience et le même verdict. Fiabilité correcte pour la presse locale ; aucune reprise par une agence internationale de premier plan repérée à ce stade.',
+   sourceUrl:'https://thecalabashnewspaper.com/justice-momoh-jah-stevens-sentences-alie-badara-kanu-thaimu-bangura-to-120-years-for-treason/',
+   impact:"La sévérité de la peine confirme la ligne dure adoptée par les autorités envers les militaires impliqués dans des complots et entretient un climat de méfiance persistant entre le pouvoir civil et une partie de l'appareil militaire depuis 2023.",
+   watch:"Suivre les autres procès en cours liés au complot de 2023 et d'éventuelles mesures de grâce ou d'amnistie à l'approche de l'échéance électorale de 2028.",
+   recoupementLabel:""},
+  {id:61, country:'SLE', cat:'Crise constitutionnelle et tensions politiques', level:'eleve', date:'2026-08-10', dateLabel:'10 août 2026 (crise institutionnelle toujours ouverte au 25/08/2026)',
+   title:"Boycott parlementaire de l'opposition et contentieux sur le seuil des deux tiers pour la révision constitutionnelle",
+   lieu:'Parlement de Sierra Leone, Freetown',
+   fait:"Le 10 août 2026, 49 députés du principal parti d'opposition (APC) ont quitté l'hémicycle après que la présidente de l'Assemblée a statué que certaines dispositions du projet de loi de révision constitutionnelle 2025 pouvaient être adoptées à la majorité simple plutôt qu'à la majorité des deux tiers exigée par la Constitution. Le Parlement a ensuite adopté le texte, mais la présidente de l'Assemblée a elle-même renvoyé la question de procédure à la Cour suprême pour clarification. Au 19-20 août 2026, le président Julius Maada Bio n'avait pas encore décidé de le promulguer.",
+   source:'Recoupé par plusieurs médias sierra-léonais indépendants (The Sierra Leone Telegraph, AYV Media Empire, Cocorioko) convergeant sur les faits, la date et les chiffres du vote. Fiabilité correcte pour la presse locale ; pas de reprise par une agence internationale identifiée à ce stade.',
+   sourceUrl:'https://www.thesierraleonetelegraph.com/sierra-leones-constitutional-faultline-a-walkout-a-two-thirds-dispute-and-the-stakes-for-2028/',
+   impact:"Ce différend procédural non tranché fragilise la légitimité du processus de révision constitutionnelle et polarise SLPP au pouvoir et APC dans l'opposition à l'approche de 2028, avec un risque de contentieux électoral et de contestation de rue.",
+   watch:"Suivre la décision de la Cour suprême sur le seuil des deux tiers, la décision du président Bio de promulguer ou non le texte, et les réactions de l'APC et de la société civile.",
+   recoupementLabel:""},
+  {id:62, country:'SLE', cat:'Ordre public et liberté de manifestation', level:'eleve', date:'2026-08-20', dateLabel:"20 août 2026 (interdiction d'une manifestation prévue le 26 août 2026)",
+   title:'La police interdit une manifestation de la société civile contre le processus de révision constitutionnelle',
+   lieu:"Freetown, Sierra Leone (marche prévue jusqu'à la State House)",
+   fait:"Le Citizens Advocacy Network (CAN) avait notifié une marche prévue le 26 août 2026 jusqu'à la State House de Freetown pour dénoncer un non-respect présumé des procédures constitutionnelles lors de l'adoption du projet de révision constitutionnelle. Par lettre datée du 20 août 2026, la police a interdit le rassemblement en invoquant l'article 17(2) du Public Order Act. L'interdiction fait suite au refus du CAN de se présenter à un entretien convoqué par l'inspecteur général de la police le 19 août.",
+   source:"Confirmé par au moins trois médias indépendants (Pan African Visions, The Calabash Newspaper, SierraLoaded) rapportant la même lettre d'interdiction et les mêmes dates. Fiabilité correcte pour la presse locale ; événement très récent, pas encore repris par une agence internationale au moment de la rédaction.",
+   sourceUrl:'https://panafricanvisions.com/2026/08/sierra-leone-police-ban-planned-august-26-protest-as-civil-society-group-challenges-constitutional-process/',
+   impact:"Dans un pays où des manifestations passées (notamment août 2022) ont dégénéré en violences meurtrières, cette interdiction accroît le risque de tensions le 26 août, et alimente la perception d'un rétrécissement de l'espace civique à l'approche de 2028.",
+   watch:"Élément à très haute priorité de surveillance : déroulement effectif du 26 août 2026 (manifestation malgré l'interdiction, interpellations, dispositif sécuritaire, réaction du CAN et de la communauté internationale).",
+   recoupementLabel:""},
+  {id:63, country:'TGO', cat:'Réforme institutionnelle et gouvernance', level:'eleve', date:'2025-05-03', dateLabel:'3 mai 2025',
+   title:"Faure Gnassingbé investi Président du Conseil des ministres, nouveau chef de l'exécutif",
+   lieu:'Lomé, Togo',
+   fait:"Le 3 mai 2025, Faure Gnassingbé, président du Togo depuis 2005, a été investi Président du Conseil des ministres, fonction créée par la réforme constitutionnelle adoptée fin mars 2024 qui fait basculer le pays d'un régime présidentiel à un régime parlementaire. Ce poste, pourvu par un vote des députés et non par élection présidentielle directe, concentre l'essentiel du pouvoir exécutif, tandis que la fonction de Président de la République devient largement honorifique. Cette réforme permet à Faure Gnassingbé de prolonger sa direction du pays sans les limites de mandat de l'ancien régime présidentiel.",
+   source:"Fait largement corroboré et non disputé : France 24, Jeune Afrique et l'Africa Center for Strategic Studies (institution universitaire américaine indépendante) convergent, confirmé également par le site officiel de la Présidence du Conseil togolaise.",
+   sourceUrl:'https://www.jeuneafrique.com/1685228/politique/togo-faure-gnassingbe-devient-president-du-conseil-des-ministres/',
+   impact:'Consolide durablement le pouvoir exécutif entre les mains de Faure Gnassingbé (plus de 20 ans au pouvoir) sans limite de mandat claire, alimentant une contestation politique interne et une défiance des partenaires régionaux quant à la légitimité démocratique du régime.',
+   watch:"Suivre les prochaines échéances électorales, la composition du gouvernement et d'éventuelles nouvelles révisions constitutionnelles.",
+   recoupementLabel:""},
+  {id:64, country:'TGO', cat:'Ordre public et contestation sociale', level:'eleve', date:'2025-06-06', dateLabel:'5-6 juin puis 26-28 juin 2025',
+   title:'Répression meurtrière de manifestations anti-régime à Lomé (mouvement M66)',
+   lieu:'Lomé (quartiers de Bè, Akodessewa, Nyékonakpoé), Togo',
+   fait:"Des manifestations contre le maintien au pouvoir de Faure Gnassingbé via la réforme constitutionnelle et contre la vie chère, appelées par le mouvement citoyen « M66 », ont éclaté à Lomé les 5-6 juin 2025 (environ 80 arrestations). Une nouvelle vague fin juin a été réprimée avec plus d'une soixantaine d'arrestations supplémentaires. Entre le 27 et le 28 juin, sept corps ont été retrouvés dans des plans d'eau de la capitale, que des organisations de la société civile relient à la répression — ce que le gouvernement dément.",
+   source:"Le bilan de 7 morts provient principalement de la Fondation des médias pour l'Afrique de l'Ouest (MFWA, ONG régionale), relayé par allAfrica et L'Alternative ; Jeune Afrique évoque de son côté une enquête officielle ouverte sur la mort de cinq personnes. LE BILAN CHIFFRÉ N'EST DONC PAS CONFIRMÉ DE MANIÈRE UNIVOQUE et reste disputé ; le gouvernement dément toute responsabilité directe.",
+   sourceUrl:'https://fr.allafrica.com/stories/202507020569.html',
+   impact:"Radicalise une partie de la jeunesse urbaine et alimente une défiance durable envers les forces de l'ordre et le régime ; ternit l'image internationale du Togo et accroît le risque de recrudescence des manifestations lors de dates symboliques.",
+   watch:"Commémorations du 6 juin, arrestations de militants, et toute publication d'un rapport d'enquête officiel sur les décès.",
+   recoupementLabel:""},
+  {id:65, country:'TGO', cat:'Justice régionale et diplomatie', level:'eleve', date:'2026-01-29', dateLabel:'29 janvier 2026 (jugement rendu ; large écho médiatique à partir de fin juin-août 2026)',
+   title:'La Cour de justice de la CEDEAO qualifie la réforme constitutionnelle togolaise de « changement inconstitutionnel de gouvernement »',
+   lieu:'Abuja (siège de la Cour de justice de la CEDEAO) ; effets juridiques et politiques au Togo',
+   fait:"Le 29 janvier 2026, la Cour de justice de la CEDEAO a jugé que la modification constitutionnelle du 25 mars 2024 (créant le poste de Président du Conseil des ministres) constitue un « changement inconstitutionnel de gouvernement » au sens de la Charte africaine de la démocratie. Le gouvernement togolais a publiquement rejeté l'arrêt le 26 juillet 2026, contestant la compétence de la Cour. Le 1er août 2026, une coalition de 43 organisations de la société civile africaines a appelé la CEDEAO et l'Union africaine à appliquer des sanctions, y compris une possible suspension du Togo des instances régionales.",
+   source:"Bien corroboré par plusieurs médias indépendants ouest-africains (Jeune Afrique, allAfrica, Koaci, Afriquinfos, Icilome, Savoirnews) convergents sur la date et la teneur du jugement ; le texte intégral de l'arrêt n'a pas pu être consulté directement.",
+   sourceUrl:'https://fr.allafrica.com/stories/202606260527.html',
+   impact:"Fragilise la légitimité juridique et politique du régime togolais sur la scène régionale et pourrait servir de levier à l'opposition ; le risque de sanctions effectives CEDEAO/UA reste incertain vu la faible portée coercitive historique de ces instances.",
+   watch:"Réponse formelle de la CEDEAO/UA à l'appel des 43 OSC, positionnement des autres États membres, et mobilisation de l'opposition togolaise s'appuyant sur cet arrêt.",
+   recoupementLabel:""},
+  {id:66, country:'TGO', cat:'Terrorisme et sécurité intérieure', level:'critique', date:'2026-02-27', dateLabel:'27 février 2026 (vote de prorogation ; menace continue depuis janvier 2025)',
+   title:"Prorogation de l'état d'urgence sécuritaire dans les Savanes face à la persistance de la menace jihadiste",
+   lieu:'Région des Savanes (nord du Togo, frontière avec le Burkina Faso)',
+   fait:"Le 27 février 2026, l'Assemblée nationale togolaise a voté la 4e prorogation consécutive de l'état d'urgence sécuritaire en vigueur depuis juin 2022 dans les Savanes, pour 12 mois à compter du 13 mars 2026. Le ministre des Affaires étrangères Robert Dussey a fait état de 62 morts (54 civils, 8 militaires) recensés depuis janvier 2025 lors de 15 attaques attribuées à des groupes jihadistes liés à Al-Qaïda/ISIS infiltrés depuis le Burkina Faso. Des incursions se sont poursuivies dans l'arrière-pays frontalier, dont une attaque le 11 novembre 2025 près de Longou/Tône.",
+   source:"Le bilan de 62 morts est une déclaration officielle gouvernementale devant le Parlement, relayée de façon concordante par au moins deux médias indépendants (Africa Radio, Newafrique.net) et plusieurs titres togolais — chiffre officiel corroboré par la couverture médiatique mais NON vérifié par une source indépendante (ONG/ONU) à ce stade. Les détails de l'attaque du 11 novembre 2025 reposent sur une SOURCE UNIQUE et ne sont pas confirmés de façon indépendante.",
+   sourceUrl:'https://www.togofirst.com/fr/securite/0203-18360-togo-l-assemblee-nationale-proroge-l-etat-d-urgence-securitaire-dans-les-savanes-pour-12-mois',
+   impact:'Menace directe et durable pour la sécurité des personnes et des activités économiques dans le nord ; déplacements de populations, restrictions opérationnelles, et risque de propagation vers le sud si le front jihadiste continue de se rapprocher depuis le Burkina Faso.',
+   watch:"Évolution du nombre d'attaques/victimes, futures extensions de l'état d'urgence, et tout signe d'extension de la zone d'opération jihadiste au-delà des Savanes.",
+   recoupementLabel:""}
 ];
 
 const ARTICLES = [
@@ -256,6 +766,34 @@ const ARTICLES = [
 const SOURCES = [
   {name:'gouv.ci', desc:'Portail officiel du gouvernement', url:'https://www.gouv.ci', icon:'globe'},
   {name:'Présidence CI', desc:'Page officielle Facebook', url:'https://facebook.com/Presidenceci', icon:'facebook'}
+];
+
+/* Couverture régionale — Afrique de l'Ouest (périmètre géographique ONU).
+   Les 16 pays du périmètre sont désormais tous instrumentés (fiches recoupées,
+   sources qualifiées) : Côte d'Ivoire (10 fiches), Mali (4), Burkina Faso (3),
+   Bénin (4), Cap-Vert (2), Gambie (4), Ghana (4), Guinée (4), Guinée-Bissau (3),
+   Liberia (4), Mauritanie (4), Niger (4), Nigeria (4), Sénégal (4), Sierra Leone (4)
+   et Togo (4) — soit 66 fiches actives au total. Chaque fiche applique la même
+   rigueur méthodologique (qualification des sources, distinction date de survenance
+   / date de publication, signalement explicite des déductions et bilans disputés),
+   conformément au protocole de veille (0 donnée inventée). */
+const COUNTRIES = [
+  {code:'CIV', name:"Côte d'Ivoire", art:'la ', status:'actif'},
+  {code:'BEN', name:'Bénin', art:'le ', status:'actif'},
+  {code:'BFA', name:'Burkina Faso', art:'le ', status:'actif'},
+  {code:'CPV', name:'Cap-Vert', art:'le ', status:'actif'},
+  {code:'GMB', name:'Gambie', art:'la ', status:'actif'},
+  {code:'GHA', name:'Ghana', art:'le ', status:'actif'},
+  {code:'GIN', name:'Guinée', art:'la ', status:'actif'},
+  {code:'GNB', name:'Guinée-Bissau', art:'la ', status:'actif'},
+  {code:'LBR', name:'Liberia', art:'le ', status:'actif'},
+  {code:'MLI', name:'Mali', art:'le ', status:'actif'},
+  {code:'MRT', name:'Mauritanie', art:'la ', status:'actif'},
+  {code:'NER', name:'Niger', art:'le ', status:'actif'},
+  {code:'NGA', name:'Nigeria', art:'le ', status:'actif'},
+  {code:'SEN', name:'Sénégal', art:'le ', status:'actif'},
+  {code:'SLE', name:'Sierra Leone', art:'la ', status:'actif'},
+  {code:'TGO', name:'Togo', art:'le ', status:'actif'}
 ];
 
 const LEVEL_ORDER = {faible:0, modere:1, eleve:2, critique:3};
@@ -284,23 +822,39 @@ const ICONS = {
   sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>',
   moon:'<path d="M20 14.5A8.5 8.5 0 1110.5 4a6.5 6.5 0 009.5 10.5z"/>'
 };
-function icon(name, size){ size = size||17; return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+ICONS[name]+'</svg>'; }
+function icon(name, size){ size = size||17; return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+ICONS[name]+'</svg>'; }
 
 /* ---------------- helpers ---------------- */
 function esc(s){ return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
 function byId(id){ return FICHES.find(f => f.id === Number(id)); }
+function fichesByCountry(code){ return FICHES.filter(f => f.country === code); }
+function countryInfo(code){ return COUNTRIES.find(c => c.code === code); }
+function countryLabel(code){ const c = countryInfo(code); return c ? c.code+' — '+c.name.toUpperCase() : code; }
+function countryLevel(code){
+  const list = fichesByCountry(code);
+  if(!list.length) return null;
+  return list.reduce((max,f) => LEVEL_ORDER[f.level] > LEVEL_ORDER[max] ? f.level : max, 'faible');
+}
+const SYNTH_DOC_SLUG = {CIV:'cote-divoire', MLI:'mali', BFA:'burkina-faso', BEN:'benin', CPV:'cap-vert', GMB:'gambie', GHA:'ghana', GIN:'guinee', GNB:'guinee-bissau', LBR:'liberia', MRT:'mauritanie', NER:'niger', NGA:'nigeria', SEN:'senegal', SLE:'sierra-leone', TGO:'togo'};
+function synthDocPath(code){
+  const slug = SYNTH_DOC_SLUG[code] || code.toLowerCase();
+  const d = code === 'CIV' ? '2026-08-24' : '2026-08-25';
+  return 'veille/synthese-'+slug+'-'+d+'.md';
+}
 function fmtDate(iso){
   const [y,m,d] = iso.split('-');
   return d+'/'+m+'/'+y;
 }
-function counts(){
+function counts(code){
+  code = code || 'CIV';
   const c = {faible:0, modere:0, eleve:0, critique:0};
-  FICHES.forEach(f => c[f.level]++);
+  fichesByCountry(code).forEach(f => c[f.level]++);
   return c;
 }
-function categoryOverview(){
+function categoryOverview(code){
+  code = code || 'CIV';
   const map = {};
-  FICHES.forEach(f => {
+  fichesByCountry(code).forEach(f => {
     if(!map[f.cat] || (LEVEL_ORDER[f.level] > LEVEL_ORDER[map[f.cat].level]) || (LEVEL_ORDER[f.level] === LEVEL_ORDER[map[f.cat].level] && f.date > map[f.cat].date)){
       map[f.cat] = f;
     }
@@ -334,16 +888,38 @@ function toggleTheme(){
 function navItem(href, iconName, label, active){
   return '<a class="navlink'+(active?' active':'')+'" href="#'+href+'">'+icon(iconName)+'<span>'+label+'</span></a>';
 }
+const SIDEBAR_PILL_CAP = 6;
+function sidebarCountryPills(activeRoute){
+  const active = COUNTRIES.filter(c => c.status === 'actif');
+  const civ = active.find(c => c.code === 'CIV');
+  const rest = active.filter(c => c.code !== 'CIV').slice().sort((a,b) => {
+    const la = LEVEL_ORDER[countryLevel(a.code) || 'faible'], lb = LEVEL_ORDER[countryLevel(b.code) || 'faible'];
+    if(lb !== la) return lb - la;
+    return a.name.localeCompare(b.name, 'fr');
+  });
+  const shown = [civ, ...rest].filter(Boolean).slice(0, SIDEBAR_PILL_CAP);
+  const pills = shown.map(c => '\
+    <a class="country-pill" href="'+(c.code==='CIV'?'#dashboard':'#pays/'+c.code)+'" style="margin-bottom:6px;">\
+      <span style="display:flex;align-items:center;gap:10px;">\
+        <span class="mono" style="font-size:10.5px;color:var(--accent);background:var(--surface-3);padding:2px 6px;border-radius:4px;">'+c.code+'</span>\
+        <span style="font-size:13px;font-weight:500;color:var(--text);">'+esc(c.name)+'</span>\
+      </span>\
+      <span class="dot dot-'+(c.code==='CIV' ? 'modere' : (countryLevel(c.code)||'faible'))+'"></span>\
+    </a>').join('');
+  return pills+'\
+    <a href="#pays" class="mono" style="font-size:11px;color:var(--text-3);padding:6px 10px 2px;display:block;text-decoration:none;">Voir les '+active.length+' pays suivis →</a>\
+  ';
+}
 function sidebar(activeRoute){
   const t = currentTheme();
   return '\
-  <div class="sidebar">\
+  <aside class="sidebar">\
     <a class="brand brand-link" href="#dashboard">\
       <div class="brand-mark">'+icon('shield',14)+'</div>\
       <span class="brand-name">SENTIQS</span>\
       <span class="mono brand-tag">OSINT&nbsp;CORE</span>\
     </a>\
-    <nav class="primary">\
+    <nav class="primary" aria-label="Navigation principale">\
       '+navItem('dashboard','grid',"Vue d'ensemble", activeRoute==='dashboard')+'\
       '+navItem('pays','flag','Pays suivis', activeRoute==='pays')+'\
       '+navItem('fiches','doc','Fiches de synthèse', activeRoute==='fiches' || activeRoute==='fiche')+'\
@@ -352,14 +928,8 @@ function sidebar(activeRoute){
       '+navItem('parametres','settings','Paramètres', activeRoute==='parametres')+'\
     </nav>\
     <button class="theme-toggle" onclick="toggleTheme()">'+icon(t==='dark'?'sun':'moon',15)+'<span>Thème '+(t==='dark'?'clair':'sombre')+'</span></button>\
-    <div class="side-sub"><span class="mono side-sub-label">PAYS SUIVIS · 1</span></div>\
-    <a class="country-pill" href="#dashboard">\
-      <span style="display:flex;align-items:center;gap:10px;">\
-        <span class="mono" style="font-size:10.5px;color:var(--accent);background:var(--surface-3);padding:2px 6px;border-radius:4px;">CIV</span>\
-        <span style="font-size:13px;font-weight:500;color:var(--text);">Côte d\'Ivoire</span>\
-      </span>\
-      <span class="dot dot-modere"></span>\
-    </a>\
+    <div class="side-sub"><span class="mono side-sub-label">PAYS SUIVIS · '+COUNTRIES.filter(c=>c.status==='actif').length+'/'+COUNTRIES.length+'</span></div>\
+    '+sidebarCountryPills(activeRoute)+'\
     <div class="sidebar-foot">\
       <div class="avatar"><span class="mono" style="font-size:11px;color:var(--text-2);">RS</span></div>\
       <div style="display:flex;flex-direction:column;">\
@@ -367,17 +937,17 @@ function sidebar(activeRoute){
         <span class="mono" style="font-size:10.5px;color:var(--text-3);">Accès habilité</span>\
       </div>\
     </div>\
-  </div>';
+  </aside>';
 }
 function topbar(crumbs, rightExtra){
   return '\
-  <div class="topbar">\
+  <header class="topbar">\
     <div class="crumbs">'+crumbs+'</div>\
-    <div style="display:flex;align-items:center;gap:20px;">'+(rightExtra||'')+'<span class="mono" style="font-size:11.5px;color:var(--text-3);white-space:nowrap;">MAJ 25/08/2026 · 09:40</span></div>\
-  </div>';
+    <div style="display:flex;align-items:center;gap:20px;">'+(rightExtra||'')+'<span class="mono" style="font-size:11.5px;color:var(--text-3);white-space:nowrap;">MAJ 25/08/2026 · 11:05</span></div>\
+  </header>';
 }
 function shell(route, crumbs, body, rightExtra){
-  return '<div class="shell">'+sidebar(route)+'<div class="main">'+topbar(crumbs, rightExtra)+'<div class="content"><div class="view-enter">'+body+'</div></div></div></div>';
+  return '<div class="shell">'+sidebar(route)+'<main class="main">'+topbar(crumbs, rightExtra)+'<div class="content"><div class="view-enter" id="view-root" tabindex="-1">'+body+'</div></div></main></div>';
 }
 
 /* ---------------- views ---------------- */
@@ -426,7 +996,7 @@ function viewLanding(){
     </div>\
     <div class="section" id="couverture" style="padding-top:0;">\
       <div class="eyebrow">Couverture en direct</div>\
-      <h2 style="font-size:32px;font-weight:600;margin-top:14px;">Côte d\'Ivoire — '+FICHES.length+' fiches actives.</h2>\
+      <h2 style="font-size:32px;font-weight:600;margin-top:14px;">Côte d\'Ivoire — '+fichesByCountry('CIV').length+' fiches actives.</h2>\
       <p style="font-size:14.5px;color:var(--text-2);max-width:640px;margin-top:10px;">Recoupées auprès de la presse ivoirienne et panafricaine et des communiqués du Conseil National de Sécurité.</p>\
       <div style="margin-top:28px;"><a class="btn btn-primary" href="#fiches">Parcourir les fiches '+icon('arrow',15)+'</a></div>\
     </div>\
@@ -456,7 +1026,7 @@ function overviewMini(){
   <div style="display:flex;flex-direction:column;gap:18px;">\
     <div style="display:flex;align-items:flex-end;justify-content:space-between;">\
       <div><div class="mono" style="font-size:11px;color:var(--text-3);letter-spacing:.08em;margin-bottom:6px;">NIVEAU DE SÛRETÉ PAYS</div><div style="font-family:\'Space Grotesk\';font-weight:700;font-size:32px;color:var(--modere);">Modéré</div></div>\
-      <span class="mono" style="font-size:11px;color:var(--text-3);">'+FICHES.length+' fiches actives</span>\
+      <span class="mono" style="font-size:11px;color:var(--text-3);">'+fichesByCountry('CIV').length+' fiches actives</span>\
     </div>\
     <div style="height:1px;background:var(--border);"></div>\
     <div style="display:flex;flex-direction:column;gap:10px;">'+
@@ -472,14 +1042,14 @@ function overviewMini(){
 function viewDashboard(){
   const c = counts();
   const cats = categoryOverview();
-  const recent = FICHES.slice().sort((a,b)=> b.date.localeCompare(a.date));
+  const recent = fichesByCountry('CIV').slice().sort((a,b)=> b.date.localeCompare(a.date));
   return shell('dashboard', '<b>Pays suivis</b><span>/</span><span style="color:var(--text);font-weight:500;">Côte d\'Ivoire</span>', '\
     <div class="card" style="padding:26px 28px;margin-bottom:20px;">\
       <div style="display:flex;gap:40px;flex-wrap:wrap;">\
         <div style="display:flex;flex-direction:column;gap:8px;min-width:180px;border-right:1px solid var(--border);padding-right:40px;">\
           <span class="mono" style="font-size:11px;color:var(--text-3);letter-spacing:.08em;">NIVEAU DE SÛRETÉ PAYS</span>\
           <span style="font-family:\'Space Grotesk\';font-weight:700;font-size:32px;color:var(--modere);">Modéré</span>\
-          <span style="font-size:12.5px;color:var(--text-2);">'+FICHES.length+' fiches actives</span>\
+          <span style="font-size:12.5px;color:var(--text-2);">'+fichesByCountry('CIV').length+' fiches actives</span>\
           <div style="display:flex;gap:2px;margin-top:10px;border-radius:4px;overflow:hidden;height:7px;">\
             <div style="flex:'+(c.faible||0.001)+';background:var(--faible);"></div>\
             <div style="flex:'+(c.modere||0.001)+';background:var(--modere);"></div>\
@@ -502,11 +1072,11 @@ function viewDashboard(){
         </div>\
       </div>\
     </div>\
-    <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:20px;" class="dash-lower">\
+    <div class="dash-lower">\
       <div class="card" style="padding:22px 24px;">\
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">\
           <h3 style="font-size:15px;font-weight:600;">Fiches récentes</h3>\
-          <a href="#fiches" class="mono" style="font-size:11px;color:var(--text-3);">'+FICHES.length+' au total →</a>\
+          <a href="#fiches" class="mono" style="font-size:11px;color:var(--text-3);">'+fichesByCountry('CIV').length+' au total →</a>\
         </div>\
         <div>'+recent.map(f => '\
           <a class="row-link" href="#fiche/'+f.id+'">\
@@ -541,10 +1111,10 @@ function viewDashboard(){
 }
 
 function viewFiches(){
-  const sorted = FICHES.slice().sort((a,b)=> b.date.localeCompare(a.date));
+  const sorted = fichesByCountry('CIV').slice().sort((a,b)=> b.date.localeCompare(a.date));
   return shell('fiches', '<b>Fiches de synthèse</b>', '\
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">\
-      <div><h1 style="font-size:19px;font-weight:600;">Toutes les fiches</h1><p style="font-size:12.5px;color:var(--text-2);margin-top:4px;">'+FICHES.length+' fiches, triées par date décroissante.</p></div>\
+      <div><h1 style="font-size:19px;font-weight:600;">Toutes les fiches</h1><p style="font-size:12.5px;color:var(--text-2);margin-top:4px;">'+fichesByCountry('CIV').length+' fiches, triées par date décroissante.</p></div>\
     </div>\
     <div class="card" style="padding:6px 24px;">'+sorted.map(f => '\
       <a class="row-link" href="#fiche/'+f.id+'" style="padding:16px 0;">\
@@ -563,14 +1133,16 @@ function viewFiches(){
 function viewFiche(id){
   const f = byId(id);
   if(!f) return viewNotFound('fiche');
-  const related = FICHES.filter(x => x.id !== f.id && x.cat === f.cat).sort((a,b)=> b.date.localeCompare(a.date)).slice(0,4);
-  return shell('fiche', '<a href="#fiches" style="display:flex;align-items:center;gap:8px;color:var(--text-2);">'+icon('back',15)+'Fiches de synthèse</a><span>/</span><b>'+esc(f.cat)+'</b>', '\
+  const related = FICHES.filter(x => x.id !== f.id && x.cat === f.cat && x.country === f.country).sort((a,b)=> b.date.localeCompare(a.date)).slice(0,4);
+  const backHref = f.country === 'CIV' ? '#fiches' : '#pays/'+f.country;
+  const backLabel = f.country === 'CIV' ? 'Fiches de synthèse' : countryLabel(f.country);
+  return shell('fiche', '<a href="'+backHref+'" style="display:flex;align-items:center;gap:8px;color:var(--text-2);">'+icon('back',15)+esc(backLabel)+'</a><span>/</span><b>'+esc(f.cat)+'</b>', '\
     <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:24px;">\
       <div style="display:flex;flex-direction:column;gap:20px;">\
         <div style="display:flex;flex-direction:column;gap:14px;">\
           <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">\
             <span class="level-badge level-'+f.level+'">NIVEAU · '+LEVEL_LABEL[f.level].toUpperCase()+'</span>\
-            <span class="mono" style="font-size:11px;color:var(--text-3);padding:4px 12px;border:1px solid var(--border);border-radius:20px;">CIV — CÔTE D\'IVOIRE</span>\
+            <span class="mono" style="font-size:11px;color:var(--text-3);padding:4px 12px;border:1px solid var(--border);border-radius:20px;">'+esc(countryLabel(f.country))+'</span>\
           </div>\
           <h1 style="font-size:25px;font-weight:600;line-height:1.3;">'+esc(f.title)+'</h1>\
           <div class="mono" style="display:flex;gap:14px;font-size:12px;color:var(--text-3);flex-wrap:wrap;"><span>'+f.dateLabel+'</span><span>·</span><span>'+esc(f.lieu)+'</span></div>\
@@ -627,7 +1199,7 @@ function viewActualites(){
 
 function viewModules(){
   const active = [
-    {name:'Fiches de synthèse', icon:'doc', desc:"Événements qualifiés et notés selon l'échelle Faible → Critique.", n: FICHES.length},
+    {name:'Fiches de synthèse', icon:'doc', desc:"Événements qualifiés et notés selon l'échelle Faible → Critique.", n: fichesByCountry('CIV').length},
     {name:'Actualités', icon:'news', desc:"Flux brut d'articles de presse, avant qualification en fiche.", n: ARTICLES.length},
     {name:'Sources web & officielles', icon:'globe', desc:'gouv.ci et la page Facebook de la Présidence, suivies en continu.', n: SOURCES.length}
   ];
@@ -654,15 +1226,92 @@ function viewModules(){
 }
 
 function viewPays(){
+  const active = COUNTRIES.filter(c => c.status === 'actif');
+  const others = COUNTRIES.filter(c => c.status !== 'actif');
+  const introSub = others.length ? (active.length+' pays sont instrumentés à ce stade — les '+others.length+' autres sont listés comme périmètre à programmer, sans aucune donnée affichée tant qu\'un recoupement n\'a pas été effectué.') : ('Les '+active.length+' pays du périmètre sont désormais tous instrumentés (fiches recoupées, sources qualifiées).');
   return shell('pays', '<b>Pays suivis</b>', '\
-    <div style="margin-bottom:18px;"><h1 style="font-size:19px;font-weight:600;">Pays suivis</h1><p style="font-size:12.5px;color:var(--text-2);margin-top:4px;">Un seul pays est instrumenté à ce stade sur ce dispositif.</p></div>\
-    <a href="#dashboard" class="card" style="display:flex;align-items:center;justify-content:space-between;padding:22px 24px;max-width:420px;text-decoration:none;color:inherit;">\
-      <div style="display:flex;align-items:center;gap:14px;">\
-        <span class="mono" style="font-size:11px;color:var(--accent);background:var(--surface-3);padding:3px 8px;border-radius:4px;">CIV</span>\
-        <div><div style="font-size:14.5px;font-weight:500;">Côte d\'Ivoire</div><div class="mono" style="font-size:11px;color:var(--text-3);">'+FICHES.length+' fiches actives</div></div>\
+    <div style="margin-bottom:18px;"><h1 style="font-size:19px;font-weight:600;">Pays suivis</h1><p style="font-size:12.5px;color:var(--text-2);margin-top:4px;">Périmètre de veille : Afrique de l\'Ouest ('+COUNTRIES.length+' pays). '+introSub+'</p></div>\
+    <div style="display:flex;flex-direction:column;gap:10px;max-width:520px;margin-bottom:22px;">\
+    '+active.map(c => {
+      const n = fichesByCountry(c.code).length;
+      const lvl = c.code === 'CIV' ? 'modere' : (countryLevel(c.code) || 'faible');
+      const href = c.code === 'CIV' ? '#dashboard' : '#pays/'+c.code;
+      return '\
+      <a href="'+href+'" class="card" style="display:flex;align-items:center;justify-content:space-between;padding:22px 24px;text-decoration:none;color:inherit;">\
+        <div style="display:flex;align-items:center;gap:14px;">\
+          <span class="mono" style="font-size:11px;color:var(--accent);background:var(--surface-3);padding:3px 8px;border-radius:4px;">'+c.code+'</span>\
+          <div><div style="font-size:14.5px;font-weight:500;">'+esc(c.name)+'</div><div class="mono" style="font-size:11px;color:var(--text-3);">'+n+' fiches actives</div></div>\
+        </div>\
+        <span class="level-badge level-'+lvl+'">'+LEVEL_LABEL[lvl].toUpperCase()+'</span>\
+      </a>';
+    }).join('')+'\
+    </div>\
+    '+(others.length ? ('\
+    <div style="margin-bottom:12px;"><span class="mono" style="font-size:11px;color:var(--text-3);letter-spacing:.06em;">AUTRES PAYS D\'AFRIQUE DE L\'OUEST — VEILLE À PROGRAMMER ('+others.length+')</span></div>\
+    <div style="display:flex;flex-direction:column;gap:1px;max-width:520px;border:1px solid var(--border);border-radius:10px;overflow:hidden;">\
+    '+others.map(c => '\
+      <a href="#pays/'+c.code+'" class="card" style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-radius:0;border-left:none;border-right:none;border-top:none;text-decoration:none;color:inherit;">\
+        <div style="display:flex;align-items:center;gap:14px;">\
+          <span class="mono" style="font-size:10.5px;color:var(--text-3);background:var(--surface-3);padding:3px 7px;border-radius:4px;">'+c.code+'</span>\
+          <span style="font-size:13.5px;color:var(--text);">'+esc(c.name)+'</span>\
+        </div>\
+        <span class="mono" style="font-size:10px;color:var(--text-3);border:1px solid var(--border-strong);padding:3px 9px;border-radius:20px;white-space:nowrap;">○ NON INSTRUMENTÉ</span>\
+      </a>').join('')+'\
+    </div>') : '')+'\
+  ');
+}
+
+function viewPaysDetail(code){
+  const c = COUNTRIES.find(x => x.code === code.toUpperCase());
+  if(!c) return viewNotFound();
+  if(c.code === 'CIV'){ location.hash = '#dashboard'; return ''; }
+  if(c.status === 'actif') return viewPaysActive(c);
+  return shell('pays', '<a href="#pays">Pays suivis</a><span>/</span><span style="color:var(--text);font-weight:500;">'+esc(c.name)+'</span>', '\
+    <div style="margin-bottom:18px;display:flex;align-items:center;gap:10px;">\
+      <span class="mono" style="font-size:11px;color:var(--text-3);background:var(--surface-3);padding:3px 8px;border-radius:4px;">'+c.code+'</span>\
+      <h1 style="font-size:19px;font-weight:600;">'+esc(c.name)+'</h1>\
+    </div>\
+    <div class="card" style="padding:24px 26px;max-width:560px;">\
+      <span class="mono" style="font-size:10px;color:var(--text-3);border:1px solid var(--border-strong);padding:3px 9px;border-radius:20px;">○ NON INSTRUMENTÉ</span>\
+      <p style="font-size:13px;color:var(--text-2);margin-top:16px;line-height:1.65;">Aucune veille n\'a encore été réalisée pour '+(c.art||'')+esc(c.name)+' sur ce dispositif : 0 fiche, 0 source recoupée, aucun niveau de sûreté pays calculé. Le pays a été ajouté au périmètre de couverture Afrique de l\'Ouest, mais conformément au protocole de veille, aucune donnée n\'est affichée tant qu\'un recoupement multi-sources n\'a pas été effectué — jamais de fait, de niveau ou de fiche inventés.</p>\
+      <p style="font-size:12px;color:var(--text-3);margin-top:14px;line-height:1.6;">Pour instrumenter ce pays : identifier des sources fiables (presse, ONG, communiqués officiels), puis rédiger une première fiche recoupée selon le même protocole que pour la Côte d\'Ivoire.</p>\
+    </div>\
+  ');
+}
+
+function viewPaysActive(c){
+  const list = fichesByCountry(c.code).slice().sort((a,b)=> b.date.localeCompare(a.date));
+  const lvl = countryLevel(c.code) || 'faible';
+  const overview = categoryOverview(c.code);
+  return shell('pays', '<a href="#pays">Pays suivis</a><span>/</span><span style="color:var(--text);font-weight:500;">'+esc(c.name)+'</span>', '\
+    <div style="margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">\
+      <div style="display:flex;align-items:center;gap:10px;">\
+        <span class="mono" style="font-size:11px;color:var(--accent);background:var(--surface-3);padding:3px 8px;border-radius:4px;">'+c.code+'</span>\
+        <h1 style="font-size:19px;font-weight:600;">'+esc(c.name)+'</h1>\
       </div>\
-      <span class="level-badge level-modere">MODÉRÉ</span>\
-    </a>\
+      <span class="level-badge level-'+lvl+'">NIVEAU · '+LEVEL_LABEL[lvl].toUpperCase()+'</span>\
+    </div>\
+    <div class="card" style="padding:16px 22px;margin-bottom:18px;max-width:640px;">\
+      <p style="font-size:12px;color:var(--text-3);line-height:1.6;">Première instrumentation de ce pays (25/08/2026), dans le cadre de l\'extension du périmètre de veille à l\'Afrique de l\'Ouest. Synthèse détaillée : <span class="mono">'+synthDocPath(c.code)+'</span>.</p>\
+    </div>\
+    <div style="margin-bottom:12px;"><span class="mono" style="font-size:11px;color:var(--text-3);letter-spacing:.06em;">RÉPARTITION PAR THÉMATIQUE</span></div>\
+    <div class="card" style="padding:6px 24px;margin-bottom:24px;max-width:640px;">'+overview.map(o => '\
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);">\
+        <span style="font-size:13px;color:var(--text-2);">'+esc(o.cat)+'</span>\
+        <span style="display:flex;align-items:center;gap:7px;"><span class="dot dot-'+o.fiche.level+'"></span><span class="mono" style="font-size:11.5px;color:var(--'+o.fiche.level+');">'+LEVEL_LABEL[o.fiche.level].toUpperCase()+'</span></span>\
+      </div>').join('')+'\
+    </div>\
+    <div style="margin-bottom:12px;"><span class="mono" style="font-size:11px;color:var(--text-3);letter-spacing:.06em;">'+list.length+' FICHES ACTIVES</span></div>\
+    <div class="card" style="padding:6px 24px;">'+list.map(f => '\
+      <a class="row-link" href="#fiche/'+f.id+'" style="padding:16px 0;">\
+        <span class="dot dot-'+f.level+'"></span>\
+        <div style="flex:1;display:flex;flex-direction:column;gap:2px;">\
+          <span class="row-title" style="font-size:13.5px;font-weight:500;">'+esc(f.title)+'</span>\
+          <span class="mono" style="font-size:10.5px;color:var(--text-3);">'+esc(f.cat)+' · '+esc(f.dateLabel)+'</span>\
+        </div>\
+        <span class="level-badge level-'+f.level+'">'+LEVEL_LABEL[f.level]+'</span>\
+      </a>').join('')+'\
+    </div>\
   ');
 }
 
@@ -695,7 +1344,19 @@ function parseHash(){
   const parts = h.split('/').filter(Boolean);
   return {route: parts[0] || '', param: parts[1]};
 }
-function render(){
+function routeTitle(route, param){
+  switch(route){
+    case 'dashboard': return "Vue d'ensemble";
+    case 'fiches': return 'Fiches de synthèse';
+    case 'fiche': { const f = byId(param); return f ? f.title : 'Fiche'; }
+    case 'actualites': return 'Actualités';
+    case 'modules': return 'Modules';
+    case 'pays': { if(!param) return 'Pays suivis'; const c = countryInfo(String(param).toUpperCase()); return c ? c.name : 'Pays suivis'; }
+    case 'parametres': return 'Paramètres';
+    default: return null;
+  }
+}
+function render(moveFocus){
   const {route, param} = parseHash();
   let html;
   switch(route){
@@ -705,14 +1366,20 @@ function render(){
     case 'fiche': html = viewFiche(param); break;
     case 'actualites': html = viewActualites(); break;
     case 'modules': html = viewModules(); break;
-    case 'pays': html = viewPays(); break;
+    case 'pays': html = param ? viewPaysDetail(param) : viewPays(); break;
     case 'parametres': html = viewParametres(); break;
     default: html = viewLanding();
   }
   document.getElementById('app').innerHTML = html;
+  const t = routeTitle(route, param);
+  document.title = t ? (t+' — SENTIQS OSINT CORE') : 'SENTIQS OSINT CORE';
   window.scrollTo(0,0);
+  if(moveFocus){
+    const vr = document.getElementById('view-root');
+    if(vr) vr.focus();
+  }
 }
-window.addEventListener('hashchange', render);
-window.addEventListener('DOMContentLoaded', render);
-render();
+window.addEventListener('hashchange', function(){ render(true); });
+window.addEventListener('DOMContentLoaded', function(){ render(false); });
+render(false);
 </script>
