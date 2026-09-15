@@ -13,14 +13,53 @@ export default function ResetPassword() {
   const [hasSession, setHasSession] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        setHasSession(true);
+    // Le lien de récupération Supabase (généré côté serveur par la fonction
+    // password-reset-link, sans PKCE) redirige vers cette page avec les
+    // jetons dans le fragment d'URL (#access_token=...&type=recovery).
+    // supabase-js les détecte et les échange de façon asynchrone : un simple
+    // getSession() au montage peut s'exécuter avant que cet échange soit
+    // terminé et affiche alors à tort "lien invalide ou expiré", alors que
+    // Supabase a bien validé le lien (observé en production : /verify
+    // renvoie 303 avec succès, mais la page affichait quand même l'erreur).
+    // onAuthStateChange('PASSWORD_RECOVERY') est déclenché précisément
+    // quand cet échange aboutit, donc on s'y abonne en plus du contrôle
+    // initial au lieu de ne compter que sur un seul getSession().
+    let resolved = false;
+    const resolve = (session: unknown) => {
+      if (resolved) return;
+      resolved = true;
+      if (session) setHasSession(true);
+      setCheckingSession(false);
+    };
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY' || (event === 'SIGNED_IN' && session)) {
+        resolve(session);
       }
-      setCheckingSession(false);
-    }).catch(() => {
-      setCheckingSession(false);
     });
+
+    const hasRecoveryHash = typeof window !== 'undefined' && window.location.hash.includes('type=recovery');
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      // Si le fragment d'URL annonce une récupération en cours, laisser
+      // onAuthStateChange trancher plutôt que de conclure trop tôt à
+      // l'absence de session sur ce premier appel.
+      if (session || !hasRecoveryHash) {
+        resolve(session);
+      }
+    }).catch(() => {
+      if (!hasRecoveryHash) resolve(null);
+    });
+
+    // Filet de sécurité : si rien ne s'est produit après quelques secondes
+    // (lien réellement invalide/expiré), ne pas bloquer l'utilisateur
+    // indéfiniment sur l'écran de chargement.
+    const timeout = setTimeout(() => resolve(null), 4000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timeout);
+    };
   }, []);
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
